@@ -58,10 +58,15 @@
     Article *article2 = [Article findOrCreate:@{ @"title": @"Computer Science Vol.1", @"text": @"The programming is ...", @"revision": @0 }];
     [Author findOrCreate:@{ @"articleID": article2.uid, @"name": @"Bob", @"age": @55 }];
     [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Computer Science" }];
+    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Paper" }];
 
     // Select all objects.
     NSArray<Article *> *articles = Article.all;
     NSLog(@"Article.all: %@", articles);
+
+    // Select all objects ordered by specified property.
+    NSArray<Author *> *authors = [Author allOrderedBy:@"age" ascending:NO];
+    NSLog(@"Author.allOrderedBy: %@", authors);
 
     // Find an object by specified ID.
     author = [Author findByID:author1.uid];
@@ -75,9 +80,25 @@
     Tag *tag = Tag.first;
     NSLog(@"Tag.first: %@", tag);
 
+    // Select specified number of objects from the head.
+    tags = [Tag firstWithLimit:2];
+    NSLog(@"Tag.firstWithLimit: %@", tags);
+
+    // Select specified number of objects ordered by specified property from the head.
+    tags = [Tag firstOrderedBy:@"name" ascending:NO limit:2];
+    NSLog(@"Tag.firstOrderedBy: %@", tags);
+
     // Select last object.
     tag = Tag.last;
     NSLog(@"Tag.last: %@", tag);
+
+    // Select specified number of objects from the tail.
+    tags = [Tag lastWithLimit:2];
+    NSLog(@"Tag.lastWithLimit: %@", tags);
+
+    // Select specified number of objects ordered by specified property from the tail.
+    tags = [Tag lastOrderedBy:@"name" ascending:YES limit:2];
+    NSLog(@"Tag.lastOrderedBy: %@", tags);
 
     // Find an object by specified parameters. When multiple objects are found, select last object.
     tag = [Tag findLast:@{ @"articleID": article1.uid }];
@@ -86,6 +107,18 @@
     // Find multiple objects by specified parameters.
     tags = [Tag where:@{ @"articleID": article1.uid }];
     NSLog(@"Tag.where: %@", tags);
+
+    // Find multiple objects by specified parameters. The results are ordered by specified property.
+    tags = [Tag where:@{ @"articleID": article1.uid }
+            orderedBy:@"name"
+            ascending:YES];
+    NSLog(@"Tag.whereOrderedBy: %@", tags);
+
+    tags = [Tag where:@{ @"articleID": article1.uid }
+            orderedBy:@"name"
+            ascending:NO
+                limit:1];
+    NSLog(@"Tag.whereOrderedBy: %@", tags);
 
     NSLog(@"Article.findByID: %@", [Article findByID:article1.uid]);
     NSLog(@"Author.where: %@", [Author where:@{ @"articleID": article1.uid }]);

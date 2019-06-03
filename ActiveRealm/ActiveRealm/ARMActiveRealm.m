@@ -195,9 +195,13 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 }
 
 + (NSArray<ARMActiveRealm *> *)all {
+    return [self allOrderedBy:@"createdAt" ascending:YES];
+}
+
++ (NSArray<ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending {
     NSMutableArray<ARMActiveRealm *> *models = [NSMutableArray new];
 
-    for (RLMObject *obj in [self allObjects:self.class]) {
+    for (RLMObject *obj in [self allObjects:self.class orderedBy:order ascending:ascending]) {
         [models addObject:[self.class createInstanceWithRLMObject:obj]];
     }
 
@@ -208,8 +212,52 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return self.all.firstObject;
 }
 
++ (NSArray<ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit {
+    NSArray *results = self.all;
+
+    if (results.count <= limit) {
+        return results;
+    }
+
+    return [results subarrayWithRange:NSMakeRange(0, limit)];
+}
+
++ (NSArray<ARMActiveRealm *> *)firstOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit {
+    NSArray *results = [self allOrderedBy:order ascending:ascending];
+
+    if (results.count <= limit) {
+        return results;
+    }
+
+    return [results subarrayWithRange:NSMakeRange(0, limit)];
+}
+
 + (nullable instancetype)last {
     return self.all.lastObject;
+}
+
++ (NSArray<ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit {
+    NSArray *results = self.all;
+
+    if (results.count <= limit) {
+        return results;
+    }
+
+    results = [results.reverseObjectEnumerator.allObjects subarrayWithRange:NSMakeRange(0, limit)];
+
+    return results.reverseObjectEnumerator.allObjects;
+}
+
++ (NSArray<ARMActiveRealm *> *)lastOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit {
+    NSArray *results = [self allOrderedBy:order ascending:ascending];
+
+    if (results.count <= limit) {
+        return results;
+    }
+
+    results = [results.reverseObjectEnumerator.allObjects subarrayWithRange:NSMakeRange(0, limit)];
+
+    return results.reverseObjectEnumerator.allObjects;
 }
 
 + (nullable instancetype)findByID:(NSString *)uid {
@@ -325,9 +373,11 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 }
 
 + (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary {
+    RLMResults *results = [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]];
+
     NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
 
-    for (RLMObject *obj in [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]]) {
+    for (RLMObject *obj in results) {
         [array addObject:[self.class createInstanceWithRLMObject:obj]];
     }
 
@@ -353,6 +403,113 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
     return array;
 }
+
++ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                           orderedBy:(NSString *)order
+                           ascending:(BOOL)ascending {
+
+    RLMResults *results = [self objects:self.class
+                          withPredicate:[self predicateWithDictionary:dictionary]
+                              orderedBy:order
+                              ascending:ascending];
+
+    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
+
+    for (RLMObject *obj in results) {
+        [array addObject:[self.class createInstanceWithRLMObject:obj]];
+    }
+
+    return array;
+}
+
++ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                           orderedBy:(NSString *)order
+                           ascending:(BOOL)ascending
+                               limit:(NSUInteger)limit {
+
+    RLMResults *results = [self objects:self.class
+                          withPredicate:[self predicateWithDictionary:dictionary]
+                              orderedBy:order
+                              ascending:ascending];
+
+    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
+
+    for (RLMObject *obj in results) {
+        [array addObject:[self.class createInstanceWithRLMObject:obj]];
+
+        if (array.count == limit) {
+            return array;
+        }
+    }
+
+    return array;
+}
+
+
++ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                    ascending:(BOOL)ascending
+                                       format:(NSString *)format, ... {
+
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+
+    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]
+                          orderedBy:order
+                          ascending:ascending];
+}
+
++ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                    ascending:(BOOL)ascending
+                                        limit:(NSUInteger)limit
+                                       format:(NSString *)format, ... {
+
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+
+    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]
+                          orderedBy:order
+                          ascending:ascending
+                              limit:limit];
+}
+
+
++ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                        orderedBy:(NSString *)order
+                                        ascending:(BOOL)ascending {
+
+    RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
+
+    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
+
+    for (RLMObject *obj in results) {
+        [array addObject:[self.class createInstanceWithRLMObject:obj]];
+    }
+
+    return array;
+}
+
++ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                        orderedBy:(NSString *)order
+                                        ascending:(BOOL)ascending
+                                            limit:(NSUInteger)limit {
+
+    RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
+
+    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
+
+    for (RLMObject *obj in results) {
+        [array addObject:[self.class createInstanceWithRLMObject:obj]];
+
+        if (array.count == limit) {
+            return array;
+        }
+    }
+
+    return array;
+}
+
 
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary {
     [[self where:dictionary] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
@@ -481,24 +638,32 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm, primaryKey);
 }
 
-+ (RLMResults *)allObjects:(Class)aClass {
++ (RLMResults *)allObjects:(Class)aClass orderedBy:(NSString *)order ascending:(BOOL)ascending {
     Class rlmObjClass = [[ARMClassMapper sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
     RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm);
 
-    return [results sortedResultsUsingKeyPath:@"createdAt" ascending:YES];
+    return [results sortedResultsUsingKeyPath:order ascending:ascending];
 }
 
 + (RLMResults *)objects:(Class)aClass withPredicate:(NSPredicate *)predicate {
+    return [self objects:aClass withPredicate:predicate orderedBy:@"createdAt" ascending:YES];
+}
+
++ (RLMResults *)objects:(Class)aClass
+          withPredicate:(NSPredicate *)predicate
+              orderedBy:(NSString *)order
+              ascending:(BOOL)ascending {
+
     Class rlmObjClass = [[ARMClassMapper sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
     RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm, predicate);
 
-    return [results sortedResultsUsingKeyPath:@"createdAt" ascending:YES];
+    return [results sortedResultsUsingKeyPath:order ascending:ascending];
 }
 
 @end
