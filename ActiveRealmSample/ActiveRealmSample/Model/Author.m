@@ -25,6 +25,12 @@ RLM_ARRAY_TYPE(ActiveRealmAuthor)
     return @[ @"country" ];
 }
 
++ (BOOL)validateBeforeSaving:(id)obj {
+    Author *author = obj;
+
+    return author.articleID.length > 0 && author.name.length > 0;
+}
+
 - (NSString *)description {
     return [self dictionaryWithValuesForKeys:@[
         @"uid",

@@ -109,9 +109,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
 @implementation ARMActiveRealm
 
-+ (NSString *)primaryKey {
-    return @"uid";
-}
+static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 
 + (NSArray<NSString *> *)ignoredProperties {
     return @[];
@@ -119,6 +117,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{};
+}
+
++ (BOOL)validateBeforeSaving:(id)obj {
+    return YES;
 }
 
 - (instancetype)init {
@@ -161,17 +163,23 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
 #pragma mark - public method
 
-- (void)save {
-    if ([self.class findByID:self[self.class.primaryKey]]) {
+- (BOOL)save {
+    if (![self.class validateBeforeSaving:self]) {
+        return NO;
+    }
+
+    if ([self.class findByID:self[kActiveRealmPrimaryKeyName]]) {
         [self update];
     }
     else {
         [self create];
     }
+
+    return YES;
 }
 
 - (void)destroy {
-    RLMObject *obj = [self.class object:self.class forPrimaryKey:self[self.class.primaryKey]];
+    RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
         return;
@@ -194,11 +202,11 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     }
 }
 
-+ (NSArray<ARMActiveRealm *> *)all {
++ (NSArray<__kindof ARMActiveRealm *> *)all {
     return [self allOrderedBy:@"createdAt" ascending:YES];
 }
 
-+ (NSArray<ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending {
++ (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending {
     NSMutableArray<ARMActiveRealm *> *models = [NSMutableArray new];
 
     for (RLMObject *obj in [self allObjects:self.class orderedBy:order ascending:ascending]) {
@@ -212,7 +220,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return self.all.firstObject;
 }
 
-+ (NSArray<ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit {
     NSArray *results = self.all;
 
     if (results.count <= limit) {
@@ -222,7 +230,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return [results subarrayWithRange:NSMakeRange(0, limit)];
 }
 
-+ (NSArray<ARMActiveRealm *> *)firstOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)firstOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                 limit:(NSUInteger)limit {
+
     NSArray *results = [self allOrderedBy:order ascending:ascending];
 
     if (results.count <= limit) {
@@ -236,7 +247,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return self.all.lastObject;
 }
 
-+ (NSArray<ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit {
     NSArray *results = self.all;
 
     if (results.count <= limit) {
@@ -248,7 +259,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return results.reverseObjectEnumerator.allObjects;
 }
 
-+ (NSArray<ARMActiveRealm *> *)lastOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)lastOrderedBy:(NSString *)order
+                                            ascending:(BOOL)ascending
+                                                limit:(NSUInteger)limit {
+
     NSArray *results = [self allOrderedBy:order ascending:ascending];
 
     if (results.count <= limit) {
@@ -372,7 +386,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return activeRealm;
 }
 
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary {
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary {
     RLMResults *results = [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]];
 
     NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
@@ -384,7 +398,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return array;
 }
 
-+ (NSArray<ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ... {
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
     va_end(args);
@@ -392,7 +406,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
 }
 
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate {
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate {
     RLMResults *results = [self objects:self.class withPredicate:predicate];
 
     NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
@@ -404,9 +418,9 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return array;
 }
 
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
-                           orderedBy:(NSString *)order
-                           ascending:(BOOL)ascending {
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                                    orderedBy:(NSString *)order
+                                    ascending:(BOOL)ascending {
 
     RLMResults *results = [self objects:self.class
                           withPredicate:[self predicateWithDictionary:dictionary]
@@ -422,10 +436,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return array;
 }
 
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
-                           orderedBy:(NSString *)order
-                           ascending:(BOOL)ascending
-                               limit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                                    orderedBy:(NSString *)order
+                                    ascending:(BOOL)ascending
+                                        limit:(NSUInteger)limit {
 
     RLMResults *results = [self objects:self.class
                           withPredicate:[self predicateWithDictionary:dictionary]
@@ -446,9 +460,9 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 }
 
 
-+ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
-                                    ascending:(BOOL)ascending
-                                       format:(NSString *)format, ... {
++ (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                format:(NSString *)format, ... {
 
     va_list args;
     va_start(args, format);
@@ -459,10 +473,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
                           ascending:ascending];
 }
 
-+ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
-                                    ascending:(BOOL)ascending
-                                        limit:(NSUInteger)limit
-                                       format:(NSString *)format, ... {
++ (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                 limit:(NSUInteger)limit
+                                                format:(NSString *)format, ... {
 
     va_list args;
     va_start(args, format);
@@ -475,9 +489,9 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 }
 
 
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
-                                        orderedBy:(NSString *)order
-                                        ascending:(BOOL)ascending {
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                                 orderedBy:(NSString *)order
+                                                 ascending:(BOOL)ascending {
 
     RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
 
@@ -490,10 +504,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return array;
 }
 
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
-                                        orderedBy:(NSString *)order
-                                        ascending:(BOOL)ascending
-                                            limit:(NSUInteger)limit {
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                                 orderedBy:(NSString *)order
+                                                 ascending:(BOOL)ascending
+                                                     limit:(NSUInteger)limit {
 
     RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
 
@@ -598,7 +612,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 }
 
 - (void)update {
-    RLMObject *obj = [self.class object:self.class forPrimaryKey:self[self.class.primaryKey]];
+    RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
         return;
@@ -608,7 +622,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
     [ARMActiveRealmManager.sharedInstance.realm transactionWithBlock:^{
         for (NSString *prop in self.class.propertyNames) {
-            if (![prop isEqualToString:self.class.primaryKey] && !self.class.definedRelationships[prop]) {
+            if (![prop isEqualToString:kActiveRealmPrimaryKeyName] && !self.class.definedRelationships[prop]) {
                 obj[prop] = self[prop];
             }
         }

@@ -38,19 +38,24 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSDate *updatedAt;
 @property (nonatomic, copy, readonly) NSDictionary<NSString *, ARMRelation *> *relations;
 
-- (void)save;
+- (BOOL)save;
 - (void)destroy;
 
 + (NSArray<NSString *> *)ignoredProperties;
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships;
-+ (NSArray<ARMActiveRealm *> *)all;
-+ (NSArray<ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending;
++ (BOOL)validateBeforeSaving:(id)obj;
++ (NSArray<__kindof ARMActiveRealm *> *)all;
++ (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending;
 + (nullable instancetype)first;
-+ (NSArray<ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit;
-+ (NSArray<ARMActiveRealm *> *)firstOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)firstOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                 limit:(NSUInteger)limit;
 + (nullable instancetype)last;
-+ (NSArray<ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit;
-+ (NSArray<ARMActiveRealm *> *)lastOrderedBy:(NSString *)order ascending:(BOOL)ascending limit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)lastOrderedBy:(NSString *)order
+                                            ascending:(BOOL)ascending
+                                                limit:(NSUInteger)limit;
 + (nullable instancetype)findByID:(NSString *)uid;
 + (nullable instancetype)find:(NSDictionary<NSString *, id> *)dictionary;
 + (nullable instancetype)findWithFormat:(NSString *)format, ...;
@@ -60,30 +65,30 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable instancetype)findLastWithPredicate:(NSPredicate *)predicate;
 + (instancetype)findOrInitialize:(NSDictionary<NSString *, id> *)dictionary;
 + (instancetype)findOrCreate:(NSDictionary<NSString *, id> *)dictionary;
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary;
-+ (NSArray<ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ...;
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate;
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
-                           orderedBy:(NSString *)order
-                           ascending:(BOOL)ascending;
-+ (NSArray<ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
-                           orderedBy:(NSString *)order
-                           ascending:(BOOL)ascending
-                               limit:(NSUInteger)limit;
-+ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ...;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate;
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                                    orderedBy:(NSString *)order
+                                    ascending:(BOOL)ascending;
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
+                                    orderedBy:(NSString *)order
                                     ascending:(BOOL)ascending
-                                       format:(NSString *)format, ...;
-+ (NSArray<ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
-                                    ascending:(BOOL)ascending
-                                        limit:(NSUInteger)limit
-                                       format:(NSString *)format, ...;
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
-                                        orderedBy:(NSString *)order
-                                        ascending:(BOOL)ascending;
-+ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
-                                        orderedBy:(NSString *)order
-                                        ascending:(BOOL)ascending
-                                            limit:(NSUInteger)limit;
+                                        limit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                format:(NSString *)format, ...;
++ (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
+                                             ascending:(BOOL)ascending
+                                                 limit:(NSUInteger)limit
+                                                format:(NSString *)format, ...;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                                 orderedBy:(NSString *)order
+                                                 ascending:(BOOL)ascending;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
+                                                 orderedBy:(NSString *)order
+                                                 ascending:(BOOL)ascending
+                                                     limit:(NSUInteger)limit;
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary;
 + (void)destroyWithFormat:(NSString *)format, ...;
 + (void)destroyWithPredicate:(NSPredicate *)predicate;

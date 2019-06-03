@@ -32,11 +32,17 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
     return self;
 }
 
-+ (NSDictionary<NSString *, ARMRelation *> *)definedRelationships {
++ (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{
         @"author": [ARMRelationship relationshipWithClass:Author.class type:ARMRelationshipTypeHasOne],
         @"tags": [ARMRelationship relationshipWithClass:Tag.class type:ARMRelationshipTypeHasMany]
     };
+}
+
++ (BOOL)validateBeforeSaving:(id)obj {
+    Article *article = obj;
+
+    return article.title.length > 0 && article.text.length > 0;
 }
 
 - (NSString *)description {

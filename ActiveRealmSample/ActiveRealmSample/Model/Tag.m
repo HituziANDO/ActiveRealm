@@ -20,6 +20,12 @@ RLM_ARRAY_TYPE(ActiveRealmTag)
 
 @implementation Tag
 
++ (BOOL)validateBeforeSaving:(id)obj {
+    Tag *tag = obj;
+
+    return tag.articleID.length > 0 && tag.name.length > 0;
+}
+
 - (NSString *)description {
     return [self dictionaryWithValuesForKeys:@[
         @"uid",

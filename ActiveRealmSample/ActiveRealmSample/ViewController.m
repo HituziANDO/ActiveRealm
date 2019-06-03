@@ -135,6 +135,11 @@
     NSLog(@"Article.all: %@", Article.all);
     NSLog(@"Author.all: %@", Author.all);
     NSLog(@"Tag.all: %@", Tag.all);
+
+    // Failed to save because validation error.
+    Article *article = [Article findOrInitialize:@{ @"title": @"Programming Guide" }];
+    BOOL success = [article save];
+    NSLog(@"success: %d article: %@", success, [Article findByID:article.uid]);
 }
 
 @end
