@@ -17,8 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, nullable) NSNumber *revision;
-@property (nonatomic) Author *author;
-@property (nonatomic, readonly) NSMutableArray<Tag *> *tags;
+
+// Relation properties. These properties are just aliases.
+@property (nonatomic, readonly) Author *author;
+@property (nonatomic, readonly) NSArray<Tag *> *tags;
 
 @end
 

@@ -24,12 +24,14 @@
 // SOFTWARE.
 //
 
-#import "ARMObject.h"
+#import "ARMRelation.h"
 
-@implementation ARMObject
+NS_ASSUME_NONNULL_BEGIN
 
-+ (NSString *)primaryKey {
-    return @"uid";
-}
+@interface ARMRelation (Internal)
+
++ (instancetype)relationWithID:(NSString *)uid relationship:(ARMRelationship *)relationship belongsTo:(Class)aClass;
 
 @end
+
+NS_ASSUME_NONNULL_END

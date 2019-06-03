@@ -24,12 +24,22 @@
 // SOFTWARE.
 //
 
-#import "ARMObject.h"
+#import <Foundation/Foundation.h>
 
-@implementation ARMObject
+NS_ASSUME_NONNULL_BEGIN
 
-+ (NSString *)primaryKey {
-    return @"uid";
-}
+typedef NS_ENUM(NSInteger, ARMRelationshipType) {
+    ARMRelationshipTypeHasOne,
+    ARMRelationshipTypeHasMany
+};
+
+@interface ARMRelationship : NSObject
+
+@property (nonatomic, readonly) Class relationClass;
+@property (nonatomic, readonly) ARMRelationshipType type;
+
++ (instancetype)relationshipWithClass:(Class)relationClass type:(ARMRelationshipType)type;
 
 @end
+
+NS_ASSUME_NONNULL_END

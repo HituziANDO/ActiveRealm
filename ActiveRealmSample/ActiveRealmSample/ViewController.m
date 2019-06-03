@@ -41,33 +41,33 @@
     Author *author1 = [Author findOrInitialize:@{ @"articleID": article1.uid, @"name": @"Alice", @"age": @28 }];
     [author1 save];
 
-    article1.author = author1;
-
     // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters and insert it to the DB.
     Tag *tag1 = [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"Programming" }];
     Tag *tag2 = [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"iOS" }];
 
-    [article1.tags addObjectsFromArray:@[ tag1, tag2 ]];
+    // Relations.
+    Author *author = (Author *) article1.relations[@"author"].object;
+    NSArray<Tag *> *tags = (NSArray<Tag *> *) article1.relations[@"tags"].objects;
+    NSLog(@"article.relations['author']: %@", author);
+    NSLog(@"article.relations['tags']: %@", tags);
 
     // Update.
     article1.revision = @1;
     [article1 save];
 
     Article *article2 = [Article findOrCreate:@{ @"title": @"Computer Science Vol.1", @"text": @"The programming is ...", @"revision": @0 }];
-    Author *author2 = [Author findOrCreate:@{ @"articleID": article2.uid, @"name": @"Bob", @"age": @55 }];
-    Tag *tag3 = [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Computer Science" }];
-    article2.author = author2;
-    [article2.tags addObject:tag3];
+    [Author findOrCreate:@{ @"articleID": article2.uid, @"name": @"Bob", @"age": @55 }];
+    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Computer Science" }];
 
     // Select all objects.
     NSArray<Article *> *articles = Article.all;
     NSLog(@"Article.all: %@", articles);
 
     // Find an object by specified ID.
-    Author *author = [Author findByID:author1.uid];
+    author = [Author findByID:author1.uid];
     NSLog(@"Author.findByID: %@", author);
 
-    // Find an object by specified parameters.
+    // Find an object by specified parameters. When multiple objects are found, select first object.
     author = [Author find:@{ @"name": @"Bob" }];
     NSLog(@"Author.find: %@", author);
 
@@ -79,12 +79,12 @@
     tag = Tag.last;
     NSLog(@"Tag.last: %@", tag);
 
-    // Find an object by specified parameters.
+    // Find an object by specified parameters. When multiple objects are found, select last object.
     tag = [Tag findLast:@{ @"articleID": article1.uid }];
     NSLog(@"Tag.findLast: %@", tag);
 
     // Find multiple objects by specified parameters.
-    NSArray<Tag *> *tags = [Tag where:@{ @"articleID": article1.uid }];
+    tags = [Tag where:@{ @"articleID": article1.uid }];
     NSLog(@"Tag.where: %@", tags);
 
     NSLog(@"Article.findByID: %@", [Article findByID:article1.uid]);

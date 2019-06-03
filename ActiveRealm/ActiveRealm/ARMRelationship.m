@@ -24,12 +24,23 @@
 // SOFTWARE.
 //
 
-#import "ARMObject.h"
+#import "ARMRelationship.h"
 
-@implementation ARMObject
+@interface ARMRelationship ()
 
-+ (NSString *)primaryKey {
-    return @"uid";
+@property (nonatomic) Class relationClass;
+@property (nonatomic) ARMRelationshipType type;
+
+@end;
+
+@implementation ARMRelationship
+
++ (instancetype)relationshipWithClass:(Class)relationClass type:(ARMRelationshipType)type {
+    ARMRelationship *relationship = [ARMRelationship new];
+    relationship.relationClass = relationClass;
+    relationship.type = type;
+
+    return relationship;
 }
 
 @end

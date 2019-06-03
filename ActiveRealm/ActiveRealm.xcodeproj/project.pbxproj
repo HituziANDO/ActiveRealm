@@ -25,17 +25,21 @@
 		19E590EE4297C0DA4E5A2FB1 /* ARMRelation.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E591094BC797EF81DF365E /* ARMActiveRealmManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E592EA41A121023D45A73A /* ARMActiveRealmManager.m */; };
 		19E59394385E0073CF6CC933 /* ARMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E591D69C490D0F4D26E383 /* ARMObject.m */; };
+		19E595431F9248B9BD359668 /* ARMRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */; };
 		19E5954F0CAB18BDCFFAD02F /* ARMClassMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E5966C4F076E14CF613A2E /* ARMClassMapper.m */; };
 		19E595F45AEB8B92794739D1 /* ARMClassMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E595393B764FE14530CC54 /* ARMClassMapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E59615638FD44DB56AB276 /* ARMObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E599F0F72F8FBB3BA1F9ED /* ARMObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E5983C29044345215C7621 /* ARMActiveRealm.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E59478834E83C924954FB0 /* ARMActiveRealm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E59843A881D2CE026EE754 /* ARMActiveRealm.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59476813E8357E2493003 /* ARMActiveRealm.m */; };
+		19E59A6AA856C7ABAE4DBCC1 /* ARMRelationship.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E59055D0985DD568452625 /* ARMRelationship.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E59B81F68AA945189F3080 /* ARMActiveRealmManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5926FD65007923BD4F0A7 /* ARMActiveRealmManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EF77DFB229F37A500230CD7 /* ActiveRealm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77DF9229F37A500230CD7 /* ActiveRealm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EF77E6E22A4123B00230CD7 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EF77E6D22A4123A00230CD7 /* Realm.framework */; };
+		5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19E59055D0985DD568452625 /* ARMRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMRelationship.h; sourceTree = "<group>"; };
 		19E591D69C490D0F4D26E383 /* ARMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMObject.m; sourceTree = "<group>"; };
 		19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMRelation.h; sourceTree = "<group>"; };
 		19E5926FD65007923BD4F0A7 /* ARMActiveRealmManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMActiveRealmManager.h; sourceTree = "<group>"; };
@@ -45,11 +49,13 @@
 		19E595393B764FE14530CC54 /* ARMClassMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMClassMapper.h; sourceTree = "<group>"; };
 		19E5966C4F076E14CF613A2E /* ARMClassMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMClassMapper.m; sourceTree = "<group>"; };
 		19E599F0F72F8FBB3BA1F9ED /* ARMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMObject.h; sourceTree = "<group>"; };
+		19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMRelationship.m; sourceTree = "<group>"; };
 		19E59C6143B788E000F25611 /* ARMRelation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMRelation.m; sourceTree = "<group>"; };
 		5EF77DF6229F37A500230CD7 /* ActiveRealm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActiveRealm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF77DF9229F37A500230CD7 /* ActiveRealm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActiveRealm.h; sourceTree = "<group>"; };
 		5EF77DFA229F37A500230CD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EF77E6D22A4123A00230CD7 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../ActiveRealmSample/ActiveRealmSample/Framework/Realm.framework; sourceTree = "<group>"; };
+		5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ARMRelation+Internal.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +74,8 @@
 			isa = PBXGroup;
 			children = (
 				5EF77DF8229F37A500230CD7 /* ActiveRealm */,
-				5EF77DF7229F37A500230CD7 /* Products */,
 				5EF77E6C22A4123A00230CD7 /* Frameworks */,
+				5EF77DF7229F37A500230CD7 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +101,9 @@
 				19E591D69C490D0F4D26E383 /* ARMObject.m */,
 				19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */,
 				19E59C6143B788E000F25611 /* ARMRelation.m */,
+				5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */,
+				19E59055D0985DD568452625 /* ARMRelationship.h */,
+				19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */,
 				5EF77DFA229F37A500230CD7 /* Info.plist */,
 			);
 			path = ActiveRealm;
@@ -120,7 +129,9 @@
 				19E5983C29044345215C7621 /* ARMActiveRealm.h in Headers */,
 				19E59615638FD44DB56AB276 /* ARMObject.h in Headers */,
 				19E595F45AEB8B92794739D1 /* ARMClassMapper.h in Headers */,
+				19E59A6AA856C7ABAE4DBCC1 /* ARMRelationship.h in Headers */,
 				19E590EE4297C0DA4E5A2FB1 /* ARMRelation.h in Headers */,
+				5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +231,7 @@
 				19E591094BC797EF81DF365E /* ARMActiveRealmManager.m in Sources */,
 				19E59394385E0073CF6CC933 /* ARMObject.m in Sources */,
 				19E5906E74C39E01E30EFD98 /* ARMRelation.m in Sources */,
+				19E595431F9248B9BD359668 /* ARMRelationship.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,27 @@
 //
-// Created by Masaki Ando on 2019-05-30.
-// Copyright (c) 2019 Hituzi Ando. All rights reserved.
+// ActiveRealm
+//
+// MIT License
+//
+// Copyright (c) 2019-present Hituzi Ando
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 //
 
 #import <objc/runtime.h>
@@ -13,6 +34,8 @@
 #import "ARMClassMapper.h"
 #import "ARMObject.h"
 #import "ARMRelation.h"
+#import "ARMRelation+Internal.h"
+#import "ARMRelationship.h"
 
 static const char *ARMGetPropertyType(objc_property_t property, BOOL *isPrimitiveType) {
     const char *attributes = property_getAttributes(property);
@@ -77,9 +100,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
 @interface ARMActiveRealm ()
 
-@property (nonatomic) NSString *uid;
+@property (nonatomic, copy) NSString *uid;
 @property (nonatomic) NSDate *createdAt;
 @property (nonatomic) NSDate *updatedAt;
+@property (nonatomic, copy) NSDictionary<NSString *, ARMRelation *> *relations;
 
 @end
 
@@ -93,7 +117,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     return @[];
 }
 
-+ (NSDictionary<NSString *, ARMRelation *> *)relationship {
++ (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{};
 }
 
@@ -102,6 +126,16 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
         _uid = [NSUUID UUID].UUIDString;
         _createdAt = [NSDate date];
         _updatedAt = [NSDate date];
+
+        NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
+
+        for (NSString *prop in self.class.definedRelationships) {
+            relations[prop] = [ARMRelation relationWithID:_uid
+                                             relationship:self.class.definedRelationships[prop]
+                                                belongsTo:self.class];
+        }
+
+        _relations = relations;
     }
 
     return self;
@@ -148,17 +182,13 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
         [realm deleteObject:obj];
     }];
 
-    for (NSString *prop in self.class.propertyNames) {
-        if (self.class.relationship[prop].hasOne && [self[prop] isKindOfClass:ARMActiveRealm.class]) {
-            [((ARMActiveRealm *) self[prop]) destroy];
+    for (NSString *prop in self.relations) {
+        if (self.relations[prop].hasOne) {
+            [self.relations[prop].object destroy];
         }
-        else if (self.class.relationship[prop].hasMany && [self[prop] isKindOfClass:NSArray.class]) {
-            NSArray *array = (NSArray *) self[prop];
-
-            for (id activeRealm in array) {
-                if ([activeRealm isKindOfClass:ARMActiveRealm.class]) {
-                    [activeRealm destroy];
-                }
+        else if (self.relations[prop].hasMany) {
+            for (ARMActiveRealm *activeRealm in self.relations[prop].objects) {
+                [activeRealm destroy];
             }
         }
     }
@@ -207,8 +237,11 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     va_start(args, format);
     va_end(args);
 
-    id rlmObj = [self objects:self.class
-                withPredicate:[NSPredicate predicateWithFormat:format arguments:args]].firstObject;
+    return [self findWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+}
+
++ (nullable instancetype)findWithPredicate:(NSPredicate *)predicate {
+    id rlmObj = [self objects:self.class withPredicate:predicate].firstObject;
 
     if (rlmObj) {
         return [self createInstanceWithRLMObject:rlmObj];
@@ -232,8 +265,11 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     va_start(args, format);
     va_end(args);
 
-    id rlmObj = [self objects:self.class
-                withPredicate:[NSPredicate predicateWithFormat:format arguments:args]].lastObject;
+    return [self findLastWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+}
+
++ (nullable instancetype)findLastWithPredicate:(NSPredicate *)predicate {
+    id rlmObj = [self objects:self.class withPredicate:predicate].lastObject;
 
     if (rlmObj) {
         return [self createInstanceWithRLMObject:rlmObj];
@@ -252,7 +288,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     activeRealm = [self.class new];
 
     for (NSString *prop in self.class.propertyNames) {
-        if (!self.relationship[prop] &&
+        if (!self.definedRelationships[prop] &&
             ![prop isEqualToString:@"uid"] &&
             ![prop isEqualToString:@"createdAt"] &&
             ![prop isEqualToString:@"updatedAt"]) {
@@ -274,7 +310,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     activeRealm = [self.class new];
 
     for (NSString *prop in self.class.propertyNames) {
-        if (!self.relationship[prop] &&
+        if (!self.definedRelationships[prop] &&
             ![prop isEqualToString:@"uid"] &&
             ![prop isEqualToString:@"createdAt"] &&
             ![prop isEqualToString:@"updatedAt"]) {
@@ -303,12 +339,11 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     va_start(args, format);
     va_end(args);
 
-    return [self whereWithFormat:format arguments:args];
+    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
 }
 
-+ (NSArray<ARMActiveRealm *> *)whereWithFormat:(NSString *)format arguments:(va_list)arguments {
-    RLMResults *results = [self objects:self.class
-                          withPredicate:[NSPredicate predicateWithFormat:format arguments:arguments]];
++ (NSArray<ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate {
+    RLMResults *results = [self objects:self.class withPredicate:predicate];
 
     NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
 
@@ -330,23 +365,33 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     va_start(args, format);
     va_end(args);
 
-    [[self whereWithFormat:format arguments:args]
-           enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [self destroyWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+}
 
-               [obj destroy];
-           }];
++ (void)destroyWithPredicate:(NSPredicate *)predicate {
+    [[self whereWithPredicate:predicate] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+        [obj destroy];
+    }];
 }
 
 #pragma mark - private method
 
 + (instancetype)createInstanceWithRLMObject:(RLMObject *)obj {
-    id activeRealm = [self.class new];
+    ARMActiveRealm *activeRealm = (ARMActiveRealm *) [self.class new];
 
     for (NSString *prop in self.class.propertyNames) {
-        if (!self.relationship[prop]) {
-            activeRealm[prop] = obj[prop];
-        }
+        activeRealm[prop] = obj[prop];
     }
+
+    NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
+
+    for (NSString *prop in self.class.definedRelationships) {
+        relations[prop] = [ARMRelation relationWithID:activeRealm.uid
+                                         relationship:self.class.definedRelationships[prop]
+                                            belongsTo:self.class];
+    }
+
+    activeRealm.relations = relations;
 
     return activeRealm;
 }
@@ -356,6 +401,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
         ARMGetProperties(self.superclass).mutableCopy : [NSMutableDictionary new];
     NSDictionary *selfProps = ARMGetProperties(self.class);
 
+    // Merge properties of superclass and self class.
     for (NSString *key in selfProps) {
         props[key] = selfProps[key];
     }
@@ -367,7 +413,10 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     NSMutableArray *properties = [NSMutableArray new];
 
     for (NSString *prop in self.properties.allKeys) {
-        if (![self.ignoredProperties containsObject:prop]) {
+        if (![self.ignoredProperties containsObject:prop] &&
+            !self.definedRelationships[prop] &&
+            ![prop isEqualToString:@"relations"]) {
+
             [properties addObject:prop];
         }
     }
@@ -380,7 +429,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
     id obj = [realmClass new];
 
     for (NSString *prop in self.class.propertyNames) {
-        if (!self.class.relationship[prop]) {
+        if (!self.class.definedRelationships[prop]) {
             obj[prop] = self[prop];
         }
     }
@@ -402,7 +451,7 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
     [ARMActiveRealmManager.sharedInstance.realm transactionWithBlock:^{
         for (NSString *prop in self.class.propertyNames) {
-            if (![prop isEqualToString:self.class.primaryKey] && !self.class.relationship[prop]) {
+            if (![prop isEqualToString:self.class.primaryKey] && !self.class.definedRelationships[prop]) {
                 obj[prop] = self[prop];
             }
         }

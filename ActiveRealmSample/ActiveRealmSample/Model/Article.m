@@ -22,27 +22,20 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 
 @end
 
-@interface Article ()
-
-@property (nonatomic) NSMutableArray<Tag *> *tags;
-
-@end
-
 @implementation Article
 
 - (instancetype)init {
     if (self = [super init]) {
-        _tags = [NSMutableArray new];
         _revision = @0;
     }
 
     return self;
 }
 
-+ (NSDictionary<NSString *, ARMRelation *> *)relationship {
++ (NSDictionary<NSString *, ARMRelation *> *)definedRelationships {
     return @{
-        @"author": [ARMRelation relationWithClass:Author.class type:ARMRelationTypeHasOne],
-        @"tags": [ARMRelation relationWithClass:Tag.class type:ARMRelationTypeHasMany]
+        @"author": [ARMRelationship relationshipWithClass:Author.class type:ARMRelationshipTypeHasOne],
+        @"tags": [ARMRelationship relationshipWithClass:Tag.class type:ARMRelationshipTypeHasMany]
     };
 }
 
@@ -55,6 +48,16 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
         @"createdAt",
         @"updatedAt"
     ]].description;
+}
+
+#pragma mark - property
+
+- (Author *)author {
+    return (Author *) self.relations[@"author"].object;
+}
+
+- (NSArray<Tag *> *)tags {
+    return (NSArray<Tag *> *) self.relations[@"tags"].objects;
 }
 
 @end
