@@ -29,7 +29,7 @@
 @interface ARMRelationship ()
 
 @property (nonatomic) Class relationClass;
-@property (nonatomic) ARMRelationshipType type;
+@property (nonatomic) NSInteger type;
 
 @end;
 
@@ -48,6 +48,25 @@
         @"relationClass",
         @"type"
     ]].description;
+}
+
+@end
+
+@implementation ARMInverseRelationship
+
++ (instancetype)relationshipWithClass:(Class)relationClass type:(ARMRelationshipType)type {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"Use `+inverseRelationshipWithClass:type:` instead."
+                                 userInfo:nil];
+}
+
+
++ (instancetype)inverseRelationshipWithClass:(Class)relationClass type:(ARMInverseRelationshipType)type {
+    ARMInverseRelationship *relationship = [ARMInverseRelationship new];
+    relationship.relationClass = relationClass;
+    relationship.type = type;
+
+    return relationship;
 }
 
 @end

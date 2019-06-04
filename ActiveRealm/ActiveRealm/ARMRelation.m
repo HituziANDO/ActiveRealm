@@ -59,7 +59,7 @@
 }
 
 - (BOOL)belongsTo {
-    return self.relationship.type == ARMRelationshipTypeBelongsTo;
+    return self.relationship.type == ARMInverseRelationshipTypeBelongsTo;
 }
 
 - (nullable ARMActiveRealm *)object {
@@ -102,7 +102,7 @@
     relation.activeRealm = activeRealm;
     relation.relationship = relationship;
 
-    NSString *className = relationship.type == ARMRelationshipTypeBelongsTo ?
+    NSString *className = relation.belongsTo ?
         NSStringFromClass(relationship.relationClass) :
         NSStringFromClass(activeRealm.class);
     relation.foreignKeyName = [NSString stringWithFormat:@"%@%@ID",

@@ -22,8 +22,8 @@ RLM_ARRAY_TYPE(ActiveRealmTag)
 
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{
-        @"article": [ARMRelationship relationshipWithClass:NSClassFromString(@"Article")
-                                                      type:ARMRelationshipTypeBelongsTo]
+        @"article": [ARMInverseRelationship inverseRelationshipWithClass:NSClassFromString(@"Article")
+                                                                    type:ARMInverseRelationshipTypeBelongsTo]
     };
 }
 

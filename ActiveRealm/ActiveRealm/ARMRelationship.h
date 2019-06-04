@@ -29,17 +29,26 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ARMRelationshipType) {
-    ARMRelationshipTypeHasOne,
-    ARMRelationshipTypeHasMany,
-    ARMRelationshipTypeBelongsTo
+    ARMRelationshipTypeHasOne = 0,
+    ARMRelationshipTypeHasMany
 };
 
 @interface ARMRelationship : NSObject
 
 @property (nonatomic, readonly) Class relationClass;
-@property (nonatomic, readonly) ARMRelationshipType type;
+@property (nonatomic, readonly) NSInteger type;
 
 + (instancetype)relationshipWithClass:(Class)relationClass type:(ARMRelationshipType)type;
+
+@end
+
+typedef NS_ENUM(NSInteger, ARMInverseRelationshipType) {
+    ARMInverseRelationshipTypeBelongsTo = 10
+};
+
+@interface ARMInverseRelationship : ARMRelationship
+
++ (instancetype)inverseRelationshipWithClass:(Class)relationClass type:(ARMInverseRelationshipType)type;
 
 @end
 
