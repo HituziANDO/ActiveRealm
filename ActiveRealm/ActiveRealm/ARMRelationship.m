@@ -43,4 +43,11 @@
     return relationship;
 }
 
+- (NSString *)description {
+    return [self dictionaryWithValuesForKeys:@[
+        @"relationClass",
+        @"type"
+    ]].description;
+}
+
 @end

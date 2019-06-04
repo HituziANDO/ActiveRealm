@@ -29,6 +29,7 @@
 #import <Realm/Realm.h>
 
 #import "ARMActiveRealm.h"
+#import "ARMActiveRealm+Internal.h"
 
 #import "ARMActiveRealmManager.h"
 #import "ARMClassMapper.h"
@@ -132,33 +133,13 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
 
         for (NSString *prop in self.class.definedRelationships) {
-            relations[prop] = [ARMRelation relationWithID:_uid
-                                             relationship:self.class.definedRelationships[prop]
-                                                belongsTo:self.class];
+            relations[prop] = [ARMRelation relationWithObject:self relationship:self.class.definedRelationships[prop]];
         }
 
         _relations = relations;
     }
 
     return self;
-}
-
-- (id)objectForKeyedSubscript:(NSString *)prop {
-    SEL sel = NSSelectorFromString(prop);
-    IMP imp = [self methodForSelector:sel];
-    id (*func)(id, SEL) = (void *) imp;
-
-    return func(self, sel);
-}
-
-- (void)setObject:(id)obj forKeyedSubscript:(NSString *)prop {
-    NSString *setter = [NSString stringWithFormat:@"set%@%@:",
-                                                  [prop substringToIndex:1].uppercaseString,
-                                                  [prop substringFromIndex:1]];
-    SEL sel = NSSelectorFromString(setter);
-    IMP imp = [self methodForSelector:sel];
-    void (*func)(id, SEL, id) = (void *) imp;
-    func(self, sel, obj);
 }
 
 #pragma mark - public method
@@ -557,9 +538,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
 
     for (NSString *prop in self.class.definedRelationships) {
-        relations[prop] = [ARMRelation relationWithID:activeRealm.uid
-                                         relationship:self.class.definedRelationships[prop]
-                                            belongsTo:self.class];
+        relations[prop] = [ARMRelation relationWithObject:activeRealm
+                                             relationship:self.class.definedRelationships[prop]];
     }
 
     activeRealm.relations = relations;
@@ -678,6 +658,28 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm, predicate);
 
     return [results sortedResultsUsingKeyPath:order ascending:ascending];
+}
+
+@end
+
+@implementation ARMActiveRealm (Internal)
+
+- (id)objectForKeyedSubscript:(NSString *)prop {
+    SEL sel = NSSelectorFromString(prop);
+    IMP imp = [self methodForSelector:sel];
+    id (*func)(id, SEL) = (void *) imp;
+
+    return func(self, sel);
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(NSString *)prop {
+    NSString *setter = [NSString stringWithFormat:@"set%@%@:",
+                                                  [prop substringToIndex:1].uppercaseString,
+                                                  [prop substringFromIndex:1]];
+    SEL sel = NSSelectorFromString(setter);
+    IMP imp = [self methodForSelector:sel];
+    void (*func)(id, SEL, id) = (void *) imp;
+    func(self, sel, obj);
 }
 
 @end

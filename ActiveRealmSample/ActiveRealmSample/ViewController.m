@@ -46,10 +46,16 @@
     Tag *tag2 = [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"iOS" }];
 
     // Relations.
-    Author *author = (Author *) article1.relations[@"author"].object;
-    NSArray<Tag *> *tags = (NSArray<Tag *> *) article1.relations[@"tags"].objects;
+    Author *author = article1.relations[@"author"].object;
+    NSArray<Tag *> *tags = article1.relations[@"tags"].objects;
+    Article *parentArticle1 = author1.relations[@"article"].object;
+    Article *parentArticle2 = tag1.relations[@"article"].object;
+    Article *parentArticle3 = tag2.relations[@"article"].object;
     NSLog(@"article.relations['author']: %@", author);
     NSLog(@"article.relations['tags']: %@", tags);
+    NSLog(@"author.relations['article']: %@", parentArticle1);
+    NSLog(@"tag.relations['article']: %@", parentArticle2);
+    NSLog(@"tag.relations['article']: %@", parentArticle3);
 
     // Update.
     article1.revision = @1;

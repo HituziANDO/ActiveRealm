@@ -58,12 +58,12 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 
 #pragma mark - property
 
-- (Author *)author {
-    return (Author *) self.relations[@"author"].object;
+- (nullable Author *)author {
+    return self.relations[@"author"].object;
 }
 
 - (NSArray<Tag *> *)tags {
-    return (NSArray<Tag *> *) self.relations[@"tags"].objects;
+    return self.relations[@"tags"].objects;
 }
 
 @end

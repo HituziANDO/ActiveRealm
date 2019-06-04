@@ -28,9 +28,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ARMActiveRealm;
+
 @interface ARMRelation (Internal)
 
-+ (instancetype)relationWithID:(NSString *)uid relationship:(ARMRelationship *)relationship belongsTo:(Class)aClass;
++ (instancetype)relationWithObject:(ARMActiveRealm *)activeRealm relationship:(ARMRelationship *)relationship;
 
 @end
 

@@ -25,6 +25,13 @@ RLM_ARRAY_TYPE(ActiveRealmAuthor)
     return @[ @"country" ];
 }
 
++ (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
+    return @{
+        @"article": [ARMRelationship relationshipWithClass:NSClassFromString(@"Article")
+                                                      type:ARMRelationshipTypeBelongsTo]
+    };
+}
+
 + (BOOL)validateBeforeSaving:(id)obj {
     Author *author = obj;
 
@@ -40,6 +47,12 @@ RLM_ARRAY_TYPE(ActiveRealmAuthor)
         @"createdAt",
         @"updatedAt"
     ]].description;
+}
+
+#pragma mark - property
+
+- (id)article {
+    return self.relations[@"article"].object;
 }
 
 @end

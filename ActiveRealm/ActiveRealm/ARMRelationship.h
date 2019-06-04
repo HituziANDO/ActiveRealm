@@ -30,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ARMRelationshipType) {
     ARMRelationshipTypeHasOne,
-    ARMRelationshipTypeHasMany
+    ARMRelationshipTypeHasMany,
+    ARMRelationshipTypeBelongsTo
 };
 
 @interface ARMRelationship : NSObject

@@ -24,21 +24,14 @@
 // SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-
-#import "ARMRelationship.h"
+#import "ActiveRealm.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ARMActiveRealm;
+@interface ARMActiveRealm (Internal)
 
-@interface ARMRelation : NSObject
-
-@property (nonatomic, readonly) BOOL hasOne;
-@property (nonatomic, readonly) BOOL hasMany;
-@property (nonatomic, readonly) BOOL belongsTo;
-@property (nonatomic, readonly, nullable) __kindof ARMActiveRealm *object;
-@property (nonatomic, readonly, nullable) NSArray<__kindof ARMActiveRealm *> *objects;
+- (id)objectForKeyedSubscript:(NSString *)prop;
+- (void)setObject:(id)obj forKeyedSubscript:(NSString *)prop;
 
 @end
 

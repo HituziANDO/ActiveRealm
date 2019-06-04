@@ -27,11 +27,13 @@
 #import "ARMRelation.h"
 #import "ARMRelation+Internal.h"
 
+#import "ARMActiveRealm.h"
+#import "ARMActiveRealm+Internal.h"
+
 @interface ARMRelation ()
 
-@property (nonatomic) Class relationClass;
-@property (nonatomic) ARMRelationshipType type;
-@property (nonatomic, copy, nullable) NSString *foreignKey;
+@property (nonatomic) ARMActiveRealm *activeRealm;
+@property (nonatomic) ARMRelationship *relationship;
 @property (nonatomic, copy, nullable) NSString *foreignKeyName;
 
 @end
@@ -40,9 +42,8 @@
 
 - (NSString *)description {
     return [self dictionaryWithValuesForKeys:@[
-        @"relationClass",
-        @"type",
-        @"foreignKey",
+        @"activeRealm",
+        @"relationship",
         @"foreignKeyName"
     ]].description;
 }
@@ -50,23 +51,34 @@
 #pragma mark - property
 
 - (BOOL)hasOne {
-    return self.type == ARMRelationshipTypeHasOne;
+    return self.relationship.type == ARMRelationshipTypeHasOne;
 }
 
 - (BOOL)hasMany {
-    return self.type == ARMRelationshipTypeHasMany;
+    return self.relationship.type == ARMRelationshipTypeHasMany;
+}
+
+- (BOOL)belongsTo {
+    return self.relationship.type == ARMRelationshipTypeBelongsTo;
 }
 
 - (nullable ARMActiveRealm *)object {
-    if (!self.hasOne) {
-        return nil;
+    if (self.hasOne) {
+        SEL sel = NSSelectorFromString(@"find:");
+        IMP imp = [self.relationship.relationClass methodForSelector:sel];
+        id (*func)(id, SEL, NSDictionary *) = (void *) imp;
+
+        return func(self.relationship.relationClass, sel, @{ self.foreignKeyName: self.activeRealm.uid });
+    }
+    else if (self.belongsTo) {
+        SEL sel = NSSelectorFromString(@"findByID:");
+        IMP imp = [self.relationship.relationClass methodForSelector:sel];
+        id (*func)(id, SEL, NSString *) = (void *) imp;
+
+        return func(self.relationship.relationClass, sel, self.activeRealm[self.foreignKeyName]);
     }
 
-    SEL sel = NSSelectorFromString(@"findOrInitialize:");
-    IMP imp = [self.relationClass methodForSelector:sel];
-    id (*func)(id, SEL, NSDictionary *) = (void *) imp;
-
-    return func(self.relationClass, sel, @{ self.foreignKeyName: self.foreignKey });
+    return nil;
 }
 
 - (nullable NSArray<ARMActiveRealm *> *)objects {
@@ -75,23 +87,24 @@
     }
 
     SEL sel = NSSelectorFromString(@"where:");
-    IMP imp = [self.relationClass methodForSelector:sel];
+    IMP imp = [self.relationship.relationClass methodForSelector:sel];
     NSArray *(*func)(id, SEL, NSDictionary *) = (void *) imp;
 
-    return func(self.relationClass, sel, @{ self.foreignKeyName: self.foreignKey });
+    return func(self.relationship.relationClass, sel, @{ self.foreignKeyName: self.activeRealm.uid });
 }
 
 @end
 
 @implementation ARMRelation (Internal)
 
-+ (instancetype)relationWithID:(NSString *)uid relationship:(ARMRelationship *)relationship belongsTo:(Class)aClass {
++ (instancetype)relationWithObject:(ARMActiveRealm *)activeRealm relationship:(ARMRelationship *)relationship {
     ARMRelation *relation = [ARMRelation new];
-    relation.relationClass = relationship.relationClass;
-    relation.type = relationship.type;
-    relation.foreignKey = uid;
+    relation.activeRealm = activeRealm;
+    relation.relationship = relationship;
 
-    NSString *className = NSStringFromClass(aClass);
+    NSString *className = relationship.type == ARMRelationshipTypeBelongsTo ?
+        NSStringFromClass(relationship.relationClass) :
+        NSStringFromClass(activeRealm.class);
     relation.foreignKeyName = [NSString stringWithFormat:@"%@%@ID",
                                                          [className substringToIndex:1].lowercaseString,
                                                          [className substringFromIndex:1]];

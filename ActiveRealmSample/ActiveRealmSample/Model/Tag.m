@@ -20,6 +20,13 @@ RLM_ARRAY_TYPE(ActiveRealmTag)
 
 @implementation Tag
 
++ (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
+    return @{
+        @"article": [ARMRelationship relationshipWithClass:NSClassFromString(@"Article")
+                                                      type:ARMRelationshipTypeBelongsTo]
+    };
+}
+
 + (BOOL)validateBeforeSaving:(id)obj {
     Tag *tag = obj;
 
@@ -34,6 +41,12 @@ RLM_ARRAY_TYPE(ActiveRealmTag)
         @"createdAt",
         @"updatedAt"
     ]].description;
+}
+
+#pragma mark - property
+
+- (id)article {
+    return self.relations[@"article"].object;
 }
 
 @end

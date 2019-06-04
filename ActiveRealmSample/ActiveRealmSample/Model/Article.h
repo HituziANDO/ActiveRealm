@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) NSNumber *revision;
 
 // Relation properties. These properties are just aliases.
-@property (nonatomic, readonly) Author *author;
+@property (nonatomic, readonly, nullable) Author *author;
 @property (nonatomic, readonly) NSArray<Tag *> *tags;
 
 @end
