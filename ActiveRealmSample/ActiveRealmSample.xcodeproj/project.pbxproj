@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		19E5924FB37B01BFAC914562 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59DEF484B45654BAB5398 /* Tag.m */; };
 		19E5962EC60C7265756A2EB6 /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E596254320895B1BA496F0 /* Author.m */; };
+		19E59835BE9CC63344B42F89 /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E596B19FAC3EC1AD949FE1 /* UserSettings.m */; };
 		19E59C2B3E990C5F497C2FCC /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59E1E6972EB950FF7148F /* Article.m */; };
 		5EF77E2A229F4CD800230CD7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77E29229F4CD800230CD7 /* AppDelegate.m */; };
 		5EF77E2D229F4CD800230CD7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77E2C229F4CD800230CD7 /* ViewController.m */; };
@@ -49,7 +50,9 @@
 /* Begin PBXFileReference section */
 		19E5908F9916EE0031EDBF93 /* Article.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Article.h; sourceTree = "<group>"; };
 		19E591AA0882DD1C86EE1AAE /* Author.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Author.h; sourceTree = "<group>"; };
+		19E595721A1B4A337A96F498 /* UserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettings.h; sourceTree = "<group>"; };
 		19E596254320895B1BA496F0 /* Author.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Author.m; sourceTree = "<group>"; };
+		19E596B19FAC3EC1AD949FE1 /* UserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettings.m; sourceTree = "<group>"; };
 		19E59DEF484B45654BAB5398 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		19E59E1E6972EB950FF7148F /* Article.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Article.m; sourceTree = "<group>"; };
 		19E59F340B64A5C68296801F /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
@@ -174,6 +177,8 @@
 				19E596254320895B1BA496F0 /* Author.m */,
 				19E59F340B64A5C68296801F /* Tag.h */,
 				19E59DEF484B45654BAB5398 /* Tag.m */,
+				19E595721A1B4A337A96F498 /* UserSettings.h */,
+				19E596B19FAC3EC1AD949FE1 /* UserSettings.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,6 +306,7 @@
 				19E59C2B3E990C5F497C2FCC /* Article.m in Sources */,
 				19E5962EC60C7265756A2EB6 /* Author.m in Sources */,
 				19E5924FB37B01BFAC914562 /* Tag.m in Sources */,
+				19E59835BE9CC63344B42F89 /* UserSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

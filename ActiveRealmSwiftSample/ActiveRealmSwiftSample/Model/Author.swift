@@ -9,40 +9,42 @@ import ActiveRealm
 
 class ActiveRealmAuthor: ARMObject {
 
-    @objc dynamic var articleID     = ""
     @objc dynamic var name          = ""
     @objc dynamic var age: NSNumber = 0
 }
 
 class Author: ARMActiveRealm {
 
-    @objc var articleID     = ""
     @objc var name          = ""
     @objc var age: NSNumber = 0
-    @objc var country       = ""
 
-    var article: Article {
-        return relations["article"]?.object as! Article
+    // Relation properties. These properties are just aliases.
+
+    var userSettings: UserSettings? {
+        guard let userSettings = relations["userSettings"]?.object as? UserSettings else { return nil }
+        return userSettings
     }
 
-    override class func ignoredProperties() -> [String] {
-        return ["country"]
+    var articles: [Article] {
+        guard let articles = relations["articles"]?.objects as? [Article] else { return [] }
+        return articles
     }
 
     override class func definedRelationships() -> [String: ARMRelationship] {
-        return ["article": ARMInverseRelationship(with: Article.self, type: .belongsTo)]
+        return [
+            "userSettings": ARMRelationship(with: UserSettings.self, type: .hasOne),
+            "articles": ARMRelationship(with: Article.self, type: .hasMany)]
     }
 
     override class func validateBeforeSaving(_ obj: Any) -> Bool {
         let author = obj as! Author
 
-        return !author.articleID.isEmpty && !author.name.isEmpty
+        return !author.name.isEmpty
     }
 
     override var description: String {
         let dict = dictionaryWithValues(forKeys: [
             "uid",
-            "articleID",
             "name",
             "age",
             "createdAt",

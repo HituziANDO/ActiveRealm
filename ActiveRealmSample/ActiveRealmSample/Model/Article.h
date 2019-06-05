@@ -9,17 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class Author;
 @class Tag;
 
 @interface Article : ARMActiveRealm
 
+@property (nonatomic, copy) NSString *authorID;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, nullable) NSNumber *revision;
 
 // Relation properties. These properties are just aliases.
-@property (nonatomic, readonly, nullable) Author *author;
+@property (nonatomic, readonly) id author;
 @property (nonatomic, readonly) NSArray<Tag *> *tags;
 
 @end

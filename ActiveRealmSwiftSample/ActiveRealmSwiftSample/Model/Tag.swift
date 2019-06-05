@@ -18,6 +18,8 @@ class Tag: ARMActiveRealm {
     @objc var articleID = ""
     @objc var name      = ""
 
+    // A relation property. This property is just alias.
+
     var article: Article {
         return relations["article"]?.object as! Article
     }

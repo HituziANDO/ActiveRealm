@@ -5,11 +5,11 @@
 
 #import "Article.h"
 
-#import "Author.h"
 #import "Tag.h"
 
 @interface ActiveRealmArticle : ARMObject
 
+@property NSString *authorID;
 @property NSString *title;
 @property NSString *text;
 @property NSNumber <RLMInt> *revision;
@@ -34,7 +34,8 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{
-        @"author": [ARMRelationship relationshipWithClass:Author.class type:ARMRelationshipTypeHasOne],
+        @"author": [ARMInverseRelationship inverseRelationshipWithClass:NSClassFromString(@"Author")
+                                                                   type:ARMInverseRelationshipTypeBelongsTo],
         @"tags": [ARMRelationship relationshipWithClass:Tag.class type:ARMRelationshipTypeHasMany]
     };
 }
@@ -42,12 +43,13 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 + (BOOL)validateBeforeSaving:(id)obj {
     Article *article = obj;
 
-    return article.title.length > 0 && article.text.length > 0;
+    return article.authorID.length > 0 && article.title.length > 0 && article.text.length > 0;
 }
 
 - (NSString *)description {
     return [self dictionaryWithValuesForKeys:@[
         @"uid",
+        @"authorID",
         @"title",
         @"text",
         @"revision",
@@ -58,7 +60,7 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 
 #pragma mark - property
 
-- (nullable Author *)author {
+- (id)author {
     return self.relations[@"author"].object;
 }
 

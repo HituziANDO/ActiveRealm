@@ -5,9 +5,11 @@
 
 #import "Author.h"
 
+#import "Article.h"
+#import "UserSettings.h"
+
 @interface ActiveRealmAuthor : ARMObject
 
-@property NSString *articleID;
 @property NSString *name;
 @property NSNumber <RLMInt> *age;
 
@@ -21,27 +23,24 @@ RLM_ARRAY_TYPE(ActiveRealmAuthor)
 
 @implementation Author
 
-+ (NSArray<NSString *> *)ignoredProperties {
-    return @[ @"country" ];
-}
-
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships {
     return @{
-        @"article": [ARMInverseRelationship inverseRelationshipWithClass:NSClassFromString(@"Article")
-                                                                    type:ARMInverseRelationshipTypeBelongsTo]
+        @"userSettings": [ARMRelationship relationshipWithClass:UserSettings.class
+                                                           type:ARMRelationshipTypeHasOne],
+        @"articles": [ARMRelationship relationshipWithClass:Article.class
+                                                       type:ARMRelationshipTypeHasMany]
     };
 }
 
 + (BOOL)validateBeforeSaving:(id)obj {
     Author *author = obj;
 
-    return author.articleID.length > 0 && author.name.length > 0;
+    return author.name.length > 0;
 }
 
 - (NSString *)description {
     return [self dictionaryWithValuesForKeys:@[
         @"uid",
-        @"articleID",
         @"name",
         @"age",
         @"createdAt",
@@ -51,8 +50,12 @@ RLM_ARRAY_TYPE(ActiveRealmAuthor)
 
 #pragma mark - property
 
-- (id)article {
-    return self.relations[@"article"].object;
+- (nullable UserSettings *)userSettings {
+    return self.relations[@"userSettings"].object;
+}
+
+- (NSArray<Article *> *)articles {
+    return self.relations[@"articles"].objects;
 }
 
 @end

@@ -9,15 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class Article;
+@class UserSettings;
+
 @interface Author : ARMActiveRealm
 
-@property (nonatomic, copy) NSString *articleID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic) NSNumber *age;
-@property (nonatomic, copy, nullable) NSString *country;
 
 // Relation properties. These properties are just aliases.
-@property (nonatomic, readonly) id article;
+@property (nonatomic, readonly, nullable) UserSettings *userSettings;
+@property (nonatomic, readonly) NSArray<Article *> *articles;
 
 @end
 

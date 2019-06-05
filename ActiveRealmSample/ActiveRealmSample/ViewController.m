@@ -13,6 +13,7 @@
 #import "Article.h"
 #import "Author.h"
 #import "Tag.h"
+#import "UserSettings.h"
 
 @interface ViewController ()
 
@@ -23,67 +24,89 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Setup ActiveRealm
+    // Setup ActiveRealm.
     RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
     configuration.inMemoryIdentifier = @"Sample";
     [RLMRealmConfiguration setDefaultConfiguration:configuration];
     ARMActiveRealmManager.sharedInstance.realm = [RLMRealm defaultRealm];
 
     // Initialize an instance.
-    Article *article1 = [Article new];
-    article1.title = @"ActiveRealm";
-    article1.text = @"ActiveRealm is a library for iOS.";
+    Author *alice = [Author new];
+    alice.name = @"Alice";
+    alice.age = @28;
 
     // Insert to Realm DB. `save` means INSERT if the record does not exists in the DB, otherwise UPDATE it.
-    [article1 save];
+    [alice save];
 
-    // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters.
-    Author *author1 = [Author findOrInitialize:@{ @"articleID": article1.uid, @"name": @"Alice", @"age": @28 }];
-    [author1 save];
+    // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters. NOT save yet.
+    UserSettings *userSettings = [UserSettings findOrInitialize:@{ @"authorID": alice.uid,
+                                                                   @"notificationEnabled": @YES }];
+    [userSettings save];
 
     // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters and insert it to the DB.
-    Tag *tag1 = [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"Programming" }];
-    Tag *tag2 = [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"iOS" }];
+    Article *article1 = [Article findOrCreate:@{ @"authorID": alice.uid,
+                                                 @"title": @"ActiveRealm User Guide",
+                                                 @"text": @"ActiveRealm is a library for iOS.",
+                                                 @"revision": @0 }];
+    Article *article2 = [Article findOrCreate:@{ @"authorID": alice.uid,
+                                                 @"title": @"ActiveRealm API Reference",
+                                                 @"text": @"ActiveRealm API (Objective-C).",
+                                                 @"revision": @0 }];
+    [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"Programming" }];
+    [Tag findOrCreate:@{ @"articleID": article1.uid, @"name": @"iOS" }];
+    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Programming" }];
+    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"iOS" }];
 
     // Relations.
-    Author *author = article1.relations[@"author"].object;
-    NSArray<Tag *> *tags = article1.relations[@"tags"].objects;
-    Article *parentArticle1 = author1.relations[@"article"].object;
-    Article *parentArticle2 = tag1.relations[@"article"].object;
-    Article *parentArticle3 = tag2.relations[@"article"].object;
-    NSLog(@"article.relations['author']: %@", author);
+    // One-to-One
+    UserSettings *settings = alice.relations[@"userSettings"].object;
+    NSLog(@"author.relations['userSettings']: %@", settings);
+
+    // One-to-Many
+    NSArray<Article *> *articles = alice.relations[@"articles"].objects;
+    NSLog(@"author.relations['articles']: %@", articles);
+
+    Article *article = articles.firstObject;
+    NSArray<Tag *> *tags = article.relations[@"tags"].objects;
     NSLog(@"article.relations['tags']: %@", tags);
-    NSLog(@"author.relations['article']: %@", parentArticle1);
-    NSLog(@"tag.relations['article']: %@", parentArticle2);
-    NSLog(@"tag.relations['article']: %@", parentArticle3);
+
+    // Inverse relationship
+    Author *author = article.relations[@"author"].object;
+    NSLog(@"article.relations['author']: %@", author);
+
+    Tag *tag = [Tag findOrCreate:@{ @"articleID": article.uid, @"name": @"Realm" }];
+    NSLog(@"tag.relations['article']['author']: %@", tag.relations[@"article"].object.relations[@"author"].object);
 
     // Update.
     article1.revision = @1;
     [article1 save];
 
-    Article *article2 = [Article findOrCreate:@{ @"title": @"Computer Science Vol.1", @"text": @"The programming is ...", @"revision": @0 }];
-    [Author findOrCreate:@{ @"articleID": article2.uid, @"name": @"Bob", @"age": @55 }];
-    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Computer Science" }];
-    [Tag findOrCreate:@{ @"articleID": article2.uid, @"name": @"Paper" }];
+    Author *bob = [Author findOrCreate:@{ @"name": @"Bob", @"age": @55 }];
+    Article *bobsArticle = [Article findOrCreate:@{ @"authorID": bob.uid,
+                                                    @"title": @"Computer Science Vol.1",
+                                                    @"text": @"The programming is ...",
+                                                    @"revision": @0 }];
+    [Tag findOrCreate:@{ @"articleID": bobsArticle.uid, @"name": @"Computer Science" }];
+    [Tag findOrCreate:@{ @"articleID": bobsArticle.uid, @"name": @"Paper" }];
 
     // Select all objects.
-    NSArray<Article *> *articles = Article.all;
-    NSLog(@"Article.all: %@", articles);
+    NSArray<Author *> *authors = Author.all;
+    NSLog(@"Author.all: %@", authors);
 
     // Select all objects ordered by specified property.
-    NSArray<Author *> *authors = [Author allOrderedBy:@"age" ascending:NO];
+    authors = [Author allOrderedBy:@"age" ascending:NO];
     NSLog(@"Author.allOrderedBy: %@", authors);
 
     // Find an object by specified ID.
-    author = [Author findByID:author1.uid];
+    author = [Author findByID:alice.uid];
     NSLog(@"Author.findByID: %@", author);
 
     // Find an object by specified parameters. When multiple objects are found, select first object.
     author = [Author find:@{ @"name": @"Bob" }];
     NSLog(@"Author.find: %@", author);
 
-    // Select first object.
-    Tag *tag = Tag.first;
+    // Select first created object.
+    tag = Tag.first;
     NSLog(@"Tag.first: %@", tag);
 
     // Select specified number of objects from the head.
@@ -94,7 +117,7 @@
     tags = [Tag firstOrderedBy:@"name" ascending:NO limit:2];
     NSLog(@"Tag.firstOrderedBy: %@", tags);
 
-    // Select last object.
+    // Select last created object.
     tag = Tag.last;
     NSLog(@"Tag.last: %@", tag);
 
@@ -126,26 +149,24 @@
                 limit:1];
     NSLog(@"Tag.whereOrderedBy: %@", tags);
 
-    NSLog(@"Article.findByID: %@", [Article findByID:article1.uid]);
-    NSLog(@"Author.where: %@", [Author where:@{ @"articleID": article1.uid }]);
-    NSLog(@"Tag.where: %@", [Tag where:@{ @"articleID": article1.uid }]);
-
     // Cascade delete.
-    [article1 destroy];
-    NSLog(@"Article.findByID: %@", [Article findByID:article1.uid]);
-    NSLog(@"Author.where: %@", [Author where:@{ @"articleID": article1.uid }]);
-    NSLog(@"Tag.where: %@", [Tag where:@{ @"articleID": article1.uid }]);
+    [alice destroy];
+    NSLog(@"Author.all: %@", Author.all);
+    NSLog(@"UserSettings.all: %@", UserSettings.all);
+    NSLog(@"Article.all: %@", Article.all);
+    NSLog(@"Tag.all: %@", Tag.all);
 
     // Cascade delete by specified parameters.
     [Article destroy:@{ @"title": @"Computer Science Vol.1", @"revision": @0 }];
-    NSLog(@"Article.all: %@", Article.all);
     NSLog(@"Author.all: %@", Author.all);
+    NSLog(@"UserSettings.all: %@", UserSettings.all);
+    NSLog(@"Article.all: %@", Article.all);
     NSLog(@"Tag.all: %@", Tag.all);
 
     // Failed to save because validation error.
-    Article *article = [Article findOrInitialize:@{ @"title": @"Programming Guide" }];
-    BOOL success = [article save];
-    NSLog(@"success: %d article: %@", success, [Article findByID:article.uid]);
+    Article *invalidArticle = [Article findOrInitialize:@{ @"title": @"Programming Guide", @"text": @"Introduction ..." }];
+    BOOL success = [invalidArticle save];
+    NSLog(@"success: %d article: %@", success, [Article findByID:invalidArticle.uid]);
 }
 
 @end

@@ -15,66 +15,87 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Setup ActiveRealm
+        // Setup ActiveRealm.
         let configuration = RLMRealmConfiguration.default()
         configuration.inMemoryIdentifier = "Sample"
         RLMRealmConfiguration.setDefault(configuration)
         ARMActiveRealmManager.shared().realm = RLMRealm.default()
 
         // Initialize an instance.
-        let article1 = Article()
-        article1.title = "ActiveRealm"
-        article1.text = "ActiveRealm is a library for iOS."
+        let alice = Author()
+        alice.name = "Alice"
+        alice.age = 28
 
         // Insert to Realm DB. `save` means INSERT if the record does not exists in the DB, otherwise UPDATE it.
-        article1.save()
+        alice.save()
 
-        // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters.
-        let author1 = Author.findOrInitialize(["articleID": article1.uid, "name": "Alice", "age": 28])
-        author1.save()
+        // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters. NOT save yet.
+        let userSettings = UserSettings.findOrInitialize(["authorID": alice.uid, "notificationEnabled": true])
+        userSettings.save()
 
         // Find an object if exists in Realm DB. Otherwise, initialize it with specified parameters and insert it to the DB.
-        let tag1 = Tag.findOrCreate(["articleID": article1.uid, "name": "Programming"])
-        let tag2 = Tag.findOrCreate(["articleID": article1.uid, "name": "iOS"])
+        let article1 = Article.findOrCreate(["authorID": alice.uid,
+                                             "title": "ActiveRealm User Guide",
+                                             "text": "ActiveRealm is a library for iOS.",
+                                             "revision": 0])
+        let article2 = Article.findOrCreate(["authorID": alice.uid,
+                                             "title": "ActiveRealm API Reference",
+                                             "text": "ActiveRealm API (Swift).",
+                                             "revision": 0])
+        Tag.findOrCreate(["articleID": article1.uid, "name": "Programming"])
+        Tag.findOrCreate(["articleID": article1.uid, "name": "iOS"])
+        Tag.findOrCreate(["articleID": article2.uid, "name": "Programming"])
+        Tag.findOrCreate(["articleID": article2.uid, "name": "iOS"])
 
         // Relations.
-        if let author = article1.relations["author"]?.object as? Author {
-            print("article.relations['author']: \(author)")
+        // One-to-One
+        if let settings = alice.relations["userSettings"]?.object as? UserSettings {
+            print("author.relations['userSettings']: \(settings)")
         }
-        if let tags = article1.relations["tags"]?.objects as? [Tag] {
-            print("article.relations['tags']: \(tags)")
-        }
-        if let article = author1.relations["article"]?.object as? Article {
-            print("author.relations['article']: \(article)")
-        }
-        if let article = tag1.relations["article"]?.object as? Article {
-            print("tag.relations['article']: \(article)")
-        }
-        if let article = tag2.relations["article"]?.object as? Article {
-            print("tag.relations['article']: \(article)")
+        // One-to-Many
+        if let articles = alice.relations["articles"]?.objects as? [Article] {
+            print("author.relations['articles']: \(articles)")
+
+            let article = articles.first!
+
+            if let tags = article.relations["tags"]?.objects as? [Tag] {
+                print("article.relations['tags']: \(tags)")
+            }
+
+            // Inverse relationship
+            if let author = article.relations["author"]?.object as? Author {
+                print("article.relations['author']: \(author)")
+            }
+
+            let tag = Tag.findOrCreate(["articleID": article.uid, "name": "Realm"])
+
+            if let author = tag.relations["article"]?.object?.relations["author"]?.object as? Author {
+                print("tag.relations['article']['author']: \(author)")
+            }
         }
 
         // Update.
         article1.revision = 1
         article1.save()
 
-        let article2 = Article.findOrCreate(["title": "Computer Science Vol.1",
-                                             "text": "The programming is ...",
-                                             "revision": 0])
-        Author.findOrCreate(["articleID": article2.uid, "name": "Bob", "age": 55])
-        Tag.findOrCreate(["articleID": article2.uid, "name": "Computer Science"])
-        Tag.findOrCreate(["articleID": article2.uid, "name": "Paper"])
+        let bob         = Author.findOrCreate(["name": "Bob", "age": 55])
+        let bobsArticle = Article.findOrCreate(["authorID": bob.uid,
+                                                "title": "Computer Science Vol.1",
+                                                "text": "The programming is ...",
+                                                "revision": 0])
+        Tag.findOrCreate(["articleID": bobsArticle.uid, "name": "Computer Science"])
+        Tag.findOrCreate(["articleID": bobsArticle.uid, "name": "Paper"])
 
         // Select all objects.
-        let articles = Article.all()
-        print("Article.all: \(articles)")
+        var authors = Author.all()
+        print("Author.all: \(authors)")
 
         // Select all objects ordered by specified property.
-        let authors = Author.all(orderedBy: "age", ascending: false)
+        authors = Author.all(orderedBy: "age", ascending: false)
         print("Author.all(orderedBy:): \(authors)")
 
         // Find an object by specified ID.
-        if let author = Author.find(ID: author1.uid) {
+        if let author = Author.find(ID: alice.uid) {
             print("Author.find(ID:): \(author)")
         }
 
@@ -83,7 +104,7 @@ class ViewController: UIViewController {
             print("Author.find: \(author)")
         }
 
-        // Select first object.
+        // Select first created object.
         if let tag = Tag.first() {
             print("Tag.first: \(tag)")
         }
@@ -98,7 +119,7 @@ class ViewController: UIViewController {
             print("Tag.first(orderedBy:): \(tags)")
         }
 
-        // Select last object.
+        // Select last created object.
         if let tag = Tag.last() {
             print("Tag.last: \(tag)")
         }
@@ -132,45 +153,42 @@ class ViewController: UIViewController {
             print("Tag.where(orderedBy:): \(tags)")
         }
 
-        if let article = Article.find(ID: article1.uid) {
-            print("Article.find(ID:): \(article)")
-        }
-        if let authors = Author.where(["articleID": article1.uid]) as? [Author] {
-            print("Author.where: \(authors)")
-        }
-        if let tags = Tag.where(["articleID": article1.uid]) as? [Tag] {
-            print("Tag.where: \(tags)")
-        }
-
         // Cascade delete.
-        article1.destroy()
-        if let article = Article.find(ID: article1.uid) {
-            print("Article.find(ID:): \(article)")
+        alice.destroy()
+        if let authors = Author.all() as? [Author] {
+            print("Author.all: \(authors)")
         }
-        if let authors = Author.where(["articleID": article1.uid]) as? [Author] {
-            print("Author.where: \(authors)")
+        if let userSettings = UserSettings.all() as? [UserSettings] {
+            print("UserSettings.all: \(userSettings)")
         }
-        if let tags = Tag.where(["articleID": article1.uid]) as? [Tag] {
-            print("Tag.where: \(tags)")
+        if let articles = Article.all() as? [Article] {
+            print("Article.all: \(articles)")
+        }
+        if let tags = Tag.all() as? [Tag] {
+            print("Tag.all: \(tags)")
         }
 
         // Cascade delete by specified parameters.
         Article.destroy(["title": "Computer Science Vol.1", "revision": 0])
-        if let articles = Article.all() as? [Article] {
-            print("Article.all: \(articles)")
-        }
         if let authors = Author.all() as? [Author] {
             print("Author.all: \(authors)")
+        }
+        if let userSettings = UserSettings.all() as? [UserSettings] {
+            print("UserSettings.all: \(userSettings)")
+        }
+        if let articles = Article.all() as? [Article] {
+            print("Article.all: \(articles)")
         }
         if let tags = Tag.all() as? [Tag] {
             print("Tag.all: \(tags)")
         }
 
         // Failed to save because validation error.
-        let article3 = Article.findOrInitialize(["title": "Programming Guide"])
-        let success  = article3.save()
+        let invalidArticle = Article.findOrInitialize(["title": "Programming Guide",
+                                                       "text": "Introduction ..."])
+        let success        = invalidArticle.save()
 
-        if Article.find(ID: article3.uid) == nil {
+        if Article.find(ID: invalidArticle.uid) == nil {
             print("success: \(success)")
         }
     }
