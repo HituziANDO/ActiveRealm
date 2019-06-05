@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, ARMInverseRelationshipType) {
 
 @interface ARMInverseRelationship : ARMRelationship
 
++ (instancetype)relationshipWithClass:(Class)relationClass type:(ARMRelationshipType)type DEPRECATED_MSG_ATTRIBUTE(
+    "Use `+inverseRelationshipWithClass:type:` instead.");
 + (instancetype)inverseRelationshipWithClass:(Class)relationClass type:(ARMInverseRelationshipType)type;
 
 @end

@@ -34,9 +34,10 @@ FOUNDATION_EXPORT const unsigned char ActiveRealmVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <ActiveRealm/PublicHeader.h>
 
+#import <Realm/Realm.h>
+
 #import "ARMActiveRealm.h"
 #import "ARMActiveRealmManager.h"
-#import "ARMClassMapper.h"
 #import "ARMObject.h"
 #import "ARMRelation.h"
 #import "ARMRelationship.h"

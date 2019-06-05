@@ -43,20 +43,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<NSString *> *)ignoredProperties;
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships;
-+ (BOOL)validateBeforeSaving:(id)obj;
++ (BOOL)validateBeforeSaving:(id)obj NS_SWIFT_NAME(validateBeforeSaving(_:));
 + (NSArray<__kindof ARMActiveRealm *> *)all;
-+ (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending;
++ (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order
+                                           ascending:(BOOL)ascending NS_SWIFT_NAME(all(orderedBy:ascending:));
 + (nullable instancetype)first;
-+ (NSArray<__kindof ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit NS_SWIFT_NAME(first(limit:));
 + (NSArray<__kindof ARMActiveRealm *> *)firstOrderedBy:(NSString *)order
                                              ascending:(BOOL)ascending
-                                                 limit:(NSUInteger)limit;
+                                                 limit:(NSUInteger)limit NS_SWIFT_NAME(first(orderedBy:ascending:limit:));
 + (nullable instancetype)last;
-+ (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit;
++ (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit NS_SWIFT_NAME(last(limit:));
 + (NSArray<__kindof ARMActiveRealm *> *)lastOrderedBy:(NSString *)order
                                             ascending:(BOOL)ascending
-                                                limit:(NSUInteger)limit;
-+ (nullable instancetype)findByID:(NSString *)uid;
+                                                limit:(NSUInteger)limit NS_SWIFT_NAME(last(orderedBy:ascending:limit:));
++ (nullable instancetype)findByID:(NSString *)uid NS_SWIFT_NAME(find(ID:));
 + (nullable instancetype)find:(NSDictionary<NSString *, id> *)dictionary;
 + (nullable instancetype)findWithFormat:(NSString *)format, ...;
 + (nullable instancetype)findWithPredicate:(NSPredicate *)predicate;

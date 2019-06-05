@@ -29,6 +29,7 @@
 
 #import "ARMActiveRealm.h"
 #import "ARMActiveRealm+Internal.h"
+#import "ARMActiveRealmManager.h"
 
 @interface ARMRelation ()
 
@@ -102,9 +103,11 @@
     relation.activeRealm = activeRealm;
     relation.relationship = relationship;
 
+    ARMActiveRealmManager *manager = [ARMActiveRealmManager sharedInstance];
+
     NSString *className = relation.belongsTo ?
-        NSStringFromClass(relationship.relationClass) :
-        NSStringFromClass(activeRealm.class);
+        [manager stringFromClass:relationship.relationClass namespace:nil] :
+        [manager stringFromClass:activeRealm.class namespace:nil];
     relation.foreignKeyName = [NSString stringWithFormat:@"%@%@ID",
                                                          [className substringToIndex:1].lowercaseString,
                                                          [className substringFromIndex:1]];

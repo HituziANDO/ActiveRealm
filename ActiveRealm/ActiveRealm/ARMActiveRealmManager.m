@@ -24,6 +24,8 @@
 // SOFTWARE.
 //
 
+#import <Realm/Realm.h>
+
 #import "ARMActiveRealmManager.h"
 
 @implementation ARMActiveRealmManager
@@ -52,6 +54,48 @@
     if (realm) {
         _realm = realm;
     }
+}
+
+#pragma mark - public method
+
+- (NSString *)stringFromClass:(Class)aClass namespace:(NSString *_Nullable *_Nullable)namespace {
+    NSString *className = NSStringFromClass(aClass);
+
+    // Remove namespace of Swift class.
+    NSMutableArray<NSString *> *nameComponents = [className componentsSeparatedByString:@"."].mutableCopy;
+    className = nameComponents.lastObject;
+    [nameComponents removeLastObject];
+
+    if (namespace) {
+        *namespace = [nameComponents componentsJoinedByString:@"."];
+    }
+
+    if (self.vendorPrefix.length > 0) {
+        className = [className substringFromIndex:self.vendorPrefix.length];
+    }
+
+    return className;
+}
+
+- (Class)map:(Class)aClass {
+    NSString *namespace = nil;
+    NSString *className = [self stringFromClass:aClass namespace:&namespace];
+    NSString *arClassName = [NSString stringWithFormat:@"ActiveRealm%@", className];
+
+    // Append namespace for Swift class.
+    if (namespace.length > 0) {
+        arClassName = [NSString stringWithFormat:@"%@.%@", namespace, arClassName];
+    }
+
+    Class arClass = NSClassFromString(arClassName);
+
+    if (!arClass) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"%@ class is not found.", arClassName]
+                                     userInfo:nil];
+    }
+
+    return arClass;
 }
 
 @end

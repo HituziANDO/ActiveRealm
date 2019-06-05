@@ -66,3 +66,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 ActiveRealmSample/ActiveRealmSample/Framework/Realm.framework
+ActiveRealmSwiftSample/ActiveRealmSwiftSample/Framework/*.framework

@@ -26,15 +26,19 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Realm/Realm.h>
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class RLMRealm;
 
 @interface ARMActiveRealmManager : NSObject
 
 @property (nonatomic) RLMRealm *realm;
+@property (nonatomic, copy, nullable) NSString *vendorPrefix;
 
-+ (instancetype)sharedInstance;
++ (instancetype)sharedInstance NS_SWIFT_NAME(shared());
+
+- (NSString *)stringFromClass:(Class)aClass namespace:(NSString *_Nullable *_Nullable)namespace;
+- (Class)map:(Class)aClass;
 
 @end
 

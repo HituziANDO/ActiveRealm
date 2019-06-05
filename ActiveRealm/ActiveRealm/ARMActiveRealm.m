@@ -32,7 +32,6 @@
 #import "ARMActiveRealm+Internal.h"
 
 #import "ARMActiveRealmManager.h"
-#import "ARMClassMapper.h"
 #import "ARMObject.h"
 #import "ARMRelation.h"
 #import "ARMRelation+Internal.h"
@@ -566,7 +565,10 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     for (NSString *prop in self.properties.allKeys) {
         if (![self.ignoredProperties containsObject:prop] &&
             !self.definedRelationships[prop] &&
-            ![prop isEqualToString:@"relations"]) {
+            ![prop isEqualToString:@"relations"] &&
+            ![prop isEqualToString:@"description"] &&
+            ![prop isEqualToString:@"debugDescription"] &&
+            ![prop isEqualToString:@"hash"]) {
 
             [properties addObject:prop];
         }
@@ -576,7 +578,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (void)create {
-    Class realmClass = [[ARMClassMapper sharedInstance] map:self.class];
+    Class realmClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
     id obj = [realmClass new];
 
     for (NSString *prop in self.class.propertyNames) {
@@ -624,7 +626,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (nullable RLMObject *)object:(Class)aClass forPrimaryKey:(id)primaryKey {
-    Class rlmObjClass = [[ARMClassMapper sharedInstance] map:aClass];
+    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"objectInRealm:forPrimaryKey:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     id (*func)(id, SEL, RLMRealm *, id) =(void *) imp;
@@ -633,7 +635,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (RLMResults *)allObjects:(Class)aClass orderedBy:(NSString *)order ascending:(BOOL)ascending {
-    Class rlmObjClass = [[ARMClassMapper sharedInstance] map:aClass];
+    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
@@ -651,7 +653,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
               orderedBy:(NSString *)order
               ascending:(BOOL)ascending {
 
-    Class rlmObjClass = [[ARMClassMapper sharedInstance] map:aClass];
+    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
