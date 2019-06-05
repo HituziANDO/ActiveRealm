@@ -74,6 +74,32 @@ class ViewController: UIViewController {
             }
         }
 
+        // Convert to dictionary.
+        print("author.asDictionary: \(alice.asDictionary())")
+        print("author.asDictionary: \(alice.asDictionary(exceptedProperties: ["uid", "createdAt", "updatedAt"]))")
+        print("author.asDictionary: \(alice.asDictionary(includedProperties: ["name", "age"]))")
+        let dictionary = alice.asDictionary(includedProperties: ["uid"]) { prop, value in
+            if prop == "uid" {
+                let uuid = value as! String
+                return uuid.split(separator: "-").first!
+            }
+            return value
+        }
+        print("author.asDictionary: \(dictionary)")
+
+        // Convert to JSON.
+        print("author.asJSON: \(alice.asJSONString())")
+        print("author.asJSON: \(alice.asJSONString(exceptedProperties: ["uid", "createdAt", "updatedAt"]))")
+        print("author.asJSON: \(alice.asJSONString(includedProperties: ["name", "age"]))")
+        let json = alice.asJSONString(includedProperties: ["uid"]) { prop, value in
+            if prop == "uid" {
+                let uuid = value as! String
+                return uuid.split(separator: "-").first!
+            }
+            return value
+        }
+        print("author.asJSON: \(json)")
+
         // Update.
         article1.revision = 1
         article1.save()

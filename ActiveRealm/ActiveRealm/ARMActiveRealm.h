@@ -96,4 +96,45 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface ARMActiveRealm (Converting)
+
+- (NSDictionary *)asDictionary;
+- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+NS_SWIFT_NAME(asDictionary(exceptedProperties:));
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                            block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asDictionary(exceptedProperties:block:));
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
+NS_SWIFT_NAME(asDictionary(includedProperties:));
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                            block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asDictionary(includedProperties:block:));
+- (NSData *)asJSON;
+- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+NS_SWIFT_NAME(asJSON(exceptedProperties:));
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asJSON(exceptedProperties:block:));
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
+NS_SWIFT_NAME(asJSON(includedProperties:));
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asJSON(includedProperties:block:));
+- (NSString *)asJSONString;
+- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+NS_SWIFT_NAME(asJSONString(exceptedProperties:));
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                        block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asJSONString(exceptedProperties:block:));
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
+NS_SWIFT_NAME(asJSONString(includedProperties:));
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                        block:(id (^)(NSString *prop, id value))block
+NS_SWIFT_NAME(asJSONString(includedProperties:block:));
+
+@end
+
 NS_ASSUME_NONNULL_END

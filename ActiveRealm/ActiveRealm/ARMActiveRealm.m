@@ -685,3 +685,141 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 @end
+
+@implementation ARMActiveRealm (Converting)
+
+- (NSDictionary *)asDictionary {
+    return [self asDictionaryExceptingProperties:@[]];
+}
+
+- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))block {
+    return [self asDictionaryExceptingProperties:@[] block:block];
+}
+
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
+    return [self asDictionaryExceptingProperties:exceptedProperties block:^id(NSString *prop, id value) {
+        return value;
+    }];
+}
+
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                            block:(id (^)(NSString *prop, id value))block {
+
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+
+    for (NSString *prop in self.class.propertyNames) {
+        if (![exceptedProperties containsObject:prop]) {
+            dictionary[prop] = block(prop, self[prop]);
+        }
+    }
+
+    return dictionary;
+}
+
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties {
+    return [self asDictionaryIncludingProperties:includedProperties block:^id(NSString *prop, id value) {
+        return value;
+    }];
+}
+
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                            block:(id (^)(NSString *prop, id value))block {
+
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+
+    for (NSString *prop in includedProperties) {
+        dictionary[prop] = block(prop, self[prop]);
+    }
+
+    return dictionary;
+}
+
+- (NSData *)asJSON {
+    return [self asJSONExceptingProperties:@[]];
+}
+
+- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))block {
+    return [self asJSONExceptingProperties:@[] block:block];
+}
+
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
+    return [self asJSONExceptingProperties:exceptedProperties block:^id(NSString *prop, id value) {
+        return value;
+    }];
+}
+
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                block:(id (^)(NSString *prop, id value))block {
+
+    NSDictionary *dictionary1 = [self asDictionaryExceptingProperties:exceptedProperties block:block];
+    NSMutableDictionary *dictionary2 = [NSMutableDictionary new];
+
+    for (NSString *prop in dictionary1) {
+        if ([dictionary1[prop] isKindOfClass:[NSDate class]]) {
+            dictionary2[prop] = [dictionary1[prop] description];
+        }
+        else {
+            dictionary2[prop] = dictionary1[prop];
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary2 options:NSJSONWritingPrettyPrinted error:nil];
+}
+
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties {
+    return [self asJSONIncludingProperties:includedProperties block:^id(NSString *prop, id value) {
+        return value;
+    }];
+}
+
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                block:(id (^)(NSString *prop, id value))block {
+
+    NSDictionary *dictionary1 = [self asDictionaryIncludingProperties:includedProperties block:block];
+    NSMutableDictionary *dictionary2 = [NSMutableDictionary new];
+
+    for (NSString *prop in dictionary1) {
+        if ([dictionary1[prop] isKindOfClass:[NSDate class]]) {
+            dictionary2[prop] = [dictionary1[prop] description];
+        }
+        else {
+            dictionary2[prop] = dictionary1[prop];
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary2 options:NSJSONWritingPrettyPrinted error:nil];
+}
+
+- (NSString *)asJSONString {
+    return [[NSString alloc] initWithData:[self asJSON] encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))block {
+    return [[NSString alloc] initWithData:[self asJSONWithBlock:block] encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
+    return [[NSString alloc] initWithData:[self asJSONExceptingProperties:exceptedProperties]
+                                 encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                                        block:(id (^)(NSString *prop, id value))block {
+
+    return [[NSString alloc] initWithData:[self asJSONExceptingProperties:exceptedProperties
+                                                                    block:block] encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties {
+    return [[NSString alloc] initWithData:[self asJSONIncludingProperties:includedProperties]
+                                 encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
+                                        block:(id (^)(NSString *prop, id value))block {
+
+    return [[NSString alloc] initWithData:[self asJSONIncludingProperties:includedProperties block:block]
+                                 encoding:NSUTF8StringEncoding];
+}
+
+@end

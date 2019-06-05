@@ -77,6 +77,30 @@
     Tag *tag = [Tag findOrCreate:@{ @"articleID": article.uid, @"name": @"Realm" }];
     NSLog(@"tag.relations['article']['author']: %@", tag.relations[@"article"].object.relations[@"author"].object);
 
+    // Convert to dictionary.
+    NSLog(@"author.asDictionary: %@", alice.asDictionary);
+    NSLog(@"author.asDictionary: %@", [alice asDictionaryExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
+    NSLog(@"author.asDictionary: %@", [alice asDictionaryIncludingProperties:@[ @"name", @"age" ]]);
+    NSLog(@"author.asDictionary: %@",
+          [alice asDictionaryIncludingProperties:@[ @"uid" ] block:^id(NSString *prop, id value) {
+              if ([prop isEqualToString:@"uid"]) {
+                  return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
+              }
+              return value;
+          }]);
+
+    // Convert to JSON.
+    NSLog(@"author.asJSON: %@", alice.asJSONString);
+    NSLog(@"author.asJSON: %@", [alice asJSONStringExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
+    NSLog(@"author.asJSON: %@", [alice asJSONStringIncludingProperties:@[ @"name", @"age" ]]);
+    NSLog(@"author.asJSON: %@",
+          [alice asJSONStringIncludingProperties:@[ @"uid" ] block:^id(NSString *prop, id value) {
+              if ([prop isEqualToString:@"uid"]) {
+                  return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
+              }
+              return value;
+          }]);
+
     // Update.
     article1.revision = @1;
     [article1 save];
