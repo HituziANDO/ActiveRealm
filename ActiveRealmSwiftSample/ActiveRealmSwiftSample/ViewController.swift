@@ -15,11 +15,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Setup ActiveRealm.
+        // Configure your Realm as default Realm.
         let configuration = RLMRealmConfiguration.default()
-        configuration.inMemoryIdentifier = "Sample"
         RLMRealmConfiguration.setDefault(configuration)
-        ARMActiveRealmManager.shared().realm = RLMRealm.default()
+
+        // Delete all data for sample.
+        let realm = RLMRealm.default()
+        try! realm.transaction { realm.deleteAllObjects() }
 
         // Initialize an instance.
         let alice = Author()
@@ -229,5 +231,22 @@ class ViewController: UIViewController {
                                        addingPropertiesWith: chris,
                                        methods: ["generation": "generation:", "works": "works:"]) // The method name is specified by ObjC representation.
         print("author.asJSON: \(json2)")
+
+        let david = Author()
+        david.name = "David"
+        david.age = 45
+        david.save()
+
+        // An ActiveRealm object can be used on multi-threads.
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + 2.0) {
+            david.age = 46
+            david.save()
+
+            DispatchQueue.main.async {
+                if let author = Author.find(with: NSPredicate(format: "name=%@", "David")) {
+                    print("author: \(author)")
+                }
+            }
+        }
     }
 }

@@ -42,7 +42,6 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _realm = [RLMRealm defaultRealm];
     }
 
     return self;
@@ -50,10 +49,8 @@
 
 #pragma mark - property
 
-- (void)setRealm:(RLMRealm *)realm {
-    if (realm) {
-        _realm = realm;
-    }
+- (RLMRealm *)defaultRealm {
+    return [RLMRealm defaultRealm];
 }
 
 #pragma mark - public method

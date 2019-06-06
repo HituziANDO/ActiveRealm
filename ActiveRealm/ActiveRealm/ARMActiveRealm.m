@@ -165,7 +165,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         return;
     }
 
-    RLMRealm *realm = ARMActiveRealmManager.sharedInstance.realm;
+    RLMRealm *realm = ARMActiveRealmManager.sharedInstance.defaultRealm;
     [realm transactionWithBlock:^{
         [realm deleteObject:obj];
     }];
@@ -587,7 +587,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         }
     }
 
-    RLMRealm *realm = ARMActiveRealmManager.sharedInstance.realm;
+    RLMRealm *realm = ARMActiveRealmManager.sharedInstance.defaultRealm;
     [realm transactionWithBlock:^{
         [realm addObject:obj];
     }];
@@ -602,7 +602,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 
     self.updatedAt = [NSDate date];
 
-    [ARMActiveRealmManager.sharedInstance.realm transactionWithBlock:^{
+    [ARMActiveRealmManager.sharedInstance.defaultRealm transactionWithBlock:^{
         for (NSString *prop in self.class.propertyNames) {
             if (![prop isEqualToString:kActiveRealmPrimaryKeyName] && !self.class.definedRelationships[prop]) {
                 obj[prop] = self[prop];
@@ -631,7 +631,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     IMP imp = [rlmObjClass methodForSelector:sel];
     id (*func)(id, SEL, RLMRealm *, id) =(void *) imp;
 
-    return func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm, primaryKey);
+    return func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, primaryKey);
 }
 
 + (RLMResults *)allObjects:(Class)aClass orderedBy:(NSString *)order ascending:(BOOL)ascending {
@@ -639,7 +639,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm);
+    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm);
 
     return [results sortedResultsUsingKeyPath:order ascending:ascending];
 }
@@ -657,7 +657,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
     IMP imp = [rlmObjClass methodForSelector:sel];
     RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.realm, predicate);
+    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, predicate);
 
     return [results sortedResultsUsingKeyPath:order ascending:ascending];
 }

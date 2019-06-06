@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ARMActiveRealmManager : NSObject
 
-@property (nonatomic) RLMRealm *realm;
+@property (nonatomic, readonly) RLMRealm *defaultRealm;
 @property (nonatomic, copy, nullable) NSString *vendorPrefix;
 
 + (instancetype)sharedInstance NS_SWIFT_NAME(shared());

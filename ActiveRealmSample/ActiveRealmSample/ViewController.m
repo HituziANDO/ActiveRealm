@@ -24,11 +24,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Setup ActiveRealm.
+    // Configure your Realm as default Realm.
     RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
-    configuration.inMemoryIdentifier = @"Sample";
     [RLMRealmConfiguration setDefaultConfiguration:configuration];
-    ARMActiveRealmManager.sharedInstance.realm = [RLMRealm defaultRealm];
+
+    // Delete all data for sample.
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        [[RLMRealm defaultRealm] deleteAllObjects];
+    }];
 
     // Initialize an instance.
     Author *alice = [Author new];
@@ -211,6 +214,23 @@
                                             addingPropertiesWithTarget:chris
                                                                methods:@{ @"generation": @"generation:",
                                                                           @"works": @"works:" }]);
+
+    Author *david = [Author new];
+    david.name = @"David";
+    david.age = @45;
+    [david save];
+
+    // An ActiveRealm object can be used on multi-threads.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2 * NSEC_PER_SEC)),
+                   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       david.age = @46;
+                       [david save];
+
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           NSLog(@"author: %@", [Author findWithFormat:@"name=%@", @"David"]);
+                       });
+                   });
 }
 
 @end
