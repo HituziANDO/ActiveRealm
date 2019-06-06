@@ -692,8 +692,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     return [self asDictionaryExceptingProperties:@[]];
 }
 
-- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))block {
-    return [self asDictionaryExceptingProperties:@[] block:block];
+- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))converter {
+    return [self asDictionaryExceptingProperties:@[] block:converter];
 }
 
 - (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
@@ -703,13 +703,13 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                            block:(id (^)(NSString *prop, id value))block {
+                                            block:(id (^)(NSString *prop, id value))converter {
 
     NSMutableDictionary *dictionary = [NSMutableDictionary new];
 
     for (NSString *prop in self.class.propertyNames) {
         if (![exceptedProperties containsObject:prop]) {
-            dictionary[prop] = block(prop, self[prop]);
+            dictionary[prop] = converter(prop, self[prop]);
         }
     }
 
@@ -723,12 +723,71 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                            block:(id (^)(NSString *prop, id value))block {
+                                            block:(id (^)(NSString *prop, id value))converter {
 
     NSMutableDictionary *dictionary = [NSMutableDictionary new];
 
     for (NSString *prop in includedProperties) {
-        dictionary[prop] = block(prop, self[prop]);
+        dictionary[prop] = converter(prop, self[prop]);
+    }
+
+    return dictionary;
+}
+
+- (NSDictionary *)asDictionaryAddingPropertiesWithTarget:(id)target
+                                                 methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionary].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
+    }
+
+    return dictionary;
+}
+
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                       addingPropertiesWithTarget:(id)target
+                                          methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionaryExceptingProperties:exceptedProperties].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
+    }
+
+    return dictionary;
+}
+
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
+                       addingPropertiesWithTarget:(id)target
+                                          methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionaryIncludingProperties:includedProperties].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
     }
 
     return dictionary;
@@ -738,8 +797,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     return [self asJSONExceptingProperties:@[]];
 }
 
-- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))block {
-    return [self asJSONExceptingProperties:@[] block:block];
+- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))converter {
+    return [self asJSONExceptingProperties:@[] block:converter];
 }
 
 - (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
@@ -749,9 +808,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                block:(id (^)(NSString *prop, id value))block {
+                                block:(id (^)(NSString *prop, id value))converter {
 
-    NSDictionary *dictionary1 = [self asDictionaryExceptingProperties:exceptedProperties block:block];
+    NSDictionary *dictionary1 = [self asDictionaryExceptingProperties:exceptedProperties block:converter];
     NSMutableDictionary *dictionary2 = [NSMutableDictionary new];
 
     for (NSString *prop in dictionary1) {
@@ -773,9 +832,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                block:(id (^)(NSString *prop, id value))block {
+                                block:(id (^)(NSString *prop, id value))converter {
 
-    NSDictionary *dictionary1 = [self asDictionaryIncludingProperties:includedProperties block:block];
+    NSDictionary *dictionary1 = [self asDictionaryIncludingProperties:includedProperties block:converter];
     NSMutableDictionary *dictionary2 = [NSMutableDictionary new];
 
     for (NSString *prop in dictionary1) {
@@ -790,12 +849,71 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     return [NSJSONSerialization dataWithJSONObject:dictionary2 options:NSJSONWritingPrettyPrinted error:nil];
 }
 
+- (NSData *)asJSONAddingPropertiesWithTarget:(id)target
+                                     methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionary].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+}
+
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+           addingPropertiesWithTarget:(id)target
+                              methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionaryExceptingProperties:exceptedProperties].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+}
+
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
+           addingPropertiesWithTarget:(id)target
+                              methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    NSMutableDictionary *dictionary = [self asDictionaryIncludingProperties:includedProperties].mutableCopy;
+
+    for (NSString *prop in methods.allKeys) {
+        SEL selector = NSSelectorFromString(methods[prop]);
+
+        if ([target respondsToSelector:selector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            dictionary[prop] = [target performSelector:selector withObject:self];
+#pragma clang diagnostic pop
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+}
+
 - (NSString *)asJSONString {
     return [[NSString alloc] initWithData:[self asJSON] encoding:NSUTF8StringEncoding];
 }
 
-- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))block {
-    return [[NSString alloc] initWithData:[self asJSONWithBlock:block] encoding:NSUTF8StringEncoding];
+- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))converter {
+    return [[NSString alloc] initWithData:[self asJSONWithBlock:converter] encoding:NSUTF8StringEncoding];
 }
 
 - (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties {
@@ -804,10 +922,10 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                        block:(id (^)(NSString *prop, id value))block {
+                                        block:(id (^)(NSString *prop, id value))converter {
 
     return [[NSString alloc] initWithData:[self asJSONExceptingProperties:exceptedProperties
-                                                                    block:block] encoding:NSUTF8StringEncoding];
+                                                                    block:converter] encoding:NSUTF8StringEncoding];
 }
 
 - (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties {
@@ -816,10 +934,35 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                        block:(id (^)(NSString *prop, id value))block {
+                                        block:(id (^)(NSString *prop, id value))converter {
 
-    return [[NSString alloc] initWithData:[self asJSONIncludingProperties:includedProperties block:block]
+    return [[NSString alloc] initWithData:[self asJSONIncludingProperties:includedProperties block:converter]
                                  encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringAddingPropertiesWithTarget:(id)target
+                                             methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    return [[NSString alloc] initWithData:[self asJSONAddingPropertiesWithTarget:target methods:methods]
+                                 encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                   addingPropertiesWithTarget:(id)target
+                                      methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    return [[NSString alloc] initWithData:[self asJSONExceptingProperties:exceptedProperties
+                                               addingPropertiesWithTarget:target
+                                                                  methods:methods] encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
+                   addingPropertiesWithTarget:(id)target
+                                      methods:(NSDictionary<NSString *, NSString *> *)methods {
+
+    return [[NSString alloc] initWithData:[self asJSONIncludingProperties:includedProperties
+                                               addingPropertiesWithTarget:target
+                                                                  methods:methods] encoding:NSUTF8StringEncoding];
 }
 
 @end

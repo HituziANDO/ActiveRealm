@@ -35,14 +35,6 @@ class Tag: ARMActiveRealm {
     }
 
     override var description: String {
-        let dict = dictionaryWithValues(forKeys: [
-            "uid",
-            "articleID",
-            "name",
-            "createdAt",
-            "updatedAt"
-        ])
-
-        return "\(dict)"
+        return asJSONString()
     }
 }

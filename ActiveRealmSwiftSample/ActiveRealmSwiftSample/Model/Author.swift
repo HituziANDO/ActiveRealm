@@ -30,6 +30,16 @@ class Author: ARMActiveRealm {
         return articles
     }
 
+    // A property ignored by ActiveRealm.
+
+    @objc var shortID: String {
+        return String(uid.split(separator: "-").first!)
+    }
+
+    override class func ignoredProperties() -> [String] {
+        return ["shortID"]
+    }
+
     override class func definedRelationships() -> [String: ARMRelationship] {
         return [
             "userSettings": ARMRelationship(with: UserSettings.self, type: .hasOne),
@@ -43,14 +53,17 @@ class Author: ARMActiveRealm {
     }
 
     override var description: String {
-        let dict = dictionaryWithValues(forKeys: [
-            "uid",
-            "name",
-            "age",
-            "createdAt",
-            "updatedAt"
-        ])
+        return asJSONString()
+    }
+}
 
-        return "\(dict)"
+extension Author {
+
+    @objc func generation(_ obj: Author) -> NSNumber {
+        return NSNumber(integerLiteral: Int(age.doubleValue / 10.0) * 10)
+    }
+
+    @objc func works(_ obj: Author) -> [String] {
+        return articles.map { article -> String in article.asJSONString() }
     }
 }

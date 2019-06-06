@@ -99,41 +99,72 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ARMActiveRealm (Converting)
 
 - (NSDictionary *)asDictionary;
-- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSDictionary *)asDictionaryWithBlock:(id (^)(NSString *prop, id value))converter;
 - (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-NS_SWIFT_NAME(asDictionary(exceptedProperties:));
+NS_SWIFT_NAME(asDictionary(excepted:));
 - (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                            block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asDictionary(exceptedProperties:block:));
+                                            block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asDictionary(excepted:block:));
 - (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
-NS_SWIFT_NAME(asDictionary(includedProperties:));
+NS_SWIFT_NAME(asDictionary(included:));
 - (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                            block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asDictionary(includedProperties:block:));
+                                            block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asDictionary(included:block:));
+- (NSDictionary *)asDictionaryAddingPropertiesWithTarget:(id)target
+                                                 methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asDictionary(addingPropertiesWith:methods:));
+- (NSDictionary *)asDictionaryExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                       addingPropertiesWithTarget:(id)target
+                                          methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asDictionary(excepted:addingPropertiesWith:methods:));
+- (NSDictionary *)asDictionaryIncludingProperties:(NSArray<NSString *> *)includedProperties
+                       addingPropertiesWithTarget:(id)target
+                                          methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asDictionary(included:addingPropertiesWith:methods:));
 - (NSData *)asJSON;
-- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSData *)asJSONWithBlock:(id (^)(NSString *prop, id value))converter;
 - (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-NS_SWIFT_NAME(asJSON(exceptedProperties:));
+NS_SWIFT_NAME(asJSON(excepted:));
 - (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asJSON(exceptedProperties:block:));
+                                block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asJSON(excepted:block:));
 - (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
-NS_SWIFT_NAME(asJSON(includedProperties:));
+NS_SWIFT_NAME(asJSON(included:));
 - (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asJSON(includedProperties:block:));
+                                block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asJSON(included:block:));
+- (NSData *)asJSONAddingPropertiesWithTarget:(id)target methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSON(addingPropertiesWith:methods:));
+- (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+           addingPropertiesWithTarget:(id)target
+                              methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSON(excepted:addingPropertiesWith:methods:));
+- (NSData *)asJSONIncludingProperties:(NSArray<NSString *> *)includedProperties
+           addingPropertiesWithTarget:(id)target
+                              methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSON(included:addingPropertiesWith:methods:));
 - (NSString *)asJSONString;
-- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))block;
+- (NSString *)asJSONStringWithBlock:(id (^)(NSString *prop, id value))converter;
 - (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-NS_SWIFT_NAME(asJSONString(exceptedProperties:));
+NS_SWIFT_NAME(asJSONString(excepted:));
 - (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
-                                        block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asJSONString(exceptedProperties:block:));
+                                        block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asJSONString(excepted:block:));
 - (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
-NS_SWIFT_NAME(asJSONString(includedProperties:));
+NS_SWIFT_NAME(asJSONString(included:));
 - (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
-                                        block:(id (^)(NSString *prop, id value))block
-NS_SWIFT_NAME(asJSONString(includedProperties:block:));
+                                        block:(id (^)(NSString *prop, id value))converter
+NS_SWIFT_NAME(asJSONString(included:block:));
+- (NSString *)asJSONStringAddingPropertiesWithTarget:(id)target methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSONString(addingPropertiesWith:methods:));
+- (NSString *)asJSONStringExceptingProperties:(NSArray<NSString *> *)exceptedProperties
+                   addingPropertiesWithTarget:(id)target
+                                      methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSONString(excepted:addingPropertiesWith:methods:));
+- (NSString *)asJSONStringIncludingProperties:(NSArray<NSString *> *)includedProperties
+                   addingPropertiesWithTarget:(id)target
+                                      methods:(NSDictionary<NSString *, NSString *> *)methods
+NS_SWIFT_NAME(asJSONString(included:addingPropertiesWith:methods:));
 
 @end
 

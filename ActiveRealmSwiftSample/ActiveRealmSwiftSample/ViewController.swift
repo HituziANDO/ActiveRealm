@@ -74,32 +74,6 @@ class ViewController: UIViewController {
             }
         }
 
-        // Convert to dictionary.
-        print("author.asDictionary: \(alice.asDictionary())")
-        print("author.asDictionary: \(alice.asDictionary(exceptedProperties: ["uid", "createdAt", "updatedAt"]))")
-        print("author.asDictionary: \(alice.asDictionary(includedProperties: ["name", "age"]))")
-        let dictionary = alice.asDictionary(includedProperties: ["uid"]) { prop, value in
-            if prop == "uid" {
-                let uuid = value as! String
-                return uuid.split(separator: "-").first!
-            }
-            return value
-        }
-        print("author.asDictionary: \(dictionary)")
-
-        // Convert to JSON.
-        print("author.asJSON: \(alice.asJSONString())")
-        print("author.asJSON: \(alice.asJSONString(exceptedProperties: ["uid", "createdAt", "updatedAt"]))")
-        print("author.asJSON: \(alice.asJSONString(includedProperties: ["name", "age"]))")
-        let json = alice.asJSONString(includedProperties: ["uid"]) { prop, value in
-            if prop == "uid" {
-                let uuid = value as! String
-                return uuid.split(separator: "-").first!
-            }
-            return value
-        }
-        print("author.asJSON: \(json)")
-
         // Update.
         article1.revision = 1
         article1.save()
@@ -217,5 +191,43 @@ class ViewController: UIViewController {
         if Article.find(ID: invalidArticle.uid) == nil {
             print("success: \(success)")
         }
+
+        let chris = Author.findOrCreate(["name": "Chris", "age": 32])
+        Article.findOrCreate(["authorID": chris.uid, "title": "Book1", "text": "Book1..."])
+        Article.findOrCreate(["authorID": chris.uid, "title": "Book2", "text": "Book2..."])
+
+        // Convert to dictionary.
+        print("author.asDictionary: \(chris.asDictionary())")
+        print("author.asDictionary: \(chris.asDictionary(excepted: ["uid", "createdAt", "updatedAt"]))")
+        print("author.asDictionary: \(chris.asDictionary(included: ["name", "age", "shortID"]))")
+        let dictionary1 = chris.asDictionary(included: ["uid"]) { prop, value in
+            if prop == "uid" {
+                let uuid = value as! String
+                return uuid.split(separator: "-").first!
+            }
+            return value
+        }
+        print("author.asDictionary: \(dictionary1)")
+        let dictionary2 = chris.asDictionary(excepted: ["uid", "createdAt", "updatedAt", "age"],
+                                             addingPropertiesWith: chris,
+                                             methods: ["generation": "generation:", "works": "works:"])   // The method name is specified by ObjC representation.
+        print("author.asDictionary: \(dictionary2)")
+
+        // Convert to JSON.
+        print("author.asJSON: \(chris.asJSONString())")
+        print("author.asJSON: \(chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt"]))")
+        print("author.asJSON: \(chris.asJSONString(included: ["name", "age", "shortID"]))")
+        let json1 = chris.asJSONString(included: ["uid"]) { prop, value in
+            if prop == "uid" {
+                let uuid = value as! String
+                return uuid.split(separator: "-").first!
+            }
+            return value
+        }
+        print("author.asJSON: \(json1)")
+        let json2 = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt", "age"],
+                                       addingPropertiesWith: chris,
+                                       methods: ["generation": "generation:", "works": "works:"]) // The method name is specified by ObjC representation.
+        print("author.asJSON: \(json2)")
     }
 }

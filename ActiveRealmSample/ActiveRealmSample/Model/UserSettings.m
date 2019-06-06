@@ -46,13 +46,7 @@ RLM_ARRAY_TYPE(ActiveRealmUserSettings)
 }
 
 - (NSString *)description {
-    return [self dictionaryWithValuesForKeys:@[
-        @"uid",
-        @"authorID",
-        @"notificationEnabled",
-        @"createdAt",
-        @"updatedAt"
-    ]].description;
+    return self.asJSONString;
 }
 
 #pragma mark - property

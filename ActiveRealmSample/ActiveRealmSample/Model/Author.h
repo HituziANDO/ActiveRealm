@@ -21,6 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) UserSettings *userSettings;
 @property (nonatomic, readonly) NSArray<Article *> *articles;
 
+// A property ignored by ActiveRealm.
+@property (nonatomic, copy, readonly) NSString *shortUID;
+
+- (NSNumber *)generation:(Author *)obj;
+
 @end
 
 NS_ASSUME_NONNULL_END

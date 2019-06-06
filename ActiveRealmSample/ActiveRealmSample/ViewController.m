@@ -77,30 +77,6 @@
     Tag *tag = [Tag findOrCreate:@{ @"articleID": article.uid, @"name": @"Realm" }];
     NSLog(@"tag.relations['article']['author']: %@", tag.relations[@"article"].object.relations[@"author"].object);
 
-    // Convert to dictionary.
-    NSLog(@"author.asDictionary: %@", alice.asDictionary);
-    NSLog(@"author.asDictionary: %@", [alice asDictionaryExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
-    NSLog(@"author.asDictionary: %@", [alice asDictionaryIncludingProperties:@[ @"name", @"age" ]]);
-    NSLog(@"author.asDictionary: %@",
-          [alice asDictionaryIncludingProperties:@[ @"uid" ] block:^id(NSString *prop, id value) {
-              if ([prop isEqualToString:@"uid"]) {
-                  return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
-              }
-              return value;
-          }]);
-
-    // Convert to JSON.
-    NSLog(@"author.asJSON: %@", alice.asJSONString);
-    NSLog(@"author.asJSON: %@", [alice asJSONStringExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
-    NSLog(@"author.asJSON: %@", [alice asJSONStringIncludingProperties:@[ @"name", @"age" ]]);
-    NSLog(@"author.asJSON: %@",
-          [alice asJSONStringIncludingProperties:@[ @"uid" ] block:^id(NSString *prop, id value) {
-              if ([prop isEqualToString:@"uid"]) {
-                  return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
-              }
-              return value;
-          }]);
-
     // Update.
     article1.revision = @1;
     [article1 save];
@@ -191,6 +167,50 @@
     Article *invalidArticle = [Article findOrInitialize:@{ @"title": @"Programming Guide", @"text": @"Introduction ..." }];
     BOOL success = [invalidArticle save];
     NSLog(@"success: %d article: %@", success, [Article findByID:invalidArticle.uid]);
+
+    Author *chris = [Author findOrCreate:@{ @"name": @"Chris", @"age": @32 }];
+    [Article findOrCreate:@{ @"authorID": chris.uid, @"title": @"Book1", @"text": @"Book1..." }];
+    [Article findOrCreate:@{ @"authorID": chris.uid, @"title": @"Book2", @"text": @"Book2..." }];
+
+    // Convert to dictionary.
+    NSLog(@"author.asDictionary: %@", chris.asDictionary);
+    NSLog(@"author.asDictionary: %@", [chris asDictionaryExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
+    NSLog(@"author.asDictionary: %@", [chris asDictionaryIncludingProperties:@[ @"name", @"age", @"shortUID" ]]);
+    NSLog(@"author.asDictionary: %@", [chris asDictionaryIncludingProperties:@[ @"uid" ]
+                                                                       block:^id(NSString *prop, id value) {
+                                                                           if ([prop isEqualToString:@"uid"]) {
+                                                                               return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
+                                                                           }
+                                                                           return value;
+                                                                       }]);
+    NSLog(@"author.asDictionary: %@", [chris asDictionaryAddingPropertiesWithTarget:chris
+                                                                            methods:@{ @"generation": @"generation:" }]);
+    NSLog(@"author.asDictionary: %@", [chris asDictionaryExceptingProperties:@[ @"uid",
+                                                                                @"createdAt",
+                                                                                @"updatedAt",
+                                                                                @"age" ]
+                                                  addingPropertiesWithTarget:chris
+                                                                     methods:@{ @"generation": @"generation:",
+                                                                                @"works": @"works:" }]);
+
+    // Convert to JSON.
+    NSLog(@"author.asJSON: %@", chris.asJSONString);
+    NSLog(@"author.asJSON: %@", [chris asJSONStringExceptingProperties:@[ @"uid", @"createdAt", @"updatedAt" ]]);
+    NSLog(@"author.asJSON: %@", [chris asJSONStringIncludingProperties:@[ @"name", @"age", @"shortUID" ]]);
+    NSLog(@"author.asJSON: %@", [chris asJSONStringIncludingProperties:@[ @"uid" ]
+                                                                 block:^id(NSString *prop, id value) {
+                                                                     if ([prop isEqualToString:@"uid"]) {
+                                                                         return [((NSString *) value) componentsSeparatedByString:@"-"].firstObject;
+                                                                     }
+                                                                     return value;
+                                                                 }]);
+    NSLog(@"author.asJSON: %@", [chris asJSONStringExceptingProperties:@[ @"uid",
+                                                                          @"createdAt",
+                                                                          @"updatedAt",
+                                                                          @"age" ]
+                                            addingPropertiesWithTarget:chris
+                                                               methods:@{ @"generation": @"generation:",
+                                                                          @"works": @"works:" }]);
 }
 
 @end

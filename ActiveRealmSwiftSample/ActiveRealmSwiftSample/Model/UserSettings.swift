@@ -45,14 +45,6 @@ class UserSettings: ARMActiveRealm {
     }
 
     override var description: String {
-        let dict = dictionaryWithValues(forKeys: [
-            "uid",
-            "authorID",
-            "notificationEnabled",
-            "createdAt",
-            "updatedAt"
-        ])
-
-        return "\(dict)"
+        return asJSONString()
     }
 }

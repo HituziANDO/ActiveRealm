@@ -47,15 +47,7 @@ RLM_ARRAY_TYPE(ActiveRealmArticle)
 }
 
 - (NSString *)description {
-    return [self dictionaryWithValuesForKeys:@[
-        @"uid",
-        @"authorID",
-        @"title",
-        @"text",
-        @"revision",
-        @"createdAt",
-        @"updatedAt"
-    ]].description;
+    return self.asJSONString;
 }
 
 #pragma mark - property

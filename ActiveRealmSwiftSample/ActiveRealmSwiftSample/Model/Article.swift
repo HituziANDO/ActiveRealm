@@ -45,16 +45,6 @@ class Article: ARMActiveRealm {
     }
 
     override var description: String {
-        let dict = dictionaryWithValues(forKeys: [
-            "uid",
-            "authorID",
-            "title",
-            "text",
-            "revision",
-            "createdAt",
-            "updatedAt"
-        ])
-
-        return "\(dict)"
+        return asJSONString()
     }
 }
