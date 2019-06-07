@@ -881,7 +881,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 - (NSData *)asJSONAddingPropertiesWithTarget:(id)target
                                      methods:(NSDictionary<NSString *, NSString *> *)methods {
 
-    NSMutableDictionary *dictionary = [self asDictionary].mutableCopy;
+    NSMutableDictionary *dictionary1 = [self asDictionary].mutableCopy;
 
     for (NSString *prop in methods.allKeys) {
         SEL selector = NSSelectorFromString(methods[prop]);
@@ -889,12 +889,23 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         if ([target respondsToSelector:selector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            dictionary[prop] = [target performSelector:selector withObject:self];
+            dictionary1[prop] = [target performSelector:selector withObject:self];
 #pragma clang diagnostic pop
         }
     }
 
-    return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSMutableDictionary *dictionary2 = [NSMutableDictionary new];
+
+    for (NSString *prop in dictionary1) {
+        if ([dictionary1[prop] isKindOfClass:[NSDate class]]) {
+            dictionary2[prop] = [dictionary1[prop] description];
+        }
+        else {
+            dictionary2[prop] = dictionary1[prop];
+        }
+    }
+
+    return [NSJSONSerialization dataWithJSONObject:dictionary2 options:NSJSONWritingPrettyPrinted error:nil];
 }
 
 - (NSData *)asJSONExceptingProperties:(NSArray<NSString *> *)exceptedProperties

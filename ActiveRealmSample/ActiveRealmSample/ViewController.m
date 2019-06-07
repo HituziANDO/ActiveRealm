@@ -207,6 +207,8 @@
                                                                      }
                                                                      return value;
                                                                  }]);
+    NSLog(@"author.asJSON: %@", [chris asJSONStringAddingPropertiesWithTarget:chris
+                                                                      methods:@{ @"generation": @"generation:" }]);
     NSLog(@"author.asJSON: %@", [chris asJSONStringExceptingProperties:@[ @"uid",
                                                                           @"createdAt",
                                                                           @"updatedAt",

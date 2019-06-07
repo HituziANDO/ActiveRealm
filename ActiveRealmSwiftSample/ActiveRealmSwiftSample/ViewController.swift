@@ -210,10 +210,13 @@ class ViewController: UIViewController {
             return value
         }
         print("author.asDictionary: \(dictionary1)")
-        let dictionary2 = chris.asDictionary(excepted: ["uid", "createdAt", "updatedAt", "age"],
+        let dictionary2 = chris.asDictionary(addingPropertiesWith: chris,
+                                             methods: ["generation": "generation:"])    // The method name is specified by ObjC representation.
+        print("author.asDictionary: \(dictionary2)")
+        let dictionary3 = chris.asDictionary(excepted: ["uid", "createdAt", "updatedAt", "age"],
                                              addingPropertiesWith: chris,
                                              methods: ["generation": "generation:", "works": "works:"])   // The method name is specified by ObjC representation.
-        print("author.asDictionary: \(dictionary2)")
+        print("author.asDictionary: \(dictionary3)")
 
         // Convert to JSON.
         print("author.asJSON: \(chris.asJSONString())")
@@ -227,10 +230,13 @@ class ViewController: UIViewController {
             return value
         }
         print("author.asJSON: \(json1)")
-        let json2 = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt", "age"],
+        let json2 = chris.asJSONString(addingPropertiesWith: chris,
+                                       methods: ["generation": "generation:"])  // The method name is specified by ObjC representation.
+        print("author.asJSON: \(json2)")
+        let json3 = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt", "age"],
                                        addingPropertiesWith: chris,
                                        methods: ["generation": "generation:", "works": "works:"]) // The method name is specified by ObjC representation.
-        print("author.asJSON: \(json2)")
+        print("author.asJSON: \(json3)")
 
         let david = Author()
         david.name = "David"
