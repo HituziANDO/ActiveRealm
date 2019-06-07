@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)save;
 - (void)destroy;
+- (void)destroyWithCascade:(BOOL)cascade NS_SWIFT_NAME(destroy(cascade:));
 
 + (NSArray<NSString *> *)ignoredProperties;
 + (NSDictionary<NSString *, ARMRelationship *> *)definedRelationships;
@@ -93,6 +94,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary;
 + (void)destroyWithFormat:(NSString *)format, ...;
 + (void)destroyWithPredicate:(NSPredicate *)predicate;
++ (void)destroy:(NSDictionary<NSString *, id> *)dictionary cascade:(BOOL)cascade;
++ (void)destroyWithCascade:(BOOL)cascade format:(NSString *)format, ...;
++ (void)destroyWithPredicate:(NSPredicate *)predicate cascade:(BOOL)cascade;
 
 @end
 

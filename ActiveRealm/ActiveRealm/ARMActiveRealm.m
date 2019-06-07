@@ -159,6 +159,10 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (void)destroy {
+    [self destroyWithCascade:YES];
+}
+
+- (void)destroyWithCascade:(BOOL)cascade {
     RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
@@ -169,6 +173,10 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     [realm transactionWithBlock:^{
         [realm deleteObject:obj];
     }];
+
+    if (!cascade) {
+        return;
+    }
 
     for (NSString *prop in self.relations) {
         if (self.relations[prop].hasOne) {
@@ -524,6 +532,27 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         [obj destroy];
     }];
 }
+
++ (void)destroy:(NSDictionary<NSString *, id> *)dictionary cascade:(BOOL)cascade {
+    [[self where:dictionary] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+        [obj destroyWithCascade:cascade];
+    }];
+}
+
++ (void)destroyWithCascade:(BOOL)cascade format:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+
+    [self destroyWithPredicate:[NSPredicate predicateWithFormat:format arguments:args] cascade:cascade];
+}
+
++ (void)destroyWithPredicate:(NSPredicate *)predicate cascade:(BOOL)cascade {
+    [[self whereWithPredicate:predicate] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+        [obj destroyWithCascade:cascade];
+    }];
+}
+
 
 #pragma mark - private method
 
