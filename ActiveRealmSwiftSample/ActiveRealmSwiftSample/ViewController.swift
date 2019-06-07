@@ -15,8 +15,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Configure your Realm as default Realm.
+        // Configure your Realm configuration as default Realm.
         let configuration = RLMRealmConfiguration.default()
+        // Something to do
         RLMRealmConfiguration.setDefault(configuration)
 
         // Delete all data for sample.
@@ -151,6 +152,7 @@ class ViewController: UIViewController {
             print("Tag.where(orderedBy:): \(tags)")
         }
 
+        // Find specified number of objects by specified parameters. The results are ordered by specified property.
         if let tags = Tag.where(["articleID": article1.uid], orderedBy: "name", ascending: false, limit: 1) as? [Tag] {
             print("Tag.where(orderedBy:): \(tags)")
         }

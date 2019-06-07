@@ -24,8 +24,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Configure your Realm as default Realm.
+    // Configure your Realm configuration as default Realm.
     RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
+    // Something to do
     [RLMRealmConfiguration setDefaultConfiguration:configuration];
 
     // Delete all data for sample.
@@ -146,6 +147,7 @@
             ascending:YES];
     NSLog(@"Tag.whereOrderedBy: %@", tags);
 
+    // Find specified number of objects by specified parameters. The results are ordered by specified property.
     tags = [Tag where:@{ @"articleID": article1.uid }
             orderedBy:@"name"
             ascending:NO
