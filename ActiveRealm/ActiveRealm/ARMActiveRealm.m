@@ -125,7 +125,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 
 - (instancetype)init {
     if (self = [super init]) {
-        _uid = [NSUUID UUID].UUIDString;
+        _uid = [NSUUID UUID].UUIDString.uppercaseString;
         _createdAt = [NSDate date];
         _updatedAt = [NSDate date];
 
@@ -263,7 +263,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (nullable instancetype)findByID:(NSString *)uid {
-    id rlmObj = [self object:self.class forPrimaryKey:uid];
+    id rlmObj = [self object:self.class forPrimaryKey:uid.uppercaseString];
 
     if (rlmObj) {
         return [self createInstanceWithRLMObject:rlmObj];
