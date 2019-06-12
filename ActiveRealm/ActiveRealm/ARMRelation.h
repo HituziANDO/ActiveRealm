@@ -31,11 +31,27 @@ NS_ASSUME_NONNULL_BEGIN
 @class ARMActiveRealm;
 
 @interface ARMRelation : NSObject
-
+/**
+ * Tells whether the relationship is One-to-One.
+ */
 @property (nonatomic, readonly) BOOL hasOne;
+/**
+ * Tells whether the relationship is One-to-Many.
+ */
 @property (nonatomic, readonly) BOOL hasMany;
+/**
+ * Tells whether the relationship is inverse relationship for One-to-One or One-to-Many.
+ */
 @property (nonatomic, readonly) BOOL belongsTo;
+/**
+ * If `hasOne` property is YES, returns a child object of the relationship.
+ * On the other hand, if `belongsTo` property is YES, returns a parent object.
+ * Otherwise, returns nil.
+ */
 @property (nonatomic, readonly, nullable) __kindof ARMActiveRealm *object;
+/**
+ * If `hasMany` property is YES, returns children objects of the relationships, otherwise nil.
+ */
 @property (nonatomic, readonly, nullable) NSArray<__kindof ARMActiveRealm *> *objects;
 
 @end

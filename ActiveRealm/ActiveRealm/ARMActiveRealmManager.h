@@ -31,10 +31,24 @@ NS_ASSUME_NONNULL_BEGIN
 @class RLMRealm;
 
 @interface ARMActiveRealmManager : NSObject
-
+/**
+ * The default Realm object.
+ */
 @property (nonatomic, readonly) RLMRealm *defaultRealm;
+/**
+ * A vendor prefix.
+ * e.g.) The ARMActiveRealmManager class has the vendor prefix: "ARM".
+ *
+ * Set this property if your ActiveRealm subclass has a vendor prefix and you want to get rid of
+ * that vendor prefix from your ARMObject subclass.
+ */
 @property (nonatomic, copy, nullable) NSString *vendorPrefix;
 
+/**
+ * Returns the singleton object of ARMActiveRealmManager.
+ *
+ * @return The singleton object.
+ */
 + (instancetype)sharedInstance NS_SWIFT_NAME(shared());
 
 - (NSString *)stringFromClass:(Class)aClass namespace:(NSString *_Nullable *_Nullable)namespace;
