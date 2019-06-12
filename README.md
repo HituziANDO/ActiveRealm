@@ -287,28 +287,6 @@ let authors = Author.all()
 let authors = Author.all(orderedBy: "age", ascending: false)
 ```
 
-#### find(ID:)
-
-```swift
-// Find an object by specified ID.
-if let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX") {
-    // Something to do.
-}
-```
-
-#### find(_:)
-
-```swift
-// Find an object by specified parameters. When multiple objects are found, select first object.
-if let author = Author.find(["name": "Alice"]) {
-    // Something to do.
-}
-
-if let author = Author.find(with: NSPredicate(format: "name=%@", "Alice")) {
-    // Something to do.
-}
-```
-
 #### first()
 
 ```swift
@@ -359,6 +337,28 @@ if let tags = Tag.last(limit: 10) as? [Tag] {
 ```swift
 // Select specified number of objects ordered by specified property from the tail.
 if let tags = Tag.last(orderedBy: "name", ascending: true, limit: 10) as? [Tag] {
+    // Something to do.
+}
+```
+
+#### find(ID:)
+
+```swift
+// Find an object by specified ID.
+if let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX") {
+    // Something to do.
+}
+```
+
+#### find(_:)
+
+```swift
+// Find an object by specified parameters. When multiple objects are found, select first object.
+if let author = Author.find(["name": "Alice", "age": 28]) {
+    // Something to do.
+}
+
+if let author = Author.find(with: NSPredicate(format: "name=%@ AND age=%d", "Alice", 28)) {
     // Something to do.
 }
 ```
@@ -524,7 +524,7 @@ class Author: ARMActiveRealm {
 
 let chris = Author.findOrCreate(["name": "Chris", "age": 32])
 
-// Convert to dictionary.
+// Convert to a dictionary.
 let dict = chris.asDictionary()
 // => {
 //	age = 32;
@@ -624,7 +624,7 @@ class Author: ARMActiveRealm {
 
 let chris = Author.findOrCreate(["name": "Chris", "age": 32])
 
-// Convert to JSON.
+// Convert to a JSON.
 let json = chris.asJSONString()
 // => {
 //	"age" : 32,
@@ -637,7 +637,7 @@ let json = chris.asJSONString()
 
 #### asJSON(excepted:), asJSONString(excepted:)
 
-Converts to JSON using a black list of property names.
+Converts to a JSON using a black list of property names.
 
 ```swift
 let json = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt"])
@@ -649,7 +649,7 @@ let json = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt"])
 
 #### asJSON(included:), asJSONString(included:)
 
-Converts to JSON using a white list of property names. This method also includes ignored properties.
+Converts to a JSON using a white list of property names. This method also includes ignored properties.
 
 ```swift
 let json = chris.asJSONString(included: ["name", "age", "shortID"])
@@ -664,7 +664,7 @@ let json = chris.asJSONString(included: ["name", "age", "shortID"])
 #### asJSON(excepted:) { prop, value in }, asJSONString(excepted:) { prop, value in }
 #### asJSON(included:) { prop, value in }, asJSONString(included:) { prop, value in }
 
-Converts to JSON using a conversion logic.
+Converts to a JSON using a conversion logic.
 
 ```swift
 let json = chris.asJSONString(included: ["uid"]) { prop, value in
@@ -683,7 +683,7 @@ let json = chris.asJSONString(included: ["uid"]) { prop, value in
 #### asJSON(excepted:) { prop, value in }, asJSONString(excepted:) { prop, value in }
 #### asJSON(included:) { prop, value in }, asJSONString(included:) { prop, value in }
 
-Converts to JSON adding properties with a conversion method of a target. The method name is specified by Objective-C representation.
+Converts to a JSON adding properties with a conversion method of a target. The method name is specified by Objective-C representation.
 
 ```swift
 let json = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt", "age"],
