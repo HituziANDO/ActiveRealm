@@ -696,7 +696,7 @@ let json = chris.asJSONString(excepted: ["uid", "createdAt", "updatedAt", "age"]
 ```
 
 ## Usage in Objective-C
-Usage in Objective-C, see my sample code.
+Usage in Objective-C, see [my sample code](https://github.com/HituziANDO/ActiveRealm/blob/master/ActiveRealmSample/ActiveRealmSample/ViewController.m).
 
 ## TODO
 
