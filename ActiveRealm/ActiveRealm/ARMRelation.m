@@ -30,6 +30,7 @@
 #import "ARMActiveRealm.h"
 #import "ARMActiveRealm+Internal.h"
 #import "ARMActiveRealmManager.h"
+#import "ARMRelationship.h"
 
 @interface ARMRelation ()
 

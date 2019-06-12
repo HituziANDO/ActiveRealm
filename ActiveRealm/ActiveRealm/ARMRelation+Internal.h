@@ -29,6 +29,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class ARMActiveRealm;
+@class ARMRelationship;
 
 @interface ARMRelation (Internal)
 
