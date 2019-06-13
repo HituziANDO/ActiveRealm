@@ -679,9 +679,9 @@ let json = chris.asJSONString(included: ["uid"]) { prop, value in
 // }
 ```
 
-#### asJSON { prop, value in }, asJSONString { prop, value in }
-#### asJSON(excepted:) { prop, value in }, asJSONString(excepted:) { prop, value in }
-#### asJSON(included:) { prop, value in }, asJSONString(included:) { prop, value in }
+#### asJSON(addingPropertiesWith:methods:), asJSONString(addingPropertiesWith:methods:)
+#### asJSON(excepted:addingPropertiesWith:methods:), asJSONString(excepted:addingPropertiesWith:methods:)
+#### asJSON(included:addingPropertiesWith:methods:), asJSONString(included:addingPropertiesWith:methods:)
 
 Converts to a JSON adding properties with a conversion method of a target. The method name is specified by Objective-C representation.
 
