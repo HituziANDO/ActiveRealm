@@ -13,4 +13,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ActiveRealm/ActiveRealm/**/*.{h,m}"
   s.exclude_files = "ActiveRealm/build/*", "ActiveRealm/Framework/*", "ActiveRealmSample/*", "ActiveRealmSwiftSample/*", "README.md"
   s.requires_arc = true
+  s.dependency 'Realm'
 end
