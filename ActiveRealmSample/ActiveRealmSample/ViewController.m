@@ -168,6 +168,14 @@
     NSLog(@"Article.all: %@", Article.all);
     NSLog(@"Tag.all: %@", Tag.all);
 
+    for (int i = 0; i < 100; i++) {
+        [Author findOrCreate:@{ @"name": [NSString stringWithFormat:@"Author%d", i], @"age": @30 }];
+    }
+
+    // Cascade delete all objects.
+    [Author destroyAll];
+    NSLog(@"Author.all: %@", Author.all);
+
     // Failed to save because validation error.
     Article *invalidArticle = [Article findOrInitialize:@{ @"title": @"Programming Guide", @"text": @"Introduction ..." }];
     BOOL success = [invalidArticle save];

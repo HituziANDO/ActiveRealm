@@ -355,6 +355,17 @@ NS_ASSUME_NONNULL_BEGIN
  * @param cascade NO if not cascade deleting.
  */
 + (void)destroyWithPredicate:(NSPredicate *)predicate cascade:(BOOL)cascade;
+/**
+ * Cascade delete all objects.
+ */
++ (void)destroyAll;
+/**
+ * Cascade delete all objects.
+ * Use this if not cascade deleting. Specify NO to cascade argument.
+ *
+ * @param cascade NO if not cascade deleting.
+ */
++ (void)destroyAllWithCascade:(BOOL)cascade;
 
 @end
 

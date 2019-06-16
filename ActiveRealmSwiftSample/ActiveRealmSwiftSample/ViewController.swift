@@ -187,6 +187,14 @@ class ViewController: UIViewController {
             print("Tag.all: \(tags)")
         }
 
+        for i in 0..<100 {
+            Author.findOrCreate(["name": "Author\(i)", "age": 30])
+        }
+
+        // Cascade delete all objects.
+        Author.destroyAll()
+        print("Author.all: \(Author.all())")
+
         // Failed to save because validation error.
         let invalidArticle = Article.findOrInitialize(["title": "Programming Guide",
                                                        "text": "Introduction ..."])

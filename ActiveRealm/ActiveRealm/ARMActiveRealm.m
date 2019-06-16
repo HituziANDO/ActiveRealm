@@ -553,6 +553,15 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     }];
 }
 
++ (void)destroyAll {
+    [self destroyAllWithCascade:YES];
+}
+
++ (void)destroyAllWithCascade:(BOOL)cascade {
+    [self.all enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+        [obj destroyWithCascade:cascade];
+    }];
+}
 
 #pragma mark - private method
 
