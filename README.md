@@ -242,13 +242,15 @@ class UserSettings: ARMActiveRealm {
 
 #### save()
 
+`save` means INSERT if the record does not exists in the DB, otherwise UPDATE it.
+
 ```swift
 // Initialize an instance.
 let alice = Author()
 alice.name = "Alice"
 alice.age = 28
 
-// Insert to Realm DB. `save` means INSERT if the record does not exists in the DB, otherwise UPDATE it.
+// Insert to Realm DB.
 alice.save()
 ```
 
@@ -275,100 +277,101 @@ ActiveRealm has many READ operations.
 
 #### all()
 
+Select all objects.
+
 ```swift
-// Select all objects.
 let authors = Author.all()
 ```
 
 #### all(orderedBy:ascending:)
 
+Select all objects ordered by specified property.
+
 ```swift
-// Select all objects ordered by specified property.
 let authors = Author.all(orderedBy: "age", ascending: false)
 ```
 
 #### first()
 
+Select first created object.
+
 ```swift
-// Select first created object.
 if let tag = Tag.first() {
-    // Something to do.
 }
 ```
 
 #### first(limit:)
 
+Select specified number of objects from the head.
+
 ```swift
-// Select specified number of objects from the head.
 if let tags = Tag.first(limit: 10) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### first(orderedBy:ascending:limit:)
 
+Select specified number of objects ordered by specified property from the head.
+
 ```swift
-// Select specified number of objects ordered by specified property from the head.
 if let tags = Tag.first(orderedBy: "name", ascending: false, limit: 10) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### last()
 
+Select last created object.
+
 ```swift
-// Select last created object.
 if let tag = Tag.last() {
-    // Something to do.
 }
 ```
 
 #### last(limit:)
 
+Select specified number of objects from the tail.
+
 ```swift
-// Select specified number of objects from the tail.
 if let tags = Tag.last(limit: 10) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### last(orderedBy:ascending:limit:)
 
+Select specified number of objects ordered by specified property from the tail.
+
 ```swift
-// Select specified number of objects ordered by specified property from the tail.
 if let tags = Tag.last(orderedBy: "name", ascending: true, limit: 10) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### find(ID:)
 
+Find an object by specified ID.
+
 ```swift
-// Find an object by specified ID.
 if let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX") {
-    // Something to do.
 }
 ```
 
 #### find(_:)
 
+Find an object by specified parameters. When multiple objects are found, select first object.
+
 ```swift
-// Find an object by specified parameters. When multiple objects are found, select first object.
 if let author = Author.find(["name": "Alice", "age": 28]) {
-    // Something to do.
 }
 
 if let author = Author.find(with: NSPredicate(format: "name=%@ AND age=%d", "Alice", 28)) {
-    // Something to do.
 }
 ```
 
 #### findLast(_:)
 
+Find an object by specified parameters. When multiple objects are found, select last object.
+
 ```swift
-// Find an object by specified parameters. When multiple objects are found, select last object.
 if let tag = Tag.findLast(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"]) {
-    // Something to do.
 }
 
 if let tag = Tag.findLast(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX")) {
@@ -378,40 +381,37 @@ if let tag = Tag.findLast(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XX
 
 #### where(_:)
 
+Find multiple objects by specified parameters.
+
 ```swift
-// Find multiple objects by specified parameters.
 if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"]) as? [Tag] {
-    // Something to do.
 }
 
 if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX")) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### where(_:orderedBy:ascending:)
 
+Find multiple objects by specified parameters. The results are ordered by specified property.
+
 ```swift
-// Find multiple objects by specified parameters. The results are ordered by specified property.
 if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"], orderedBy: "name", ascending: true) as? [Tag] {
-    // Something to do.
 }
 
 if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"), orderedBy: "name", ascending: true) as? [Tag] {
-    // Something to do.
 }
 ```
 
 #### where(_:orderedBy:ascending:limit:)
 
+Find specified number of objects by specified parameters. The results are ordered by specified property.
+
 ```swift
-// Find specified number of objects by specified parameters. The results are ordered by specified property.
 if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"], orderedBy: "name", ascending: false, limit: 10) as? [Tag] {
-    // Something to do.
 }
 
 if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"), orderedBy: "name", ascending: true, limit: 10) as? [Tag] {
-    // Something to do.
 }
 ```
 
@@ -434,16 +434,24 @@ alice.save()
 `destroy` method performs cascade delete by default. In other words, related data are also deleted collectively.
 
 ```swift
-// Cascade delete.
 alice.destroy()
 ```
 
 #### destroy(_:)
 
+Cascade delete by specified parameters.
+
 ```swift
-// Cascade delete by specified parameters.
 Author.destroy(["name": "Alice"])
 Author.destroy(with: NSPredicate(format: "name=%@", "Alice"))
+```
+
+#### destroyAll()
+
+Cascade delete all objects.
+
+```swift
+Author.destroyAll()
 ```
 
 If not cascade deleting, use following methods. Specify false to `cascade` argument.
@@ -452,6 +460,7 @@ If not cascade deleting, use following methods. Specify false to `cascade` argum
 alice.destroy(cascade: false)
 Author.destroy(["name": "Alice"], cascade: false)
 Author.destroy(with: NSPredicate(format: "name=%@", "Alice"), cascade: false)
+Author.destroyAll(cascade: false)
 ```
 
 ## Ignored properties
