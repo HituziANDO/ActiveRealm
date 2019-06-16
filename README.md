@@ -2,6 +2,8 @@
 
 ***ActiveRealm is Active Record library using Realm for Objective-C/Swift, inspired by ActiveRecord of Ruby on Rails.***
 
+[日本語doc](https://qiita.com/hituziando/items/06f85328c500da76afc6)
+
 ## Features
 
 - Made in Objective-C and supports Swift
