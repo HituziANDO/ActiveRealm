@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ActiveRealm"
-  s.version      = "0.1.1"
+  s.version      = "0.1.2"
   s.summary      = "ActiveRealm is Active Record library using Realm."
   s.description  = <<-DESC
   ActiveRealm is Active Record library using Realm for Objective-C/Swift, inspired by ActiveRecord of Ruby on Rails.

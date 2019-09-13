@@ -1015,3 +1015,39 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 @end
+
+@implementation ARMActiveRealm (Counting)
+
++ (NSUInteger)count {
+    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
+    SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
+    IMP imp = [rlmObjClass methodForSelector:sel];
+    RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
+    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm);
+
+    return results.count;
+}
+
++ (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary {
+    return [self countWithPredicate:[self predicateWithDictionary:dictionary]];
+}
+
++ (NSUInteger)countWithFormat:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+
+    return [self countWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+}
+
++ (NSUInteger)countWithPredicate:(NSPredicate *)predicate {
+    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
+    SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
+    IMP imp = [rlmObjClass methodForSelector:sel];
+    RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
+    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, predicate);
+
+    return results.count;
+}
+
+@end

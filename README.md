@@ -465,6 +465,16 @@ Author.destroy(with: NSPredicate(format: "name=%@", "Alice"), cascade: false)
 Author.destroyAll(cascade: false)
 ```
 
+## Count
+
+Count objects.
+
+```swift
+let count1 = Author.count()
+let count2 = Author.count(where: ["name": "David"])
+let count3 = Author.count(predicate: NSPredicate(format: "age > %d", 40))
+```
+
 ## Ignored properties
 
 ActiveRealm saves all properties in your model to the DB by default. If you don’t want to save a property, override `ignoredProperties` method.

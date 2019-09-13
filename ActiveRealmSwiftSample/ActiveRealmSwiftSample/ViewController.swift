@@ -253,6 +253,11 @@ class ViewController: UIViewController {
         david.age = 45
         david.save()
 
+        // Count objects.
+        print("Author.count: \(Author.count())")
+        print("Author.count(where:): \(Author.count(where: ["name": "David"]))")
+        print("Author.count(predicate:): \(Author.count(predicate: NSPredicate(format: "age > %d", 40)))")
+
         // An ActiveRealm object can be used on multi-threads.
         DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + 2.0) {
             david.age = 46

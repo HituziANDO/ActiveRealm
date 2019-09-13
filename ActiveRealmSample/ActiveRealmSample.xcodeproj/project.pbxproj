@@ -11,6 +11,7 @@
 		19E5962EC60C7265756A2EB6 /* Author.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E596254320895B1BA496F0 /* Author.m */; };
 		19E59835BE9CC63344B42F89 /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E596B19FAC3EC1AD949FE1 /* UserSettings.m */; };
 		19E59C2B3E990C5F497C2FCC /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59E1E6972EB950FF7148F /* Article.m */; };
+		5E8D59E7232BD2EC00869124 /* ActiveRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E8D59E6232BD2EB00869124 /* ActiveRealm.framework */; };
 		5EF77E2A229F4CD800230CD7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77E29229F4CD800230CD7 /* AppDelegate.m */; };
 		5EF77E2D229F4CD800230CD7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77E2C229F4CD800230CD7 /* ViewController.m */; };
 		5EF77E30229F4CD800230CD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EF77E2E229F4CD800230CD7 /* Main.storyboard */; };
@@ -31,20 +32,6 @@
 			remoteGlobalIDString = 5EF77E24229F4CD800230CD7;
 			remoteInfo = ActiveRealmSample;
 		};
-		5EF77E59229F4D3B00230CD7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EF77E54229F4D3B00230CD7 /* ActiveRealm.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5EF77DF6229F37A500230CD7;
-			remoteInfo = ActiveRealm;
-		};
-		5EF77E5B229F4D4500230CD7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EF77E54229F4D3B00230CD7 /* ActiveRealm.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5EF77DF5229F37A500230CD7;
-			remoteInfo = ActiveRealm;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +43,7 @@
 		19E59DEF484B45654BAB5398 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		19E59E1E6972EB950FF7148F /* Article.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Article.m; sourceTree = "<group>"; };
 		19E59F340B64A5C68296801F /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
+		5E8D59E6232BD2EB00869124 /* ActiveRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ActiveRealm.framework; sourceTree = "<group>"; };
 		5EF77E25229F4CD800230CD7 /* ActiveRealmSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ActiveRealmSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF77E28229F4CD800230CD7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5EF77E29229F4CD800230CD7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -72,7 +60,6 @@
 		5EF77E4D229F4D1000230CD7 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
 		5EF77E50229F4D1E00230CD7 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		5EF77E52229F4D2600230CD7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		5EF77E54229F4D3B00230CD7 /* ActiveRealm.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ActiveRealm.xcodeproj; path = ../ActiveRealm/ActiveRealm.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +69,7 @@
 			files = (
 				5EF77E53229F4D2600230CD7 /* libz.tbd in Frameworks */,
 				5EF77E51229F4D1E00230CD7 /* libc++.tbd in Frameworks */,
+				5E8D59E7232BD2EC00869124 /* ActiveRealm.framework in Frameworks */,
 				5EF77E4E229F4D1000230CD7 /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,7 +87,6 @@
 		5EF77E1C229F4CD800230CD7 = {
 			isa = PBXGroup;
 			children = (
-				5EF77E54229F4D3B00230CD7 /* ActiveRealm.xcodeproj */,
 				5EF77E27229F4CD800230CD7 /* ActiveRealmSample */,
 				5EF77E40229F4CD900230CD7 /* ActiveRealmSampleTests */,
 				5EF77E26229F4CD800230CD7 /* Products */,
@@ -146,6 +133,7 @@
 		5EF77E4C229F4CE700230CD7 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				5E8D59E6232BD2EB00869124 /* ActiveRealm.framework */,
 				5EF77E4D229F4D1000230CD7 /* Realm.framework */,
 			);
 			path = Framework;
@@ -158,14 +146,6 @@
 				5EF77E50229F4D1E00230CD7 /* libc++.tbd */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		5EF77E55229F4D3B00230CD7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5EF77E5A229F4D3B00230CD7 /* ActiveRealm.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		5EF77E5D229F4D7F00230CD7 /* Model */ = {
@@ -197,7 +177,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5EF77E5C229F4D4500230CD7 /* PBXTargetDependency */,
 			);
 			name = ActiveRealmSample;
 			productName = ActiveRealmSample;
@@ -251,12 +230,6 @@
 			mainGroup = 5EF77E1C229F4CD800230CD7;
 			productRefGroup = 5EF77E26229F4CD800230CD7 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 5EF77E55229F4D3B00230CD7 /* Products */;
-					ProjectRef = 5EF77E54229F4D3B00230CD7 /* ActiveRealm.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				5EF77E24229F4CD800230CD7 /* ActiveRealmSample */,
@@ -264,16 +237,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		5EF77E5A229F4D3B00230CD7 /* ActiveRealm.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ActiveRealm.framework;
-			remoteRef = 5EF77E59229F4D3B00230CD7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5EF77E23229F4CD800230CD7 /* Resources */ = {
@@ -325,11 +288,6 @@
 			isa = PBXTargetDependency;
 			target = 5EF77E24229F4CD800230CD7 /* ActiveRealmSample */;
 			targetProxy = 5EF77E3E229F4CD900230CD7 /* PBXContainerItemProxy */;
-		};
-		5EF77E5C229F4D4500230CD7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ActiveRealm;
-			targetProxy = 5EF77E5B229F4D4500230CD7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -469,6 +427,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -491,6 +450,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (

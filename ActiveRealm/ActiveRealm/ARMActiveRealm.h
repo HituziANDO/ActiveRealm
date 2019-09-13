@@ -629,4 +629,31 @@ NS_SWIFT_NAME(asJSONString(included:addingPropertiesWith:methods:));
 
 @end
 
+@interface ARMActiveRealm (Counting)
+/**
+ * Count objects.
+ * @return Number of objects.
+ */
++ (NSUInteger)count;
+/**
+ * Count objects searched by specified parameters.
+ * @param dictionary Parameters for searching.
+ * @return Number of objects.
+ */
++ (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary NS_SWIFT_NAME(count(where:));
+/**
+ * Count objects searched by a format.
+ * @param format A format.
+ * @return Number of objects.
+ */
++ (NSUInteger)countWithFormat:(NSString *)format, ...;
+/**
+ * Count objects searched by a NSPredicate.
+ * @param predicate A NSPredicate.
+ * @return Number of objects.
+ */
++ (NSUInteger)countWithPredicate:(NSPredicate *)predicate NS_SWIFT_NAME(count(predicate:));
+
+@end
+
 NS_ASSUME_NONNULL_END

@@ -232,6 +232,11 @@
     david.age = @45;
     [david save];
 
+    // Count objects.
+    NSLog(@"Author.count: %ld", Author.count);
+    NSLog(@"Author.count(where:): %ld", [Author countWhere:@{ @"name": @"David" }]);
+    NSLog(@"Author.count(predicate:): %ld", [Author countWithPredicate:[NSPredicate predicateWithFormat:@"age > %d", 40]]);
+
     // An ActiveRealm object can be used on multi-threads.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2 * NSEC_PER_SEC)),
                    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),

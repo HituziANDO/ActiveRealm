@@ -67,3 +67,4 @@ iOSInjectionProject/
 
 ActiveRealmSample/ActiveRealmSample/Framework/Realm.framework
 ActiveRealmSwiftSample/ActiveRealmSwiftSample/Framework/*.framework
+ActiveRealmSample/ActiveRealmSample/Framework/ActiveRealm.framework
