@@ -227,25 +227,70 @@
                                                                methods:@{ @"generation": @"generation:",
                                                                           @"works": @"works:" }]);
 
-    Author *david = [Author new];
-    david.name = @"David";
-    david.age = @45;
-    [david save];
+    [self countSample];
+
+    [self pluckSample];
+
+    [self multiThreadSample];
+}
+
+- (void)countSample {
+    // Delete all data for sample.
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        [[RLMRealm defaultRealm] deleteAllObjects];
+    }];
+
+    Author *author1 = [Author findOrCreate:@{ @"name": @"Alice", @"age": @28 }];
+    Author *author2 = [Author findOrCreate:@{ @"name": @"Bob", @"age": @55 }];
+    Author *author3 = [Author findOrCreate:@{ @"name": @"Chris", @"age": @32 }];
+    Author *author4 = [Author findOrCreate:@{ @"name": @"David", @"age": @45 }];
 
     // Count objects.
-    NSLog(@"Author.count: %ld", Author.count);
-    NSLog(@"Author.count(where:): %ld", [Author countWhere:@{ @"name": @"David" }]);
-    NSLog(@"Author.count(predicate:): %ld", [Author countWithPredicate:[NSPredicate predicateWithFormat:@"age > %d", 40]]);
+    NSLog(@"The number of authors: %ld", Author.count);
+    NSLog(@"The number of authors called David: %ld", [Author.query where:@{ @"name": @"David" }].count);
+    NSLog(@"The number of authors over 40: %ld",
+          [Author.query whereWithPredicate:[NSPredicate predicateWithFormat:@"age >= %d", 40]].count);
+}
+
+- (void)pluckSample {
+    // Delete all data for sample.
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        [[RLMRealm defaultRealm] deleteAllObjects];
+    }];
+
+    Author *author1 = [Author findOrCreate:@{ @"name": @"Alice", @"age": @28 }];
+    Author *author2 = [Author findOrCreate:@{ @"name": @"Bob", @"age": @55 }];
+    Author *author3 = [Author findOrCreate:@{ @"name": @"Chris", @"age": @32 }];
+    Author *author4 = [Author findOrCreate:@{ @"name": @"David", @"age": @45 }];
+
+    NSArray *results1 = [Author.query.all pluck:@[ @"name" ]];
+    NSLog(@"Pluck author names: %@", results1);
+
+    NSArray *results2 = [Author.query.all pluck:@[ @"name", @"age" ]];
+    NSLog(@"Pluck author status: %@", results2);
+
+    NSArray *results3 = [[Author.query whereWithPredicate:[NSPredicate predicateWithFormat:@"age < %d", 40]]
+                                       pluck:@[ @"name" ]];
+    NSLog(@"Pluck author names under 40: %@", results3);
+}
+
+- (void)multiThreadSample {
+    // Delete all data for sample.
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        [[RLMRealm defaultRealm] deleteAllObjects];
+    }];
+
+    Author *author = [Author findOrCreate:@{ @"name": @"Alice", @"age": @28 }];
 
     // An ActiveRealm object can be used on multi-threads.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2 * NSEC_PER_SEC)),
                    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                    ^{
-                       david.age = @46;
-                       [david save];
+                       author.age = @29;
+                       [author save];
 
                        dispatch_async(dispatch_get_main_queue(), ^{
-                           NSLog(@"author: %@", [Author findWithFormat:@"name=%@", @"David"]);
+                           NSLog(@"author: %@", [Author findWithFormat:@"name=%@", @"Alice"]);
                        });
                    });
 }

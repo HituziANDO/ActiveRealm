@@ -28,10 +28,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ARMCollection;
+@class ARMQuery;
 @class ARMRelation;
 @class ARMRelationship;
 
 @interface ARMActiveRealm : NSObject
+/**
+ * The property names of the model.
+ */
+@property (class, nonatomic, copy, readonly) NSArray<NSString *> *propertyNames;
+/**
+ * The query object.
+ */
+@property (class, nonatomic, readonly) ARMQuery *query;
 /**
  * The primary key.
  */
@@ -631,28 +641,32 @@ NS_SWIFT_NAME(asJSONString(included:addingPropertiesWith:methods:));
 
 @interface ARMActiveRealm (Counting)
 /**
- * Count objects.
- * @return Number of objects.
+ * Returns the number of objects of the model.
+ *
+ * @return The number of objects.
  */
-+ (NSUInteger)count;
+@property (class, nonatomic, readonly) NSUInteger count;
 /**
- * Count objects searched by specified parameters.
+ * Returns the number of objects searched by specified parameters.
+ *
  * @param dictionary Parameters for searching.
- * @return Number of objects.
+ * @return The number of objects.
  */
-+ (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary NS_SWIFT_NAME(count(where:));
++ (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary NS_SWIFT_NAME(count(where:)) DEPRECATED_ATTRIBUTE;
 /**
- * Count objects searched by a format.
+ * Returns the number of objects searched by specified searching condition.
+ *
  * @param format A format.
- * @return Number of objects.
+ * @return The number of objects.
  */
-+ (NSUInteger)countWithFormat:(NSString *)format, ...;
++ (NSUInteger)countWithFormat:(NSString *)format, ... DEPRECATED_ATTRIBUTE;
 /**
- * Count objects searched by a NSPredicate.
+ * Returns the number of objects searched by specified searching condition.
+ *
  * @param predicate A NSPredicate.
- * @return Number of objects.
+ * @return The number of objects.
  */
-+ (NSUInteger)countWithPredicate:(NSPredicate *)predicate NS_SWIFT_NAME(count(predicate:));
++ (NSUInteger)countWithPredicate:(NSPredicate *)predicate NS_SWIFT_NAME(count(predicate:)) DEPRECATED_ATTRIBUTE;
 
 @end
 

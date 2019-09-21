@@ -24,22 +24,37 @@
 // SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-//! Project version number for ActiveRealm.
-FOUNDATION_EXPORT double ActiveRealmVersionNumber;
+NS_ASSUME_NONNULL_BEGIN
 
-//! Project version string for ActiveRealm.
-FOUNDATION_EXPORT const unsigned char ActiveRealmVersionString[];
+@class ARMCollection;
 
-// In this header, you should import all the public headers of your framework using statements like #import <ActiveRealm/PublicHeader.h>
+@interface ARMQuery : NSObject
 
-#import <Realm/Realm.h>
+- (instancetype)initWithClass:(Class)aClass;
 
-#import "ARMActiveRealm.h"
-#import "ARMActiveRealmManager.h"
-#import "ARMCollection.h"
-#import "ARMObject.h"
-#import "ARMQuery.h"
-#import "ARMRelation.h"
-#import "ARMRelationship.h"
+/**
+ * Returns all objects of the model.
+ *
+ * @return All objects of the model.
+ */
+- (ARMCollection *)all;
+/**
+ * Returns objects searched by specified parameters.
+ *
+ * @param dictionary Parameters for searching.
+ * @return Objects of the model.
+ */
+- (ARMCollection *)where:(NSDictionary<NSString *, id> *)dictionary;
+/**
+ * Returns objects searched by specified searching condition.
+ *
+ * @param predicate A NSPredicate.
+ * @return Objects of the model.
+ */
+- (ARMCollection *)whereWithPredicate:(NSPredicate *)predicate NS_SWIFT_NAME(where(predicate:));
+
+@end
+
+NS_ASSUME_NONNULL_END

@@ -21,9 +21,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		19E5904D9DB071DBD25F9F74 /* ARMProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E590406B80095B306B5A6A /* ARMProperty.h */; };
 		19E5906E74C39E01E30EFD98 /* ARMRelation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59C6143B788E000F25611 /* ARMRelation.m */; };
 		19E590EE4297C0DA4E5A2FB1 /* ARMRelation.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E591094BC797EF81DF365E /* ARMActiveRealmManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E592EA41A121023D45A73A /* ARMActiveRealmManager.m */; };
+		19E591943E6B357CBA0011FA /* ARMProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E5948FDAC3491D88A47833 /* ARMProperty.m */; };
+		19E5920AF09885689250AA59 /* ARMQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59956F85B0FC62E321A55 /* ARMQuery.m */; };
 		19E59394385E0073CF6CC933 /* ARMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E591D69C490D0F4D26E383 /* ARMObject.m */; };
 		19E595431F9248B9BD359668 /* ARMRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */; };
 		19E59615638FD44DB56AB276 /* ARMObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E599F0F72F8FBB3BA1F9ED /* ARMObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,6 +34,9 @@
 		19E59843A881D2CE026EE754 /* ARMActiveRealm.m in Sources */ = {isa = PBXBuildFile; fileRef = 19E59476813E8357E2493003 /* ARMActiveRealm.m */; };
 		19E59A6AA856C7ABAE4DBCC1 /* ARMRelationship.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E59055D0985DD568452625 /* ARMRelationship.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		19E59B81F68AA945189F3080 /* ARMActiveRealmManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E5926FD65007923BD4F0A7 /* ARMActiveRealmManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		19E59C850280F35D882D2CCD /* ARMQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E597EC4A2E20265A29A91C /* ARMQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5E30C46A23343AE5008E3FF3 /* ARMCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E30C46823343AE5008E3FF3 /* ARMCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5E30C46B23343AE5008E3FF3 /* ARMCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E30C46923343AE5008E3FF3 /* ARMCollection.m */; };
 		5EF77DFB229F37A500230CD7 /* ActiveRealm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77DF9229F37A500230CD7 /* ActiveRealm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EF77E6E22A4123B00230CD7 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EF77E6D22A4123A00230CD7 /* Realm.framework */; };
 		5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */; };
@@ -38,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19E590406B80095B306B5A6A /* ARMProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMProperty.h; sourceTree = "<group>"; };
 		19E59055D0985DD568452625 /* ARMRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMRelationship.h; sourceTree = "<group>"; };
 		19E591D69C490D0F4D26E383 /* ARMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMObject.m; sourceTree = "<group>"; };
 		19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMRelation.h; sourceTree = "<group>"; };
@@ -45,9 +52,14 @@
 		19E592EA41A121023D45A73A /* ARMActiveRealmManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMActiveRealmManager.m; sourceTree = "<group>"; };
 		19E59476813E8357E2493003 /* ARMActiveRealm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMActiveRealm.m; sourceTree = "<group>"; };
 		19E59478834E83C924954FB0 /* ARMActiveRealm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMActiveRealm.h; sourceTree = "<group>"; };
+		19E5948FDAC3491D88A47833 /* ARMProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMProperty.m; sourceTree = "<group>"; };
+		19E597EC4A2E20265A29A91C /* ARMQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMQuery.h; sourceTree = "<group>"; };
+		19E59956F85B0FC62E321A55 /* ARMQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMQuery.m; sourceTree = "<group>"; };
 		19E599F0F72F8FBB3BA1F9ED /* ARMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMObject.h; sourceTree = "<group>"; };
 		19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMRelationship.m; sourceTree = "<group>"; };
 		19E59C6143B788E000F25611 /* ARMRelation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMRelation.m; sourceTree = "<group>"; };
+		5E30C46823343AE5008E3FF3 /* ARMCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMCollection.h; sourceTree = "<group>"; };
+		5E30C46923343AE5008E3FF3 /* ARMCollection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARMCollection.m; sourceTree = "<group>"; };
 		5EF77DF6229F37A500230CD7 /* ActiveRealm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActiveRealm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF77DF9229F37A500230CD7 /* ActiveRealm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActiveRealm.h; sourceTree = "<group>"; };
 		5EF77DFA229F37A500230CD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -94,8 +106,14 @@
 				5EF77E7822A680D200230CD7 /* ARMActiveRealm+Internal.h */,
 				19E5926FD65007923BD4F0A7 /* ARMActiveRealmManager.h */,
 				19E592EA41A121023D45A73A /* ARMActiveRealmManager.m */,
+				5E30C46823343AE5008E3FF3 /* ARMCollection.h */,
+				5E30C46923343AE5008E3FF3 /* ARMCollection.m */,
 				19E599F0F72F8FBB3BA1F9ED /* ARMObject.h */,
 				19E591D69C490D0F4D26E383 /* ARMObject.m */,
+				19E590406B80095B306B5A6A /* ARMProperty.h */,
+				19E5948FDAC3491D88A47833 /* ARMProperty.m */,
+				19E597EC4A2E20265A29A91C /* ARMQuery.h */,
+				19E59956F85B0FC62E321A55 /* ARMQuery.m */,
 				19E59250C9C782DD5F0B7FF3 /* ARMRelation.h */,
 				19E59C6143B788E000F25611 /* ARMRelation.m */,
 				5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */,
@@ -125,10 +143,13 @@
 				19E59B81F68AA945189F3080 /* ARMActiveRealmManager.h in Headers */,
 				19E5983C29044345215C7621 /* ARMActiveRealm.h in Headers */,
 				19E59615638FD44DB56AB276 /* ARMObject.h in Headers */,
+				19E59C850280F35D882D2CCD /* ARMQuery.h in Headers */,
 				5EF77E7A22A680D200230CD7 /* ARMActiveRealm+Internal.h in Headers */,
 				19E59A6AA856C7ABAE4DBCC1 /* ARMRelationship.h in Headers */,
+				5E30C46A23343AE5008E3FF3 /* ARMCollection.h in Headers */,
 				19E590EE4297C0DA4E5A2FB1 /* ARMRelation.h in Headers */,
 				5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */,
+				19E5904D9DB071DBD25F9F74 /* ARMProperty.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,11 +244,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E30C46B23343AE5008E3FF3 /* ARMCollection.m in Sources */,
 				19E59843A881D2CE026EE754 /* ARMActiveRealm.m in Sources */,
 				19E591094BC797EF81DF365E /* ARMActiveRealmManager.m in Sources */,
 				19E59394385E0073CF6CC933 /* ARMObject.m in Sources */,
 				19E5906E74C39E01E30EFD98 /* ARMRelation.m in Sources */,
 				19E595431F9248B9BD359668 /* ARMRelationship.m in Sources */,
+				19E591943E6B357CBA0011FA /* ARMProperty.m in Sources */,
+				19E5920AF09885689250AA59 /* ARMQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,22 +24,16 @@
 // SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 
-//! Project version number for ActiveRealm.
-FOUNDATION_EXPORT double ActiveRealmVersionNumber;
+NS_ASSUME_NONNULL_BEGIN
 
-//! Project version string for ActiveRealm.
-FOUNDATION_EXPORT const unsigned char ActiveRealmVersionString[];
+FOUNDATION_EXTERN const char *ARMGetPropertyType(objc_property_t property, BOOL *isPrimitiveType);
+FOUNDATION_EXTERN NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass);
 
-// In this header, you should import all the public headers of your framework using statements like #import <ActiveRealm/PublicHeader.h>
+@interface ARMProperty : NSObject
 
-#import <Realm/Realm.h>
+@end
 
-#import "ARMActiveRealm.h"
-#import "ARMActiveRealmManager.h"
-#import "ARMCollection.h"
-#import "ARMObject.h"
-#import "ARMQuery.h"
-#import "ARMRelation.h"
-#import "ARMRelationship.h"
+NS_ASSUME_NONNULL_END

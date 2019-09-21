@@ -24,79 +24,20 @@
 // SOFTWARE.
 //
 
-#import <objc/runtime.h>
-
 #import <Realm/Realm.h>
+#import <ActiveRealm/ActiveRealm.h>
 
 #import "ARMActiveRealm.h"
 #import "ARMActiveRealm+Internal.h"
 
 #import "ARMActiveRealmManager.h"
+#import "ARMCollection.h"
 #import "ARMObject.h"
+#import "ARMProperty.h"
+#import "ARMQuery.h"
 #import "ARMRelation.h"
 #import "ARMRelation+Internal.h"
 #import "ARMRelationship.h"
-
-static const char *ARMGetPropertyType(objc_property_t property, BOOL *isPrimitiveType) {
-    const char *attributes = property_getAttributes(property);
-    char buffer[1 + strlen(attributes)];
-    strcpy(buffer, attributes);
-    char *state = buffer, *attribute;
-
-    while ((attribute = strsep(&state, ",")) != NULL) {
-        if (attribute[0] == 'T' && attribute[1] != '@') {
-            // it's a C primitive type:
-            *isPrimitiveType = YES;
-
-            /*
-             if you want a list of what will be returned for these primitives, search online for
-             "objective-c" "Property Attribute Description Examples"
-             apple docs list plenty of examples of what you get for int "i", long "l", unsigned "I", struct, etc.
-             */
-            return (const char *) [[NSData dataWithBytes:(attribute + 1) length:strlen(attribute) - 1] bytes];
-        }
-        else if (attribute[0] == 'T' && attribute[1] == '@' && strlen(attribute) == 2) {
-            // it's an ObjC id type:
-            *isPrimitiveType = NO;
-
-            return "id";
-        }
-        else if (attribute[0] == 'T' && attribute[1] == '@') {
-            // it's another ObjC object type:
-            *isPrimitiveType = NO;
-
-            return (const char *) [[NSData dataWithBytes:(attribute + 3) length:strlen(attribute) - 4] bytes];
-        }
-    }
-
-    *isPrimitiveType = NO;
-
-    return "";
-}
-
-NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
-    NSMutableDictionary<NSString *, NSString *> *props = [NSMutableDictionary new];
-
-    unsigned int outCount;
-    objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
-
-    for (int i = 0; i < outCount; i++) {
-        objc_property_t property = properties[i];
-        const char *propName = property_getName(property);
-
-        if (propName) {
-            BOOL isPrimitiveType;
-            const char *propType = ARMGetPropertyType(property, &isPrimitiveType);
-            NSString *propertyName = [NSString stringWithUTF8String:propName];
-            NSString *propertyType = [NSString stringWithUTF8String:propType];
-            props[propertyName] = propertyType;
-        }
-    }
-
-    free(properties);
-
-    return props;
-}
 
 @interface ARMActiveRealm ()
 
@@ -107,9 +48,37 @@ NSDictionary<NSString *, NSString *> *ARMGetProperties(Class aClass) {
 
 @end
 
+@interface ARMCollection ()
+
+@property (nonatomic) RLMResults *results;
+
+@end
+
 @implementation ARMActiveRealm
 
 static NSString *const kActiveRealmPrimaryKeyName = @"uid";
+
++ (NSArray<NSString *> *)propertyNames {
+    NSMutableArray *properties = [NSMutableArray new];
+
+    for (NSString *prop in self.properties.allKeys) {
+        if (![self.ignoredProperties containsObject:prop] &&
+            !self.definedRelationships[prop] &&
+            ![prop isEqualToString:@"relations"] &&
+            ![prop isEqualToString:@"description"] &&
+            ![prop isEqualToString:@"debugDescription"] &&
+            ![prop isEqualToString:@"hash"]) {
+
+            [properties addObject:prop];
+        }
+    }
+
+    return properties;
+}
+
++ (ARMQuery *)query {
+    return [[ARMQuery alloc] initWithClass:self.class];
+}
 
 + (NSArray<NSString *> *)ignoredProperties {
     return @[];
@@ -191,95 +160,49 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)all {
-    return [self allOrderedBy:@"createdAt" ascending:YES];
+    return [self.query.all order:@"createdAt" ascending:YES].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order ascending:(BOOL)ascending {
-    NSMutableArray<ARMActiveRealm *> *models = [NSMutableArray new];
-
-    for (RLMObject *obj in [self allObjects:self.class orderedBy:order ascending:ascending]) {
-        [models addObject:[self.class createInstanceWithRLMObject:obj]];
-    }
-
-    return models;
+    return [self.query.all order:order ascending:ascending].toArray;
 }
 
 + (nullable instancetype)first {
-    return self.all.firstObject;
+    return self.query.all.first;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)firstWithLimit:(NSUInteger)limit {
-    NSArray *results = self.all;
-
-    if (results.count <= limit) {
-        return results;
-    }
-
-    return [results subarrayWithRange:NSMakeRange(0, limit)];
+    return [self.query.all firstWithLimit:limit];
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)firstOrderedBy:(NSString *)order
                                              ascending:(BOOL)ascending
                                                  limit:(NSUInteger)limit {
 
-    NSArray *results = [self allOrderedBy:order ascending:ascending];
-
-    if (results.count <= limit) {
-        return results;
-    }
-
-    return [results subarrayWithRange:NSMakeRange(0, limit)];
+    return [[self.query.all order:order ascending:ascending] firstWithLimit:limit];
 }
 
 + (nullable instancetype)last {
-    return self.all.lastObject;
+    return self.query.all.last;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit {
-    NSArray *results = self.all;
-
-    if (results.count <= limit) {
-        return results;
-    }
-
-    results = [results.reverseObjectEnumerator.allObjects subarrayWithRange:NSMakeRange(0, limit)];
-
-    return results.reverseObjectEnumerator.allObjects;
+    return [self.query.all lastWithLimit:limit];
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)lastOrderedBy:(NSString *)order
                                             ascending:(BOOL)ascending
                                                 limit:(NSUInteger)limit {
 
-    NSArray *results = [self allOrderedBy:order ascending:ascending];
-
-    if (results.count <= limit) {
-        return results;
-    }
-
-    results = [results.reverseObjectEnumerator.allObjects subarrayWithRange:NSMakeRange(0, limit)];
-
-    return results.reverseObjectEnumerator.allObjects;
+    return [[self.query.all order:order ascending:ascending] lastWithLimit:limit];
 }
 
 + (nullable instancetype)findByID:(NSString *)uid {
-    id rlmObj = [self object:self.class forPrimaryKey:uid.uppercaseString];
-
-    if (rlmObj) {
-        return [self createInstanceWithRLMObject:rlmObj];
-    }
-
-    return nil;
+    return [self.query whereWithPredicate:[NSPredicate predicateWithFormat:@"uid=%@", uid]].first;
 }
 
 + (nullable instancetype)find:(NSDictionary<NSString *, id> *)dictionary {
-    id rlmObj = [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]].firstObject;
-
-    if (rlmObj) {
-        return [self createInstanceWithRLMObject:rlmObj];
-    }
-
-    return nil;
+    return [self.query where:dictionary].first;
 }
 
 + (nullable instancetype)findWithFormat:(NSString *)format, ... {
@@ -291,23 +214,11 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (nullable instancetype)findWithPredicate:(NSPredicate *)predicate {
-    id rlmObj = [self objects:self.class withPredicate:predicate].firstObject;
-
-    if (rlmObj) {
-        return [self createInstanceWithRLMObject:rlmObj];
-    }
-
-    return nil;
+    return [self.query whereWithPredicate:predicate].first;
 }
 
 + (nullable instancetype)findLast:(NSDictionary<NSString *, id> *)dictionary {
-    id rlmObj = [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]].lastObject;
-
-    if (rlmObj) {
-        return [self createInstanceWithRLMObject:rlmObj];
-    }
-
-    return nil;
+    return [self.query where:dictionary].last;
 }
 
 + (nullable instancetype)findLastWithFormat:(NSString *)format, ... {
@@ -319,13 +230,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (nullable instancetype)findLastWithPredicate:(NSPredicate *)predicate {
-    id rlmObj = [self objects:self.class withPredicate:predicate].lastObject;
-
-    if (rlmObj) {
-        return [self createInstanceWithRLMObject:rlmObj];
-    }
-
-    return nil;
+    return [self.query whereWithPredicate:predicate].last;
 }
 
 + (instancetype)findOrInitialize:(NSDictionary<NSString *, id> *)dictionary {
@@ -375,15 +280,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary {
-    RLMResults *results = [self objects:self.class withPredicate:[self predicateWithDictionary:dictionary]];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-    }
-
-    return array;
+    return [self.query where:dictionary].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ... {
@@ -395,33 +292,14 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate {
-    RLMResults *results = [self objects:self.class withPredicate:predicate];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-    }
-
-    return array;
+    return [self.query whereWithPredicate:predicate].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
                                     orderedBy:(NSString *)order
                                     ascending:(BOOL)ascending {
 
-    RLMResults *results = [self objects:self.class
-                          withPredicate:[self predicateWithDictionary:dictionary]
-                              orderedBy:order
-                              ascending:ascending];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-    }
-
-    return array;
+    return [[self.query where:dictionary] order:order ascending:ascending].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
@@ -429,22 +307,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
                                     ascending:(BOOL)ascending
                                         limit:(NSUInteger)limit {
 
-    RLMResults *results = [self objects:self.class
-                          withPredicate:[self predicateWithDictionary:dictionary]
-                              orderedBy:order
-                              ascending:ascending];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-
-        if (array.count == limit) {
-            return array;
-        }
-    }
-
-    return array;
+    return [[[self.query where:dictionary] order:order ascending:ascending] firstWithLimit:limit];
 }
 
 
@@ -476,20 +339,11 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
                               limit:limit];
 }
 
-
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
                                                  orderedBy:(NSString *)order
                                                  ascending:(BOOL)ascending {
 
-    RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-    }
-
-    return array;
+    return [[self.query whereWithPredicate:predicate] order:order ascending:ascending].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
@@ -497,21 +351,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
                                                  ascending:(BOOL)ascending
                                                      limit:(NSUInteger)limit {
 
-    RLMResults *results = [self objects:self.class withPredicate:predicate orderedBy:order ascending:ascending];
-
-    NSMutableArray<ARMActiveRealm *> *array = [NSMutableArray new];
-
-    for (RLMObject *obj in results) {
-        [array addObject:[self.class createInstanceWithRLMObject:obj]];
-
-        if (array.count == limit) {
-            return array;
-        }
-    }
-
-    return array;
+    return [[[self.query whereWithPredicate:predicate] order:order ascending:ascending] firstWithLimit:limit];
 }
-
 
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary {
     [[self where:dictionary] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
@@ -565,25 +406,6 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 
 #pragma mark - private method
 
-+ (instancetype)createInstanceWithRLMObject:(RLMObject *)obj {
-    ARMActiveRealm *activeRealm = (ARMActiveRealm *) [self.class new];
-
-    for (NSString *prop in self.class.propertyNames) {
-        activeRealm[prop] = obj[prop];
-    }
-
-    NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
-
-    for (NSString *prop in self.class.definedRelationships) {
-        relations[prop] = [ARMRelation relationWithObject:activeRealm
-                                             relationship:self.class.definedRelationships[prop]];
-    }
-
-    activeRealm.relations = relations;
-
-    return activeRealm;
-}
-
 + (NSDictionary<NSString *, NSString *> *)properties {
     NSMutableDictionary *props = self.superclass != NSObject.class ?
         ARMGetProperties(self.superclass).mutableCopy : [NSMutableDictionary new];
@@ -595,24 +417,6 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     }
 
     return props;
-}
-
-+ (NSArray<NSString *> *)propertyNames {
-    NSMutableArray *properties = [NSMutableArray new];
-
-    for (NSString *prop in self.properties.allKeys) {
-        if (![self.ignoredProperties containsObject:prop] &&
-            !self.definedRelationships[prop] &&
-            ![prop isEqualToString:@"relations"] &&
-            ![prop isEqualToString:@"description"] &&
-            ![prop isEqualToString:@"debugDescription"] &&
-            ![prop isEqualToString:@"hash"]) {
-
-            [properties addObject:prop];
-        }
-    }
-
-    return properties;
 }
 
 - (void)create {
@@ -670,34 +474,6 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     id (*func)(id, SEL, RLMRealm *, id) =(void *) imp;
 
     return func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, primaryKey);
-}
-
-+ (RLMResults *)allObjects:(Class)aClass orderedBy:(NSString *)order ascending:(BOOL)ascending {
-    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
-    SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
-    IMP imp = [rlmObjClass methodForSelector:sel];
-    RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm);
-
-    return [results sortedResultsUsingKeyPath:order ascending:ascending];
-}
-
-+ (RLMResults *)objects:(Class)aClass withPredicate:(NSPredicate *)predicate {
-    return [self objects:aClass withPredicate:predicate orderedBy:@"createdAt" ascending:YES];
-}
-
-+ (RLMResults *)objects:(Class)aClass
-          withPredicate:(NSPredicate *)predicate
-              orderedBy:(NSString *)order
-              ascending:(BOOL)ascending {
-
-    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
-    SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
-    IMP imp = [rlmObjClass methodForSelector:sel];
-    RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, predicate);
-
-    return [results sortedResultsUsingKeyPath:order ascending:ascending];
 }
 
 @end
@@ -1019,13 +795,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 @implementation ARMActiveRealm (Counting)
 
 + (NSUInteger)count {
-    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
-    SEL sel = NSSelectorFromString(@"allObjectsInRealm:");
-    IMP imp = [rlmObjClass methodForSelector:sel];
-    RLMResults *(*func)(id, SEL, RLMRealm *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm);
-
-    return results.count;
+    return self.query.all.count;
 }
 
 + (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary {
@@ -1041,13 +811,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (NSUInteger)countWithPredicate:(NSPredicate *)predicate {
-    Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
-    SEL sel = NSSelectorFromString(@"objectsInRealm:withPredicate:");
-    IMP imp = [rlmObjClass methodForSelector:sel];
-    RLMResults *(*func)(id, SEL, RLMRealm *, NSPredicate *) = (void *) imp;
-    RLMResults *results = func(rlmObjClass, sel, ARMActiveRealmManager.sharedInstance.defaultRealm, predicate);
-
-    return results.count;
+    return [self.query whereWithPredicate:predicate].count;
 }
 
 @end

@@ -248,23 +248,63 @@ class ViewController: UIViewController {
                                        methods: ["generation": "generation:", "works": "works:"]) // The method name is specified by ObjC representation.
         print("author.asJSON: \(json3)")
 
-        let david = Author()
-        david.name = "David"
-        david.age = 45
-        david.save()
+        countSample()
+
+        pluckSample()
+
+        multiThreadSample()
+    }
+
+    func countSample() {
+        // Delete all data for sample.
+        let realm = RLMRealm.default()
+        try! realm.transaction { realm.deleteAllObjects() }
+
+        let author1 = Author.findOrCreate(["name": "Alice", "age": 28])
+        let author2 = Author.findOrCreate(["name": "Bob", "age": 55])
+        let author3 = Author.findOrCreate(["name": "Chris", "age": 32])
+        let author4 = Author.findOrCreate(["name": "David", "age": 45])
 
         // Count objects.
-        print("Author.count: \(Author.count())")
-        print("Author.count(where:): \(Author.count(where: ["name": "David"]))")
-        print("Author.count(predicate:): \(Author.count(predicate: NSPredicate(format: "age > %d", 40)))")
+        print("The number of authors: \(Author.count)")
+        print("The number of authors called David: \(Author.query.where(["name": "David"]).count)")
+        print("The number of authors over 40: \(Author.query.where(predicate: NSPredicate(format: "age >= %d", 40)).count)")
+    }
+
+    func pluckSample() {
+        // Delete all data for sample.
+        let realm = RLMRealm.default()
+        try! realm.transaction { realm.deleteAllObjects() }
+
+        let author1 = Author.findOrCreate(["name": "Alice", "age": 28])
+        let author2 = Author.findOrCreate(["name": "Bob", "age": 55])
+        let author3 = Author.findOrCreate(["name": "Chris", "age": 32])
+        let author4 = Author.findOrCreate(["name": "David", "age": 45])
+
+        let results1 = Author.query.all().pluck(["name"])
+        print("Pluck author names: \(results1)");
+
+        let results2 = Author.query.all().pluck(["name", "age"])
+        print("Pluck author status: \(results2)");
+
+        let results3 = Author.query.where(predicate: NSPredicate(format: "age < %d", 40)).pluck(["name"])
+        print("Pluck author names under 40: \(results3)");
+    }
+
+    func multiThreadSample() {
+        // Delete all data for sample.
+        let realm = RLMRealm.default()
+        try! realm.transaction { realm.deleteAllObjects() }
+
+        let author = Author.findOrCreate(["name": "Alice", "age": 28])
 
         // An ActiveRealm object can be used on multi-threads.
         DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + 2.0) {
-            david.age = 46
-            david.save()
+            author.age = 29
+            author.save()
 
             DispatchQueue.main.async {
-                if let author = Author.find(with: NSPredicate(format: "name=%@", "David")) {
+                if let author = Author.find(with: NSPredicate(format: "name=%@", "Alice")) {
                     print("author: \(author)")
                 }
             }
