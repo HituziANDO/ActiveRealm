@@ -453,20 +453,6 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     }];
 }
 
-+ (NSPredicate *)predicateWithDictionary:(NSDictionary<NSString *, id> *)dictionary {
-    NSMutableArray *formats = [NSMutableArray new];
-    NSMutableArray *arguments = [NSMutableArray new];
-
-    for (NSString *prop in dictionary.allKeys) {
-        [formats addObject:[prop stringByAppendingString:@"=%@"]];
-        [arguments addObject:dictionary[prop]];
-    }
-
-    NSString *format = [formats componentsJoinedByString:@" AND "];
-
-    return [NSPredicate predicateWithFormat:format argumentArray:arguments];
-}
-
 + (nullable RLMObject *)object:(Class)aClass forPrimaryKey:(id)primaryKey {
     Class rlmObjClass = [[ARMActiveRealmManager sharedInstance] map:aClass];
     SEL sel = NSSelectorFromString(@"objectInRealm:forPrimaryKey:");
@@ -799,7 +785,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (NSUInteger)countWhere:(NSDictionary<NSString *, id> *)dictionary {
-    return [self countWithPredicate:[self predicateWithDictionary:dictionary]];
+    return [self.query where:dictionary].count;
 }
 
 + (NSUInteger)countWithFormat:(NSString *)format, ... {

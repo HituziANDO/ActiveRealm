@@ -31,15 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class ARMCollection;
 
 @interface ARMQuery : NSObject
+/**
+ * Returns all objects of the model.
+ */
+@property (nonatomic, readonly) ARMCollection *all;
 
 - (instancetype)initWithClass:(Class)aClass;
 
-/**
- * Returns all objects of the model.
- *
- * @return All objects of the model.
- */
-- (ARMCollection *)all;
 /**
  * Returns objects searched by specified parameters.
  *

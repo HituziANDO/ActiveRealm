@@ -124,11 +124,11 @@ class ViewController: UIViewController {
         print("All authors: \(authors)")
 
         // Select all objects ordered by specified property.
-        authors = Author.query.all().order("age", ascending: false).toArray
+        authors = Author.query.all.order("age", ascending: false).toArray
         print("All authors ordered by age: \(authors)")
 
         // Retrieve an object at index.
-        if let author = Author.query.all()[1] as? Author {
+        if let author = Author.query.all[1] as? Author {
             print("Retrieve an author at index: \(author)")
         }
 
@@ -153,7 +153,7 @@ class ViewController: UIViewController {
         }
 
         // Select specified number of objects ordered by specified property from the head.
-        if let tags = Tag.query.all().order("name", ascending: false).first(limit: 2) as? [Tag] {
+        if let tags = Tag.query.all.order("name", ascending: false).first(limit: 2) as? [Tag] {
             print("Select tags from the head: \(tags)")
         }
 
@@ -168,7 +168,7 @@ class ViewController: UIViewController {
         }
 
         // Select specified number of objects ordered by specified property from the tail.
-        if let tags = Tag.query.all().order("name", ascending: true).last(limit: 2) as? [Tag] {
+        if let tags = Tag.query.all.order("name", ascending: true).last(limit: 2) as? [Tag] {
             print("Select tags from the tail: \(tags)")
         }
 
@@ -365,10 +365,10 @@ class ViewController: UIViewController {
         let author3 = Author.findOrCreate(["name": "Chris", "age": 32])
         let author4 = Author.findOrCreate(["name": "David", "age": 45])
 
-        let results1 = Author.query.all().pluck(["name"])
+        let results1 = Author.query.all.pluck(["name"])
         print("Pluck author names: \(results1)")
 
-        let results2 = Author.query.all().pluck(["name", "age"])
+        let results2 = Author.query.all.pluck(["name", "age"])
         print("Pluck author status: \(results2)")
 
         let results3 = Author.query.where(predicate: NSPredicate(format: "age < %d", 40)).pluck(["name"])

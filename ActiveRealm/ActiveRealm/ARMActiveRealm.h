@@ -117,7 +117,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return All sorted objects.
  */
 + (NSArray<__kindof ARMActiveRealm *> *)allOrderedBy:(NSString *)order
-                                           ascending:(BOOL)ascending NS_SWIFT_NAME(all(orderedBy:ascending:));
+                                           ascending:(BOOL)ascending NS_SWIFT_NAME(all(orderedBy:ascending:)) DEPRECATED_ATTRIBUTE;
 /**
  * Select first created object.
  *
@@ -141,7 +141,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<__kindof ARMActiveRealm *> *)firstOrderedBy:(NSString *)order
                                              ascending:(BOOL)ascending
-                                                 limit:(NSUInteger)limit NS_SWIFT_NAME(first(orderedBy:ascending:limit:));
+                                                 limit:(NSUInteger)limit NS_SWIFT_NAME(first(orderedBy:ascending:limit:)) DEPRECATED_ATTRIBUTE;
 /**
  * Select last created object.
  *
@@ -165,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<__kindof ARMActiveRealm *> *)lastOrderedBy:(NSString *)order
                                             ascending:(BOOL)ascending
-                                                limit:(NSUInteger)limit NS_SWIFT_NAME(last(orderedBy:ascending:limit:));
+                                                limit:(NSUInteger)limit NS_SWIFT_NAME(last(orderedBy:ascending:limit:)) DEPRECATED_ATTRIBUTE;
 /**
  * Find an object by specified ID.
  *
@@ -236,21 +236,21 @@ NS_ASSUME_NONNULL_BEGIN
  * @param dictionary Parameters for searching.
  * @return Objects.
  */
-+ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary;
++ (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary DEPRECATED_ATTRIBUTE;
 /**
  * Find multiple objects by a format.
  *
  * @param format A format.
  * @return Objects.
  */
-+ (NSArray<__kindof ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ...;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithFormat:(NSString *)format, ... DEPRECATED_ATTRIBUTE;
 /**
  * Find multiple objects by a NSPredicate.
  *
  * @param predicate A NSPredicate.
  * @return Objects.
  */
-+ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate;
++ (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate DEPRECATED_ATTRIBUTE;
 /**
  * Find multiple objects by specified parameters. The results are ordered by specified property.
  *
@@ -261,7 +261,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
                                     orderedBy:(NSString *)order
-                                    ascending:(BOOL)ascending;
+                                    ascending:(BOOL)ascending DEPRECATED_ATTRIBUTE;
 /**
  * Find specified number of objects by specified parameters. The results are ordered by specified property.
  *
@@ -274,7 +274,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<__kindof ARMActiveRealm *> *)where:(NSDictionary<NSString *, id> *)dictionary
                                     orderedBy:(NSString *)order
                                     ascending:(BOOL)ascending
-                                        limit:(NSUInteger)limit;
+                                        limit:(NSUInteger)limit DEPRECATED_ATTRIBUTE;
 /**
  * Find specified number of objects by a format. The results are ordered by specified property.
  *
@@ -285,7 +285,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
                                              ascending:(BOOL)ascending
-                                                format:(NSString *)format, ...;
+                                                format:(NSString *)format, ... DEPRECATED_ATTRIBUTE;
 /**
  * Find specified number of objects by a format. The results are ordered by specified property.
  *
@@ -298,7 +298,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
                                              ascending:(BOOL)ascending
                                                  limit:(NSUInteger)limit
-                                                format:(NSString *)format, ...;
+                                                format:(NSString *)format, ... DEPRECATED_ATTRIBUTE;
 /**
  * Find specified number of objects by a NSPredicate. The results are ordered by specified property.
  *
@@ -309,7 +309,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
                                                  orderedBy:(NSString *)order
-                                                 ascending:(BOOL)ascending;
+                                                 ascending:(BOOL)ascending DEPRECATED_ATTRIBUTE;
 /**
  * Find specified number of objects by a NSPredicate. The results are ordered by specified property.
  *
@@ -322,7 +322,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
                                                  orderedBy:(NSString *)order
                                                  ascending:(BOOL)ascending
-                                                     limit:(NSUInteger)limit;
+                                                     limit:(NSUInteger)limit DEPRECATED_ATTRIBUTE;
 /**
  * Cascade delete objects searched by specified parameters.
  *
