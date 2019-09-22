@@ -81,6 +81,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray *)pluck:(NSArray<NSString *> *)properties;
 
+- (__kindof ARMActiveRealm *)objectAtIndexedSubscript:(NSUInteger)idx;
+
 @end
 
 NS_ASSUME_NONNULL_END

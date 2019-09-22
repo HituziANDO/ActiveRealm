@@ -131,8 +131,12 @@
     authors = [Author.query.all order:@"age" ascending:NO].toArray;
     NSLog(@"All authors ordered by age: %@", authors);
 
+    // Retrieve an object at index.
+    Author *author = Author.query.all[1];
+    NSLog(@"Retrieve an author at index: %@", author);
+
     // Find an object by specified ID.
-    Author *author = [Author findByID:author1.uid];
+    author = [Author findByID:author1.uid];
     NSLog(@"Find an author by ID: %@", author);
 
     // Find an object by specified parameters. When multiple objects are found, select first object.

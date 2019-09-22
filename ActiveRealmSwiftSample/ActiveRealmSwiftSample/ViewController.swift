@@ -127,6 +127,11 @@ class ViewController: UIViewController {
         authors = Author.query.all().order("age", ascending: false).toArray
         print("All authors ordered by age: \(authors)")
 
+        // Retrieve an object at index.
+        if let author = Author.query.all()[1] as? Author {
+            print("Retrieve an author at index: \(author)")
+        }
+
         // Find an object by specified ID.
         if let author = Author.find(ID: author1.uid) {
             print("Find an author by ID: \(author)")

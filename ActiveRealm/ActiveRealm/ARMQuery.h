@@ -48,12 +48,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ARMCollection *)where:(NSDictionary<NSString *, id> *)dictionary;
 /**
- * Returns objects searched by specified searching condition.
+ * Returns objects searched by specified searching condition with a predicate.
  *
  * @param predicate A NSPredicate.
  * @return Objects of the model.
  */
 - (ARMCollection *)whereWithPredicate:(NSPredicate *)predicate NS_SWIFT_NAME(where(predicate:));
+/**
+ * Returns objects searched by specified searching condition with a format.
+ *
+ * @param format A format.
+ * @return Objects of the model.
+ */
+- (ARMCollection *)whereWithFormat:(NSString *)format, ...;
 
 @end
 

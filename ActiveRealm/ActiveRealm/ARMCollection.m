@@ -137,6 +137,10 @@
     return array;
 }
 
+- (__kindof ARMActiveRealm *)objectAtIndexedSubscript:(NSUInteger)idx {
+    return [self activeRealmFromRLMObject:self.results[idx]];
+}
+
 #pragma mark - private method
 
 - (ARMActiveRealm *)activeRealmFromRLMObject:(RLMObject *)obj {

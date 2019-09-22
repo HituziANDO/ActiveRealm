@@ -75,6 +75,14 @@
     return [[ARMCollection alloc] initWithClass:self.modelClass results:results];
 }
 
+- (ARMCollection *)whereWithFormat:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    va_end(args);
+
+    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+}
+
 #pragma mark - private method
 
 + (NSPredicate *)predicateWithDictionary:(NSDictionary<NSString *, id> *)dictionary {
