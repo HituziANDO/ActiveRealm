@@ -496,6 +496,15 @@ let collection = Author.query.all
 collection.order("age", ascending: true)
 ```
 
+#### at(_:)
+
+Retrieves an object at given index.
+
+```swift
+let collection = Author.query.all
+let author = collection.at(1)
+```
+
 #### pluck(_:)
 
 Plucks properties of the model.

@@ -74,6 +74,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<__kindof ARMActiveRealm *> *)lastWithLimit:(NSUInteger)limit NS_SWIFT_NAME(last(limit:));
 /**
+ * Retrieves an object at given index.
+ *
+ * @param idx An index.
+ * @return An object.
+ */
+- (nullable __kindof ARMActiveRealm *)objectAtIndex:(NSUInteger)idx NS_SWIFT_NAME(at(_:));
+/**
  * Plucks properties of the model.
  *
  * @param properties Properties.

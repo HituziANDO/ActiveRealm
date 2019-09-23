@@ -194,6 +194,11 @@ class ViewController: UIViewController {
         if let articles = Article.query.where(["authorID": author1.uid]).order("title", ascending: false).last(limit: 2) as? [Article] {
             print("Select articles by author: \(articles)")
         }
+
+        // Retrieve an object at index.
+        if let author = Author.query.all.at(1) {
+            print("Author at index: \(author)")
+        }
     }
 
     func destroySample() {

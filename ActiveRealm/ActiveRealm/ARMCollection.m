@@ -111,6 +111,14 @@
     return results.reverseObjectEnumerator.allObjects;
 }
 
+- (nullable __kindof ARMActiveRealm *)objectAtIndex:(NSUInteger)idx {
+    if (self.results.count <= idx) {
+        return nil;
+    }
+
+    return [self activeRealmFromRLMObject:self.results[idx]];
+}
+
 - (NSArray *)pluck:(NSArray<NSString *> *)properties {
     NSMutableArray *array = [NSMutableArray new];
 

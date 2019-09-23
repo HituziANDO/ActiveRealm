@@ -184,6 +184,10 @@
     NSLog(@"Select articles by author: %@", articles);
     articles = [[[Article.query where:@{ @"authorID": author1.uid }] order:@"title" ascending:NO] lastWithLimit:2];
     NSLog(@"Select articles by author: %@", articles);
+
+    // Retrieve an object at index.
+    author = [Author.query.all objectAtIndex:1];
+    NSLog(@"Author at index: %@", author);
 }
 
 - (void)destroySample {
