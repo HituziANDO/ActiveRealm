@@ -285,21 +285,12 @@ Select all objects.
 let authors = Author.all()
 ```
 
-#### all(orderedBy:ascending:)
-
-Select all objects ordered by specified property.
-
-```swift
-let authors = Author.all(orderedBy: "age", ascending: false)
-```
-
 #### first()
 
 Select first created object.
 
 ```swift
-if let tag = Tag.first() {
-}
+let tag = Tag.first()
 ```
 
 #### first(limit:)
@@ -307,17 +298,7 @@ if let tag = Tag.first() {
 Select specified number of objects from the head.
 
 ```swift
-if let tags = Tag.first(limit: 10) as? [Tag] {
-}
-```
-
-#### first(orderedBy:ascending:limit:)
-
-Select specified number of objects ordered by specified property from the head.
-
-```swift
-if let tags = Tag.first(orderedBy: "name", ascending: false, limit: 10) as? [Tag] {
-}
+let tags = Tag.first(limit: 10)
 ```
 
 #### last()
@@ -325,8 +306,7 @@ if let tags = Tag.first(orderedBy: "name", ascending: false, limit: 10) as? [Tag
 Select last created object.
 
 ```swift
-if let tag = Tag.last() {
-}
+let tag = Tag.last()
 ```
 
 #### last(limit:)
@@ -334,17 +314,7 @@ if let tag = Tag.last() {
 Select specified number of objects from the tail.
 
 ```swift
-if let tags = Tag.last(limit: 10) as? [Tag] {
-}
-```
-
-#### last(orderedBy:ascending:limit:)
-
-Select specified number of objects ordered by specified property from the tail.
-
-```swift
-if let tags = Tag.last(orderedBy: "name", ascending: true, limit: 10) as? [Tag] {
-}
+let tags = Tag.last(limit: 10)
 ```
 
 #### find(ID:)
@@ -352,8 +322,7 @@ if let tags = Tag.last(orderedBy: "name", ascending: true, limit: 10) as? [Tag] 
 Find an object by specified ID.
 
 ```swift
-if let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX") {
-}
+let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX")
 ```
 
 #### find(_:)
@@ -361,11 +330,15 @@ if let author = Author.find(ID: "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX") {
 Find an object by specified parameters. When multiple objects are found, select first object.
 
 ```swift
-if let author = Author.find(["name": "Alice", "age": 28]) {
-}
+let author = Author.find(["name": "Alice", "age": 28])
+```
 
-if let author = Author.find(with: NSPredicate(format: "name=%@ AND age=%d", "Alice", 28)) {
-}
+#### find(with:)
+
+Find an object by specified parameters. When multiple objects are found, select first object.
+
+```swift
+let author = Author.find(with: NSPredicate(format: "age > %d", 28))
 ```
 
 #### findLast(_:)
@@ -373,48 +346,15 @@ if let author = Author.find(with: NSPredicate(format: "name=%@ AND age=%d", "Ali
 Find an object by specified parameters. When multiple objects are found, select last object.
 
 ```swift
-if let tag = Tag.findLast(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"]) {
-}
-
-if let tag = Tag.findLast(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX")) {
-    // Something to do.
-}
+let tag = Tag.findLast(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"])
 ```
 
-#### where(_:)
+#### findLast(with:)
 
-Find multiple objects by specified parameters.
-
-```swift
-if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"]) as? [Tag] {
-}
-
-if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX")) as? [Tag] {
-}
-```
-
-#### where(_:orderedBy:ascending:)
-
-Find multiple objects by specified parameters. The results are ordered by specified property.
+Find an object by specified parameters. When multiple objects are found, select last object.
 
 ```swift
-if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"], orderedBy: "name", ascending: true) as? [Tag] {
-}
-
-if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"), orderedBy: "name", ascending: true) as? [Tag] {
-}
-```
-
-#### where(_:orderedBy:ascending:limit:)
-
-Find specified number of objects by specified parameters. The results are ordered by specified property.
-
-```swift
-if let tags = Tag.where(["articleID": "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"], orderedBy: "name", ascending: false, limit: 10) as? [Tag] {
-}
-
-if let tags = Tag.where(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"), orderedBy: "name", ascending: true, limit: 10) as? [Tag] {
-}
+let tag = Tag.findLast(with: NSPredicate(format: "articleID=%@", "XXXXXXXX-XXXX-4XXX-XXXX-XXXXXXXXXXXX"))
 ```
 
 ### Update
@@ -465,14 +405,119 @@ Author.destroy(with: NSPredicate(format: "name=%@", "Alice"), cascade: false)
 Author.destroyAll(cascade: false)
 ```
 
+### Query
+
+#### all
+
+Returns all objects of the model.
+
+```swift
+let collection = Author.query.all
+```
+
+#### where(_:)
+
+Returns objects searched by specified parameters.
+
+```swift
+let collection = Author.query.where(["name": "Alice"])
+```
+
+#### where(predicate:)
+
+Returns objects searched by specified searching condition with a predicate.
+
+```swift
+let collection = Author.query.where(predicate: NSPredicate(format: "age > %d", 40))
+```
+
+### Collection
+
+#### toArray
+
+The models in the collection. Converts to a NSArray.
+ 
+```swift
+let collection = Author.query.all
+let authors = collection.toArray
+```
+
+#### count
+
+The number of models in the collection.
+
+```swift
+let collection = Author.query.all
+let count = collection.count
+```
+
+#### first
+
+The first model in the collection.
+
+```swift
+let collection = Author.query.all
+let author = collection.first
+```
+
+#### first(limit:)
+
+Returns specified number of the models from the head.
+
+```swift
+let collection = Author.query.all
+let authors = collection.first(limit: 5)
+```
+
+#### last
+
+The last model in the collection.
+
+```swift
+let collection = Author.query.all
+let author = collection.last
+```
+
+#### last(limit:)
+
+Returns specified number of the models from the tail.
+
+```swift
+let collection = Author.query.all
+let authors = collection.last(limit: 5)
+```
+
+#### order(_:ascending:)
+
+Sorts objects in the collection by specified property.
+
+```swift
+let collection = Author.query.all
+collection.order("age", ascending: true)
+```
+
+#### pluck(_:)
+
+Plucks properties of the model.
+
+```swift
+let collection = Author.query.all
+let names = collection.pluck(["name"])
+```
+
 ## Count
 
 Count objects.
 
 ```swift
-let count1 = Author.count()
-let count2 = Author.count(where: ["name": "David"])
-let count3 = Author.count(predicate: NSPredicate(format: "age > %d", 40))
+// The number of all objects.
+let count = Author.count
+```
+
+```swift
+// The number of objects matched given condition.
+let count1 = Author.query.where(["name": "Alice"]).count
+let count2 = Author.query.where(predicate: NSPredicate(format: "age > %d", 40)).count
 ```
 
 ## Ignored properties
