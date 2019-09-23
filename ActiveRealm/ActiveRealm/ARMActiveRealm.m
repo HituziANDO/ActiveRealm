@@ -288,7 +288,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     va_start(args, format);
     va_end(args);
 
-    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+    return [self.query whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate {
@@ -319,9 +319,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     va_start(args, format);
     va_end(args);
 
-    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]
-                          orderedBy:order
-                          ascending:ascending];
+    return [[self.query whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]]
+                        order:order ascending:ascending].toArray;
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereOrderedBy:(NSString *)order
@@ -333,10 +332,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     va_start(args, format);
     va_end(args);
 
-    return [self whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]
-                          orderedBy:order
-                          ascending:ascending
-                              limit:limit];
+    return [[[self.query whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]]
+                         order:order ascending:ascending] firstWithLimit:limit];
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)whereWithPredicate:(NSPredicate *)predicate
@@ -355,7 +352,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary {
-    [[self where:dictionary] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [[self.query where:dictionary].toArray enumerateObjectsUsingBlock:^(__kindof ARMActiveRealm *obj,
+                                                                        NSUInteger idx,
+                                                                        BOOL *stop) {
         [obj destroy];
     }];
 }
@@ -369,13 +368,17 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (void)destroyWithPredicate:(NSPredicate *)predicate {
-    [[self whereWithPredicate:predicate] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [[self.query whereWithPredicate:predicate].toArray enumerateObjectsUsingBlock:^(__kindof ARMActiveRealm *obj,
+                                                                                    NSUInteger idx,
+                                                                                    BOOL *stop) {
         [obj destroy];
     }];
 }
 
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary cascade:(BOOL)cascade {
-    [[self where:dictionary] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [[self.query where:dictionary].toArray enumerateObjectsUsingBlock:^(__kindof ARMActiveRealm *obj,
+                                                                        NSUInteger idx,
+                                                                        BOOL *stop) {
         [obj destroyWithCascade:cascade];
     }];
 }
@@ -389,7 +392,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (void)destroyWithPredicate:(NSPredicate *)predicate cascade:(BOOL)cascade {
-    [[self whereWithPredicate:predicate] enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [[self.query whereWithPredicate:predicate].toArray enumerateObjectsUsingBlock:^(__kindof ARMActiveRealm *obj,
+                                                                                    NSUInteger idx,
+                                                                                    BOOL *stop) {
         [obj destroyWithCascade:cascade];
     }];
 }
@@ -399,7 +404,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (void)destroyAllWithCascade:(BOOL)cascade {
-    [self.all enumerateObjectsUsingBlock:^(ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
+    [self.query.all.toArray enumerateObjectsUsingBlock:^(__kindof ARMActiveRealm *obj, NSUInteger idx, BOOL *stop) {
         [obj destroyWithCascade:cascade];
     }];
 }
@@ -793,7 +798,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     va_start(args, format);
     va_end(args);
 
-    return [self countWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]];
+    return [self.query whereWithPredicate:[NSPredicate predicateWithFormat:format arguments:args]].count;
 }
 
 + (NSUInteger)countWithPredicate:(NSPredicate *)predicate {

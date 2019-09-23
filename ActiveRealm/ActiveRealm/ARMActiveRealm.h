@@ -324,54 +324,54 @@ NS_ASSUME_NONNULL_BEGIN
                                                  ascending:(BOOL)ascending
                                                      limit:(NSUInteger)limit DEPRECATED_ATTRIBUTE;
 /**
- * Cascade delete objects searched by specified parameters.
+ * Deletes objects and related objects searched by specified parameters.
  *
  * @param dictionary Parameters for searching.
  */
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary;
 /**
- * Cascade delete objects searched by a format.
+ * Deletes objects and related objects searched by specified searching condition with a format.
  *
  * @param format A format.
  */
 + (void)destroyWithFormat:(NSString *)format, ...;
 /**
- * Cascade delete objects searched by a NSPredicate.
+ * Deletes objects and related objects searched by specified searching condition with a predicate.
  *
  * @param predicate A NSPredicate.
  */
 + (void)destroyWithPredicate:(NSPredicate *)predicate;
 /**
- * Cascade delete objects searched by specified parameters.
- * Use this if not cascade deleting. Specify NO to cascade argument.
+ * Deletes objects searched by specified parameters.
+ * If not cascade deleting. Specify NO to cascade argument.
  *
  * @param dictionary Parameters for searching.
  * @param cascade NO if not cascade deleting.
  */
 + (void)destroy:(NSDictionary<NSString *, id> *)dictionary cascade:(BOOL)cascade;
 /**
- * Cascade delete objects searched by a format.
- * Use this if not cascade deleting. Specify NO to cascade argument.
+ * Deletes objects searched by specified searching condition with a format.
+ * If not cascade deleting. Specify NO to cascade argument.
  *
  * @param cascade NO if not cascade deleting.
  * @param format A format.
  */
 + (void)destroyWithCascade:(BOOL)cascade format:(NSString *)format, ...;
 /**
- * Cascade delete objects searched by a NSPredicate.
- * Use this if not cascade deleting. Specify NO to cascade argument.
+ * Deletes objects searched by specified searching condition with a predicate.
+ * If not cascade deleting. Specify NO to cascade argument.
  *
  * @param predicate A NSPredicate.
  * @param cascade NO if not cascade deleting.
  */
 + (void)destroyWithPredicate:(NSPredicate *)predicate cascade:(BOOL)cascade;
 /**
- * Cascade delete all objects.
+ * Deletes all objects and related objects at the same time.
  */
 + (void)destroyAll;
 /**
- * Cascade delete all objects.
- * Use this if not cascade deleting. Specify NO to cascade argument.
+ * Deletes all objects.
+ * If not cascade deleting. Specify NO to cascade argument.
  *
  * @param cascade NO if not cascade deleting.
  */

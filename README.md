@@ -381,7 +381,7 @@ alice.destroy()
 
 #### destroy(_:)
 
-Cascade delete by specified parameters.
+Deletes objects and related objects searched by specified parameters.
 
 ```swift
 Author.destroy(["name": "Alice"])
@@ -390,7 +390,7 @@ Author.destroy(with: NSPredicate(format: "name=%@", "Alice"))
 
 #### destroyAll()
 
-Cascade delete all objects.
+Deletes all objects and related objects at the same time.
 
 ```swift
 Author.destroyAll()
