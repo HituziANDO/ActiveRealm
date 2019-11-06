@@ -670,4 +670,15 @@ NS_SWIFT_NAME(asJSONString(included:addingPropertiesWith:methods:));
 
 @end
 
+@interface ARMActiveRealm (Callback)
+
++ (void)beforeCreate:(__kindof ARMActiveRealm *)obj;
++ (void)beforeUpdate:(__kindof ARMActiveRealm *)obj;
++ (void)beforeSave:(__kindof ARMActiveRealm *)obj;
++ (void)afterCreate:(__kindof ARMActiveRealm *)obj;
++ (void)afterUpdate:(__kindof ARMActiveRealm *)obj;
++ (void)afterSave:(__kindof ARMActiveRealm *)obj;
+
+@end
+
 NS_ASSUME_NONNULL_END

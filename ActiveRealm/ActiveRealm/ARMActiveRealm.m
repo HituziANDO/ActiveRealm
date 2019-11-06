@@ -425,6 +425,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (void)create {
+    [self.class beforeCreate:self];
+    [self.class beforeSave:self];
+
     Class realmClass = [[ARMActiveRealmManager sharedInstance] map:self.class];
     id obj = [realmClass new];
 
@@ -438,9 +441,15 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     [realm transactionWithBlock:^{
         [realm addObject:obj];
     }];
+
+    [self.class afterCreate:self];
+    [self.class afterSave:self];
 }
 
 - (void)update {
+    [self.class beforeUpdate:self];
+    [self.class beforeSave:self];
+
     RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
@@ -456,6 +465,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
             }
         }
     }];
+
+    [self.class afterUpdate:self];
+    [self.class afterSave:self];
 }
 
 + (nullable RLMObject *)object:(Class)aClass forPrimaryKey:(id)primaryKey {
@@ -803,6 +815,28 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 
 + (NSUInteger)countWithPredicate:(NSPredicate *)predicate {
     return [self.query whereWithPredicate:predicate].count;
+}
+
+@end
+
+@implementation ARMActiveRealm (Callback)
+
++ (void)beforeCreate:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)beforeUpdate:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)beforeSave:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)afterCreate:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)afterUpdate:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)afterSave:(__kindof ARMActiveRealm *)obj {
 }
 
 @end
