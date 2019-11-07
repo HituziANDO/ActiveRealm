@@ -678,6 +678,8 @@ NS_SWIFT_NAME(asJSONString(included:addingPropertiesWith:methods:));
 + (void)afterCreate:(__kindof ARMActiveRealm *)obj;
 + (void)afterUpdate:(__kindof ARMActiveRealm *)obj;
 + (void)afterSave:(__kindof ARMActiveRealm *)obj;
++ (void)beforeDestroy:(__kindof ARMActiveRealm *)obj;
++ (void)afterDestroy:(__kindof ARMActiveRealm *)obj;
 
 @end
 

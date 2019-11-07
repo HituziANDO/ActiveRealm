@@ -132,6 +132,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (void)destroyWithCascade:(BOOL)cascade {
+    [self.class beforeDestroy:self];
+
     RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
@@ -142,6 +144,8 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     [realm transactionWithBlock:^{
         [realm deleteObject:obj];
     }];
+
+    [self.class afterDestroy:self];
 
     if (!cascade) {
         return;
@@ -837,6 +841,12 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 + (void)afterSave:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)beforeDestroy:(__kindof ARMActiveRealm *)obj {
+}
+
++ (void)afterDestroy:(__kindof ARMActiveRealm *)obj {
 }
 
 @end
