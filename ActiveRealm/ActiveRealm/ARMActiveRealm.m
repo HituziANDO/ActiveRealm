@@ -132,13 +132,26 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 }
 
 - (void)destroyWithCascade:(BOOL)cascade {
-    [self.class beforeDestroy:self];
-
     RLMObject *obj = [self.class object:self.class forPrimaryKey:self[kActiveRealmPrimaryKeyName]];
 
     if (!obj) {
         return;
     }
+
+    if (cascade) {
+        for (NSString *prop in self.relations) {
+            if (self.relations[prop].hasOne) {
+                [self.relations[prop].object destroy];
+            }
+            else if (self.relations[prop].hasMany) {
+                for (ARMActiveRealm *activeRealm in self.relations[prop].objects) {
+                    [activeRealm destroy];
+                }
+            }
+        }
+    }
+
+    [self.class beforeDestroy:self];
 
     RLMRealm *realm = ARMActiveRealmManager.sharedInstance.defaultRealm;
     [realm transactionWithBlock:^{
@@ -146,21 +159,6 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     }];
 
     [self.class afterDestroy:self];
-
-    if (!cascade) {
-        return;
-    }
-
-    for (NSString *prop in self.relations) {
-        if (self.relations[prop].hasOne) {
-            [self.relations[prop].object destroy];
-        }
-        else if (self.relations[prop].hasMany) {
-            for (ARMActiveRealm *activeRealm in self.relations[prop].objects) {
-                [activeRealm destroy];
-            }
-        }
-    }
 }
 
 + (NSArray<__kindof ARMActiveRealm *> *)all {
