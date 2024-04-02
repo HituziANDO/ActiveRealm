@@ -68,5 +68,5 @@ iOSInjectionProject/
 # App
 #
 Output
-Dependency
+Dependency/*.xcframework
 
