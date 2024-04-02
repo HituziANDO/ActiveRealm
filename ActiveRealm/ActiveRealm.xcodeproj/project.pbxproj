@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -37,8 +37,8 @@
 		19E59C850280F35D882D2CCD /* ARMQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E597EC4A2E20265A29A91C /* ARMQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E30C46A23343AE5008E3FF3 /* ARMCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E30C46823343AE5008E3FF3 /* ARMCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E30C46B23343AE5008E3FF3 /* ARMCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E30C46923343AE5008E3FF3 /* ARMCollection.m */; };
+		5EAD16122BBBFB4400BBCD29 /* Realm.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EAD16112BBBFB4400BBCD29 /* Realm.xcframework */; };
 		5EF77DFB229F37A500230CD7 /* ActiveRealm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77DF9229F37A500230CD7 /* ActiveRealm.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5EF77E6E22A4123B00230CD7 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EF77E6D22A4123A00230CD7 /* Realm.framework */; };
 		5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */; };
 		5EF77E7A22A680D200230CD7 /* ARMActiveRealm+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E7822A680D200230CD7 /* ARMActiveRealm+Internal.h */; };
 /* End PBXBuildFile section */
@@ -60,10 +60,10 @@
 		19E59C6143B788E000F25611 /* ARMRelation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARMRelation.m; sourceTree = "<group>"; };
 		5E30C46823343AE5008E3FF3 /* ARMCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMCollection.h; sourceTree = "<group>"; };
 		5E30C46923343AE5008E3FF3 /* ARMCollection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARMCollection.m; sourceTree = "<group>"; };
+		5EAD16112BBBFB4400BBCD29 /* Realm.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Realm.xcframework; sourceTree = "<group>"; };
 		5EF77DF6229F37A500230CD7 /* ActiveRealm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActiveRealm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF77DF9229F37A500230CD7 /* ActiveRealm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActiveRealm.h; sourceTree = "<group>"; };
 		5EF77DFA229F37A500230CD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5EF77E6D22A4123A00230CD7 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../ActiveRealmSample/ActiveRealmSample/Framework/Realm.framework; sourceTree = "<group>"; };
 		5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ARMRelation+Internal.h"; sourceTree = "<group>"; };
 		5EF77E7822A680D200230CD7 /* ARMActiveRealm+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ARMActiveRealm+Internal.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,18 +73,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EF77E6E22A4123B00230CD7 /* Realm.framework in Frameworks */,
+				5EAD16122BBBFB4400BBCD29 /* Realm.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5EAD16102BBBFB0700BBCD29 /* Dependency */ = {
+			isa = PBXGroup;
+			children = (
+				5EAD16112BBBFB4400BBCD29 /* Realm.xcframework */,
+			);
+			path = Dependency;
+			sourceTree = "<group>";
+		};
 		5EF77DEC229F37A500230CD7 = {
 			isa = PBXGroup;
 			children = (
 				5EF77DF8229F37A500230CD7 /* ActiveRealm */,
-				5EF77E6C22A4123A00230CD7 /* Frameworks */,
+				5EAD16102BBBFB0700BBCD29 /* Dependency */,
 				5EF77DF7229F37A500230CD7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -122,14 +130,6 @@
 				5EF77DFA229F37A500230CD7 /* Info.plist */,
 			);
 			path = ActiveRealm;
-			sourceTree = "<group>";
-		};
-		5EF77E6C22A4123A00230CD7 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				5EF77E6D22A4123A00230CD7 /* Realm.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,7 +235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "######################\n# Options\n######################\n\nFRAMEWORK_NAME=\"${PROJECT_NAME}\"\nBUILD_PATH=\"build\"\nSIMULATOR_LIBRARY_PATH=\"${BUILD_PATH}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework\"\nDEVICE_LIBRARY_PATH=\"${BUILD_PATH}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework\"\nUNIVERSAL_LIBRARY_DIR=\"${BUILD_PATH}/${CONFIGURATION}-iphoneuniversal\"\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework\"\nINFOPLIST=\"${PROJECT_NAME}/Info.plist\"\nFRAMEWORK_VERSION_NUMBER=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" ${INFOPLIST})\nPACKAGENAME=\"${FRAMEWORK_NAME}-${FRAMEWORK_VERSION_NUMBER}.zip\"\n\n######################\n# Build Frameworks\n######################\n\nxcodebuild -configuration ${CONFIGURATION} -target ${FRAMEWORK_NAME} clean\nxcodebuild -configuration ${CONFIGURATION} -target ${FRAMEWORK_NAME} -sdk iphonesimulator\n[ $? != 0 ] && exit 1\nxcodebuild -configuration ${CONFIGURATION} -target ${FRAMEWORK_NAME} -sdk iphoneos\n[ $? != 0 ] && exit 1\n\n\n######################\n# Create directory for universal\n######################\n\nrm -rf \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${FRAMEWORK}\"\n\n\n######################\n# Copy files Framework\n######################\n\ncp -r \"${DEVICE_LIBRARY_PATH}/.\" \"${FRAMEWORK}\"\n\n\n######################\n# Make an universal binary\n######################\n\nlipo \"${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}\" \"${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}\" -create -output \"${FRAMEWORK}/${FRAMEWORK_NAME}\" | echo\n\n# For Swift framework, Swiftmodule needs to be copied in the universal framework\nif [ -d \"${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nif [ -d \"${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\n######################\n# On Release, copy the result to release directory\n######################\nOUTPUT_DIR=\"${PROJECT_DIR}/Framework/${FRAMEWORK_NAME}-${CONFIGURATION}/\"\n\nrm -rf \"$OUTPUT_DIR\"\nmkdir -p \"$OUTPUT_DIR\"\n\ncp -r \"${FRAMEWORK}\" \"$OUTPUT_DIR\"\n\n# Zip\ncd \"$OUTPUT_DIR\"\nzip -ry ${PACKAGENAME} $(basename \"${OUTPUT_DIR}/${FRAMEWORK_NAME}.framework\")\ncd ${SRCROOT}\n\n";
+			shellScript = "OUTPUT_DIR=${PROJECT_DIR}/Output\n\nDERIVED_DIR=${OUTPUT_DIR}/${CONFIGURATION}-derived\n\nARCHIVE_DIR=${OUTPUT_DIR}/${CONFIGURATION}-archive\n\nXCFRAMEWORK_DIR=${OUTPUT_DIR}/${CONFIGURATION}-xcframework\n\nrm -rf ${OUTPUT_DIR}\n\nmkdir -p ${DERIVED_DIR}\n\nmkdir -p ${ARCHIVE_DIR}\n\nmkdir -p ${XCFRAMEWORK_DIR}\n\nARCHIVE_FILE_IOS=${ARCHIVE_DIR}/ios.xcarchive\necho \"ARCHIVE_FILE_IOS:${ARCHIVE_FILE_IOS}\"\n\nARCHIVE_FILE_IOS_SIMULATOR=${ARCHIVE_DIR}/iossimulator.xcarchive\necho \"ARCHIVE_FILE_IOS_SIMULATOR:${ARCHIVE_FILE_IOS_SIMULATOR}\"\n\nARCHIVE_FILE_IOS_MACCATALYST=${ARCHIVE_DIR}/maccatalyst.xcarchive\necho \"ARCHIVE_FILE_IOS_MACCATALYST:${ARCHIVE_FILE_IOS_MACCATALYST}\"\n\nxcodebuild archive \\\n-scheme ${PROJECT_NAME} \\\n-destination=\"iOS\" \\\n-archivePath $ARCHIVE_FILE_IOS \\\n-derivedDataPath $DERIVED_DIR \\\n-sdk iphoneos SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\nxcodebuild archive \\\n-scheme ${PROJECT_NAME} \\\n-destination=\"iOS Simulator\" \\\n-archivePath $ARCHIVE_FILE_IOS_SIMULATOR \\\n-derivedDataPath $DERIVED_DIR \\\n-sdk iphonesimulator SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\nxcodebuild archive \\\n-scheme ${PROJECT_NAME} \\\n-destination='platform=macOS,arch=x86_64,variant=Mac Catalyst' \\\n-archivePath $ARCHIVE_FILE_IOS_MACCATALYST SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\nxcodebuild -create-xcframework \\\n-framework $ARCHIVE_FILE_IOS/Products/Library/Frameworks/${PROJECT_NAME}.framework \\\n-framework $ARCHIVE_FILE_IOS_SIMULATOR/Products/Library/Frameworks/${PROJECT_NAME}.framework \\\n-framework $ARCHIVE_FILE_IOS_MACCATALYST/Products/Library/Frameworks/${PROJECT_NAME}.framework \\\n-output $XCFRAMEWORK_DIR/${PROJECT_NAME}.xcframework\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -310,7 +310,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -368,7 +368,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -402,7 +402,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.6;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.hituzi.ActiveRealm;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -433,7 +433,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.6;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.hituzi.ActiveRealm;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
