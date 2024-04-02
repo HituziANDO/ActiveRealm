@@ -65,5 +65,8 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-#Dependency
-Framework
+# App
+#
+Output
+Dependency
+
