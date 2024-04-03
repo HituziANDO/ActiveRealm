@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/HituziANDO/ActiveRealm.git", :tag => "#{s.version}" }
   s.source_files     = "ActiveRealm/ActiveRealm/**/*.{h,m}"
   s.exclude_files    = "ActiveRealm/build/*", "ActiveRealm/Framework/*", "ActiveRealmSample/*", "ActiveRealmSwiftSample/*", "README.md"
-  s.resource_bundles = { "ActiveRealm" => ["ActiveRealm/PrivacyInfo.xcprivacy"] }
+  s.resource_bundles = { "ActiveRealm" => ["ActiveRealm/ActiveRealm/PrivacyInfo.xcprivacy"] }
   s.requires_arc     = true
   s.dependency 'Realm', '~>10'
 end

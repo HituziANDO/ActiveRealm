@@ -38,6 +38,7 @@
 		5E30C46A23343AE5008E3FF3 /* ARMCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E30C46823343AE5008E3FF3 /* ARMCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E30C46B23343AE5008E3FF3 /* ARMCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E30C46923343AE5008E3FF3 /* ARMCollection.m */; };
 		5EAD16122BBBFB4400BBCD29 /* Realm.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EAD16112BBBFB4400BBCD29 /* Realm.xcframework */; };
+		5EAD16182BBCE60300BBCD29 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5EAD16172BBCE60200BBCD29 /* PrivacyInfo.xcprivacy */; };
 		5EF77DFB229F37A500230CD7 /* ActiveRealm.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77DF9229F37A500230CD7 /* ActiveRealm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EF77E7122A41CDA00230CD7 /* ARMRelation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E6F22A41CDA00230CD7 /* ARMRelation+Internal.h */; };
 		5EF77E7A22A680D200230CD7 /* ARMActiveRealm+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF77E7822A680D200230CD7 /* ARMActiveRealm+Internal.h */; };
@@ -61,6 +62,7 @@
 		5E30C46823343AE5008E3FF3 /* ARMCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMCollection.h; sourceTree = "<group>"; };
 		5E30C46923343AE5008E3FF3 /* ARMCollection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARMCollection.m; sourceTree = "<group>"; };
 		5EAD16112BBBFB4400BBCD29 /* Realm.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Realm.xcframework; sourceTree = "<group>"; };
+		5EAD16172BBCE60200BBCD29 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5EF77DF6229F37A500230CD7 /* ActiveRealm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActiveRealm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF77DF9229F37A500230CD7 /* ActiveRealm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActiveRealm.h; sourceTree = "<group>"; };
 		5EF77DFA229F37A500230CD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				19E59055D0985DD568452625 /* ARMRelationship.h */,
 				19E59BB8E500ED810D19A0C6 /* ARMRelationship.m */,
 				5EF77DFA229F37A500230CD7 /* Info.plist */,
+				5EAD16172BBCE60200BBCD29 /* PrivacyInfo.xcprivacy */,
 			);
 			path = ActiveRealm;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EAD16182BBCE60300BBCD29 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
