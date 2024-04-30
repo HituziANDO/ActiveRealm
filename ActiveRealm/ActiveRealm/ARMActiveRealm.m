@@ -96,7 +96,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     if (self = [super init]) {
         _uid = [NSUUID UUID].UUIDString.uppercaseString;
         _createdAt = [NSDate date];
-        _updatedAt = [NSDate date];
+        _updatedAt = _createdAt;
 
         NSMutableDictionary<NSString *, ARMRelation *> *relations = [NSMutableDictionary new];
 
@@ -113,12 +113,16 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
 #pragma mark - public method
 
 - (BOOL)save {
+    return [self saveWithOptions:ARMSavingOptionNone];
+}
+
+- (BOOL)saveWithOptions:(ARMSavingOption)options {
     if (![self.class validateBeforeSaving:self]) {
         return NO;
     }
 
     if ([self.class findByID:self[kActiveRealmPrimaryKeyName]]) {
-        [self update];
+        [self updateWithOptions:options];
     }
     else {
         [self create];
@@ -448,7 +452,7 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
     [self.class afterSave:self];
 }
 
-- (void)update {
+- (void)updateWithOptions:(ARMSavingOption)options {
     [self.class beforeUpdate:self];
     [self.class beforeSave:self];
 
@@ -458,7 +462,9 @@ static NSString *const kActiveRealmPrimaryKeyName = @"uid";
         return;
     }
 
-    self.updatedAt = [NSDate date];
+    if (!(options & ARMSavingOptionNotAutomaticallyUpdateTimestamp)) {
+        self.updatedAt = [NSDate date];
+    }
 
     [ARMActiveRealmManager.sharedInstance.defaultRealm transactionWithBlock:^{
         for (NSString *prop in self.class.propertyNames) {

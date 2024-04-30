@@ -33,6 +33,17 @@ NS_ASSUME_NONNULL_BEGIN
 @class ARMRelation;
 @class ARMRelationship;
 
+typedef NS_OPTIONS(NSInteger, ARMSavingOption) {
+    /**
+     * No option.
+     */
+    ARMSavingOptionNone,
+    /**
+     * The `updatedAt` property is not automatically updated.
+     */
+    ARMSavingOptionNotAutomaticallyUpdateTimestamp,
+};
+
 @interface ARMActiveRealm : NSObject
 /**
  * The property names of the model.
@@ -67,6 +78,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @return YES if the validation is successful, otherwise NO.
  */
 - (BOOL)save;
+/**
+ * The `save` means INSERT if the record does not exists in the DB, otherwise UPDATE it.
+ *
+ * @param options Options.
+ * @return YES if the validation is successful, otherwise NO.
+ */
+- (BOOL)saveWithOptions:(ARMSavingOption)options NS_SWIFT_NAME(save(options:));
 /**
  * The `destroy` method performs cascade delete by default.
  * In other words, related data are also deleted collectively.
