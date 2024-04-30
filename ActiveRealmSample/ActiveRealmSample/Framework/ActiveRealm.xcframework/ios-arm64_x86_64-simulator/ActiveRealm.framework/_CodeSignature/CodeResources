@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/ARMActiveRealm.h</key>
 		<data>
-		/z4c1aCgKcjD/xtdkIVUIkNX1bY=
+		4JvMHj91HCxGnbwthHXMmYlrW30=
 		</data>
 		<key>Headers/ARMActiveRealmManager.h</key>
 		<data>
@@ -44,6 +44,10 @@
 		<data>
 		dvQk8q3Af8uSJoKuH9cZ1mabvws=
 		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		AsGWXTZZNiiA2K0mG3kTPcRZ83U=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -51,11 +55,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/z4c1aCgKcjD/xtdkIVUIkNX1bY=
+			4JvMHj91HCxGnbwthHXMmYlrW30=
 			</data>
 			<key>hash2</key>
 			<data>
-			HSFGdJgLIS53vgKkIP2hyU7eBPRE02yA2+lgiHitHJs=
+			IhGi684ls1/WUljrfuf9k1Af+40Ioj9lyPPao0xQLQo=
 			</data>
 		</dict>
 		<key>Headers/ARMActiveRealmManager.h</key>
@@ -144,6 +148,17 @@
 			<key>hash2</key>
 			<data>
 			UmBF8pOzaUA+QN0RkkCz5oWfdBl83GRrWppv2Zn3p9o=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			AsGWXTZZNiiA2K0mG3kTPcRZ83U=
+			</data>
+			<key>hash2</key>
+			<data>
+			oOieiiHwPwrN8Jcb7UfQIsN5K/r7ZuKQ3AfMZT8usiw=
 			</data>
 		</dict>
 	</dict>

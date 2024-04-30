@@ -30,6 +30,7 @@ class ViewController: UIViewController {
         countSample()
         pluckSample()
         multiThreadSample()
+        saveOptionSample()
     }
 
     func createSample() {
@@ -397,6 +398,16 @@ class ViewController: UIViewController {
                     print("author: \(author)")
                 }
             }
+        }
+    }
+
+    func saveOptionSample() {
+        let author = Author.findOrCreate(["name": "Yamada", "age": 35])
+        print("before save: \(author)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            author.age = 36
+            author.save(options: [.notAutomaticallyUpdateTimestamp])
+            print("after save: \(author)")
         }
     }
 }
